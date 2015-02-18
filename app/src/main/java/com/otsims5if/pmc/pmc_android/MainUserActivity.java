@@ -130,9 +130,9 @@ public class MainUserActivity extends ActionBarActivity implements ActionBar.Tab
             //return PlaceholderFragment.newInstance(position + 1);
             switch(position){
                 case 0 :
-                    return new ProfilFragment();
-                case 1 :
                     return new UserMapFragment();
+                case 1 :
+                    return new ProfilFragment();
                 default:
                     return new PlaceholderFragment();
             }
