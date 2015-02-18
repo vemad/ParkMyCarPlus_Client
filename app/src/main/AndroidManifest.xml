@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.otsims5if.pmc.pmc_android" >
 
+
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES"/>
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
@@ -33,6 +34,14 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".PlaceInformation"
+            android:label="@string/title_activity_place_information"
+            android:parentActivityName=".MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.otsims5if.pmc.pmc_android.MainActivity" />
         </activity>
         <activity
             android:name=".MainUserActivity"

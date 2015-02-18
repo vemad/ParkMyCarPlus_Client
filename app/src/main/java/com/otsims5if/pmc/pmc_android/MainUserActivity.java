@@ -1,5 +1,6 @@
 package com.otsims5if.pmc.pmc_android;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -8,8 +9,11 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import java.util.Locale;
 
@@ -155,6 +159,12 @@ public class MainUserActivity extends ActionBarActivity implements ActionBar.Tab
         }
     }
 
+    public void displayPlaceInformation(View v){
+        Log.e("coucou", "coucou");
+        Intent intent = new Intent(this, PlaceInformation.class);
+        startActivity(intent);
+    }
+
     /**
      * A placeholder fragment containing a simple view.
      */
@@ -179,6 +189,7 @@ public class MainUserActivity extends ActionBarActivity implements ActionBar.Tab
 
         public PlaceholderFragment() {
         }
+
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,

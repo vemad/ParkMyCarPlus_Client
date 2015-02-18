@@ -43,9 +43,10 @@ public class MainActivity extends ActionBarActivity implements OnClickListener {
     }
 
     public void displayUserInterface() {
-        //Intent intent = new Intent(this, MainUserActivity.class);
 
         Intent intent = new Intent(this, MainUserActivity.class);
+        //Intent intent = new Intent(this, PlaceInformation.class);
+
         startActivity(intent);
     }
 

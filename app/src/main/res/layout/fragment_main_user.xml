@@ -14,4 +14,13 @@
         android:layout_height="wrap_content"
         android:text="sa marche" />
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Test affichage place"
+        android:id="@+id/btnTestDisplayPlace"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:onClick="displayPlaceInformation" />
+
 </RelativeLayout>
