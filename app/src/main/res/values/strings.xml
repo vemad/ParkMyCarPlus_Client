@@ -2,7 +2,6 @@
 <resources>
 
     <string name="app_name">PMC_Android</string>
-    <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="userProfil">userProfil</string>
     <string name="logo">logo</string>
@@ -12,5 +11,10 @@
     <string name="title_section1">Mon profil</string>
     <string name="title_section2">Ma carte</string>
     <string name="title_section3">Section 3</string>
+    <string name="title_activity_place_information">PlaceInformation</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
+    <!-- Display information on a place-->
+    <string name="id_place_label">Id de la place</string>
+    <string name="id_place_value">[id]</string>
 </resources>
