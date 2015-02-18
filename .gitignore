@@ -34,3 +34,5 @@ proguard/
 .idea/gradle.xml
 
 .idea/workspace.xml
+
+.idea/libraries/play_services_6_5_87.xml
