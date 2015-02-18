@@ -2,11 +2,14 @@
 <resources>
 
     <string name="app_name">PMC_Android</string>
-    <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="userProfil">userProfil</string>
     <string name="logo">logo</string>
     <string name="usernameHint">Nom utilisateur</string>
     <string name="motDePasse">Mot de passe</string>
+    <string name="title_activity_place_information">PlaceInformation</string>
 
+    <!-- Display information on a place-->
+    <string name="id_place_label">Id de la place</string>
+    <string name="id_place_value">[id]</string>
 </resources>
