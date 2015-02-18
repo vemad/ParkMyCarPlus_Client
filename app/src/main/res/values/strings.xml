@@ -7,6 +7,10 @@
     <string name="logo">logo</string>
     <string name="usernameHint">Nom utilisateur</string>
     <string name="motDePasse">Mot de passe</string>
+    <string name="title_activity_main_user">Mon Profil</string>
+    <string name="title_section1">Mon profil</string>
+    <string name="title_section2">Ma carte</string>
+    <string name="title_section3">Section 3</string>
     <string name="title_activity_place_information">PlaceInformation</string>
 
     <!-- Display information on a place-->

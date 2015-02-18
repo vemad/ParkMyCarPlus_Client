@@ -7,13 +7,13 @@
     tools:context="com.otsims5if.pmc.pmc_android.PlaceInformation$PlaceholderFragment">
 
     <TextView
-        android:id="@+id/id_label"
+        android:id="@+id/id_place_label"
         android:text="@string/id_place_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
     <TextView
-        android:id="@+id/id_value"
+        android:id="@+id/id_place_value"
         android:text="@string/id_place_value"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

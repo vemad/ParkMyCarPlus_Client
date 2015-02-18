@@ -7,6 +7,7 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 import org.springframework.web.client.RestTemplate;
 
 /**
+ * Singleton proposing services on places
  * Created by Gaetan on 18/02/2015.
  */
 public class PlaceServices {
@@ -15,12 +16,14 @@ public class PlaceServices {
     public static PlaceServices getInstance() {
         return ourInstance;
     }
-
     private PlaceServices() {
     }
 
+    /*
+    * Service to get a place by its id
+    */
     /*TODO: ne fait pas se qu'il faut*/
-    public void getPlaceById(final String id, final GetPlaceByIdCallback cb){
+    public AsyncTask<Void, Void, Place> getPlaceById(final String id, final GetPlaceByIdCallback cb){
 
         class GetPlaceById extends AsyncTask<Void, Void, Place> {
             @Override
@@ -37,14 +40,13 @@ public class PlaceServices {
 
                 return null;
             }
-
             @Override
             protected void onPostExecute(Place place) {
                 cb.callback(place);
             }
         }
 
-        new GetPlaceById().execute();
+        return new GetPlaceById();
     }
 }
 

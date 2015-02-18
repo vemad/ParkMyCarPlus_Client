@@ -10,6 +10,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.os.Build;
+import android.widget.TextView;
+
+import api.place.*;
 
 
 public class PlaceInformation extends ActionBarActivity {
@@ -25,6 +28,13 @@ public class PlaceInformation extends ActionBarActivity {
         }
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        //Call the service getPlaceById and execute the callback ShowPlaceCallback with the result
+        PlaceServices.getInstance().getPlaceById("123", new ShowPlaceCallback()).execute();
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -61,6 +71,14 @@ public class PlaceInformation extends ActionBarActivity {
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_place_information, container, false);
             return rootView;
+        }
+    }
+
+    /*Method for displaying a place received by a service*/
+    private class ShowPlaceCallback extends GetPlaceByIdCallback {
+        protected void callback(Place place){
+            TextView placeIdText = (TextView) findViewById(R.id.id_place_value);
+            placeIdText.setText(place.getId());
         }
     }
 }
