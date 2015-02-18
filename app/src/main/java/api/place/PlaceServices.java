@@ -29,7 +29,7 @@ public class PlaceServices {
             @Override
             protected Place doInBackground(Void... params) {
                 try {
-                    final String url = "http://rest-service.guides.spring.io/greeting";
+                    final String url = "http://192.168.43.62:8080/place?name=Small";
                     RestTemplate restTemplate = new RestTemplate();
                     restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
                     Place place = restTemplate.getForObject(url, Place.class);
