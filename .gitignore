@@ -29,3 +29,10 @@ proguard/
 /.idea/libraries/support_annotations_21_0_3.xml
 /.idea/workspace.xml
 /.idea/workspace.xml
+
+
+.idea/gradle.xml
+
+.idea/workspace.xml
+
+.idea/libraries/play_services_6_5_87.xml
