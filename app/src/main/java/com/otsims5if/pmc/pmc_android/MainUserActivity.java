@@ -3,7 +3,6 @@ package com.otsims5if.pmc.pmc_android;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
@@ -15,7 +14,6 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 
 import java.util.Locale;
 
@@ -134,7 +132,7 @@ public class MainUserActivity extends ActionBarActivity implements ActionBar.Tab
                 case 0 :
                     return new ProfilFragment();
                 case 1 :
-                    return new MapFragment();
+                    return new UserMapFragment();
                 default:
                     return new PlaceholderFragment();
             }
