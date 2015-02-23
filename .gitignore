@@ -36,3 +36,19 @@ proguard/
 .idea/workspace.xml
 
 .idea/libraries/play_services_6_5_87.xml
+
+.idea/libraries/jackson_annotations_2_3_0.xml
+
+.idea/libraries/jackson_core_2_3_2.xml
+
+.idea/libraries/jackson_databind_2_3_2.xml
+
+.idea/libraries/spring_android_core_1_0_1_RELEASE.xml
+
+.idea/libraries/spring_android_rest_template_1_0_1_RELEASE.xml
+
+.idea/workspace.xml
+
+.idea/workspace.xml
+
+.idea/workspace.xml
