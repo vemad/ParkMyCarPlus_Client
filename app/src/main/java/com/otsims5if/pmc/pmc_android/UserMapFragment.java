@@ -9,6 +9,8 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 /**
  * Created by Iler on 18/02/2015.
@@ -29,7 +31,7 @@ public class UserMapFragment extends PlaceholderFragment{
         View v = inflater.inflate(R.layout.fragment_map, container, false);
         mapView = (MapView) v.findViewById(R.id.map);
         mapView.onCreate(savedInstanceState);
-        mapView.onResume();//needed to get the map to display immediately
+        //mapView.onResume();//needed to get the map to display immediately
 
         /*try {
             MapsInitializer.initialize(this);
@@ -37,7 +39,8 @@ public class UserMapFragment extends PlaceholderFragment{
             e.printStackTrace();
         }*/
 
-        map = mapView.getMap();
+        //map = mapView.getMap();
+        setUpMapIfNeeded(v);
 
         //Perform any camera updates here
 
@@ -66,5 +69,29 @@ public class UserMapFragment extends PlaceholderFragment{
     public void onLowMemory() {
         super.onLowMemory();
         mapView.onLowMemory();
+    }
+
+    private void setUpMapIfNeeded(View v) {
+        // Do a null check to confirm that we have not already instantiated the map.
+        if (map == null) {
+            // Try to obtain the map from the SupportMapFragment.
+            mapView = (MapView) v.findViewById(R.id.map);
+            map = mapView.getMap();
+            // Check if we were successful in obtaining the map.
+            if (map != null) {
+                setUpMap();
+            }
+        }
+    }
+
+    /**
+     * This is where we can add markers or lines, add listeners or move the camera. In this case, we
+     * just add a marker near Africa.
+     * <p/>
+     * This should only be called once and when we are sure that {@link #map} is not null.
+     */
+    private void setUpMap() {
+        //map.addMarker(new MarkerOptions().position(new LatLng(0, 0)).title("Marker"));
+        map.setMyLocationEnabled(true);
     }
 }
