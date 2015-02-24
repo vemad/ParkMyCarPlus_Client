@@ -1,10 +1,13 @@
 package api.place;
 
 import android.os.AsyncTask;
-import android.util.Log;
+import android.util.Pair;
 
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
+
+
+import api.ApiConfig;
 
 /**
  * Singleton proposing services on places
@@ -22,31 +25,55 @@ public class PlaceServices {
     /*
     * Service to get a place by its id
     */
-    /*TODO: ne fait pas se qu'il faut*/
-    public AsyncTask<Void, Void, Place> getPlaceById(final String id, final GetPlaceByIdCallback cb){
+    public AsyncTask<Void, Void, Pair<Exception, Place>> getPlaceById(final int id, final GetPlaceByIdCallback cb){
 
-        class GetPlaceById extends AsyncTask<Void, Void, Place> {
+        class GetPlaceById extends AsyncTask<Void, Void, Pair<Exception, Place>> {
             @Override
-            protected Place doInBackground(Void... params) {
+            protected Pair<Exception, Place> doInBackground(Void... params) {
                 try {
-                    final String url = "http://192.168.43.62:8080/place?name=Small";
+                    final String url = ApiConfig.baseUrl + "/place?id=" + id;
                     RestTemplate restTemplate = new RestTemplate();
                     restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
                     Place place = restTemplate.getForObject(url, Place.class);
-                    return place;
+                    return new Pair<Exception, Place>(null, place);
                 } catch (Exception e) {
-                    Log.e("MainActivity", e.getMessage(), e);
+                    return new Pair<Exception, Place>(e, null);
                 }
-
-                return null;
             }
             @Override
-            protected void onPostExecute(Place place) {
-                cb.callback(place);
+            protected void onPostExecute(Pair<Exception, Place> resRequest) {
+                cb.callback(resRequest.first, resRequest.second);
             }
         }
 
         return new GetPlaceById();
+    }
+
+    /*
+    * Service to get a place by its id
+    */
+    public AsyncTask<Void, Void, Pair<Exception, Place[]>> getListPlacesByPosition(final double latitude, final double longitude, final int radius, final GetListPlacesByPositionCallback cb){
+
+        class GetListPlacesByPosition extends AsyncTask<Void, Void, Pair<Exception, Place[]>> {
+            @Override
+            protected Pair<Exception, Place[]> doInBackground(Void... params) {
+                try {
+                    final String url = ApiConfig.baseUrl + "/places?longitude=" + longitude + "&latitude=" + latitude + "&radius=" + radius;
+                    RestTemplate restTemplate = new RestTemplate();
+                    restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
+                    Place[] places = restTemplate.getForObject(url, Place[].class);
+                    return new Pair<>(null, places);
+                } catch (Exception e) {
+                    return new Pair<>(e, null);
+                }
+            }
+            @Override
+            protected void onPostExecute(Pair<Exception, Place[]> resRequest) {
+                cb.callback(resRequest.first, resRequest.second);
+            }
+        }
+
+        return new GetListPlacesByPosition();
     }
 }
 

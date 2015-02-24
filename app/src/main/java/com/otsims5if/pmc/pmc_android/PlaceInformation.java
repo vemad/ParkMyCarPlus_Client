@@ -4,6 +4,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -33,7 +34,9 @@ public class PlaceInformation extends ActionBarActivity {
         super.onStart();
 
         //Call the service getPlaceById and execute the callback ShowPlaceCallback with the result
-        PlaceServices.getInstance().getPlaceById("123", new ShowPlaceCallback()).execute();
+        //PlaceServices.getInstance().getPlaceById(2, new ShowPlaceCallback()).execute();
+
+        PlaceServices.getInstance().getListPlacesByPosition(45.78166386726485, 4.872752178696828, 5, new ShowListPlacesCallback()).execute();
     }
 
     @Override
@@ -76,9 +79,31 @@ public class PlaceInformation extends ActionBarActivity {
 
     /*Method for displaying a place received by a service*/
     private class ShowPlaceCallback extends GetPlaceByIdCallback {
-        protected void callback(Place place){
+        protected void callback(Exception e, Place place){
             TextView placeIdText = (TextView) findViewById(R.id.id_place_value);
-            placeIdText.setText(place.getId());
+            if(e != null || place == null) {
+                Log.e("MainActivity", e.getMessage(), e);
+                placeIdText.setText("Une erreur est survenu");
+            }
+            else{
+                placeIdText.setText(place.getId());
+            }
+        }
+    }
+
+    /*Method for displaying a place received by a service*/
+    private class ShowListPlacesCallback extends GetListPlacesByPositionCallback {
+        protected void callback(Exception e, Place[] places){
+            if(e != null || places == null) {
+                Log.e("MainActivity", e.getMessage(), e);
+                Log.e("erreur", "Une erreur est survenu");
+            }
+            else{
+                Log.i("listPlaces", "listPlaces");
+                for(int i=0; i<places.length; i++){
+                    Log.i("place", "lat: " + places[i].getLatitude() + " lng: " + places[i].getLongitude());
+                }
+            }
         }
     }
 }

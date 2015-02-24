@@ -6,13 +6,18 @@ package api.place;
  */
 public class Place {
     private String id;
-    private String content;
+    private Double longitude;
+    private Double latitude;
 
     public String getId() {
         return id;
     }
 
-    public String getContent() {
-        return content;
+    public Double getLongitude() {
+        return longitude;
+    }
+
+    public Double getLatitude() {
+        return latitude;
     }
 }

@@ -5,5 +5,5 @@ package api.place;
  * Created by Gaetan on 18/02/2015.
  */
 public abstract class GetPlaceByIdCallback{
-    protected abstract void callback(Place place);
+    protected abstract void callback(Exception e, Place place);
 }

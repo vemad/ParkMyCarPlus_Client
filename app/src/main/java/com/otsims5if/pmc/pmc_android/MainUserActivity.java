@@ -160,7 +160,6 @@ public class MainUserActivity extends ActionBarActivity implements ActionBar.Tab
     }
 
     public void displayPlaceInformation(View v){
-        Log.e("coucou", "coucou");
         Intent intent = new Intent(this, PlaceInformation.class);
         startActivity(intent);
     }
