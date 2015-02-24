@@ -20,6 +20,11 @@ public class UserMapFragment extends PlaceholderFragment{
     MapView mapView;
     GoogleMap map;
 
+    LatLng laDouaGastonBerger = new LatLng(45.781543000000010000,4.872104000000036000);
+    LatLng insa = new LatLng(45.7829609,4.875031300000046);
+    LatLng doubleMixte = new LatLng(45.78053269999999,4.872770199999991);
+    LatLng laPoste = new LatLng(43.4778166,5.168552200000022);
+
     public UserMapFragment() {
         super();
     }
@@ -91,7 +96,10 @@ public class UserMapFragment extends PlaceholderFragment{
      * This should only be called once and when we are sure that {@link #map} is not null.
      */
     private void setUpMap() {
-        //map.addMarker(new MarkerOptions().position(new LatLng(0, 0)).title("Marker"));
+        map.addMarker(new MarkerOptions().position(laDouaGastonBerger).title("La Doua - Gaston Berger"));
+        map.addMarker(new MarkerOptions().position(insa).title("Insa Lyon"));
+        map.addMarker(new MarkerOptions().position(doubleMixte).title("Double Mixte"));
+        map.addMarker(new MarkerOptions().position(laPoste).title("La Poste"));
         map.setMyLocationEnabled(true);
     }
 }
