@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 
 import java.util.Locale;
 
@@ -132,6 +133,8 @@ public class MainUserActivity extends ActionBarActivity implements ActionBar.Tab
                 case 0 :
                     return new UserMapFragment();
                 case 1 :
+                    return new BookMarkFragment();
+                case 2 :
                     return new ProfilFragment();
                 default:
                     return new PlaceholderFragment();
