@@ -35,8 +35,9 @@ public class PlaceInformation extends ActionBarActivity {
 
         //Call the service getPlaceById and execute the callback ShowPlaceCallback with the result
         //PlaceServices.getInstance().getPlaceById(2, new ShowPlaceCallback()).execute();
-
         PlaceServices.getInstance().getListPlacesByPosition(45.78166386726485, 4.872752178696828, 5, new ShowListPlacesCallback()).execute();
+        PlaceServices.getInstance().releasePlace(45.78166386726485, 4.872752178696828, new ShowResultReleasePlaceCallback()).execute();
+        //PlaceServices.getInstance().takePlace(45.78166386726485, 4.872752178696828, new ShowResultTakePlaceCallback()).execute();
     }
 
     @Override
@@ -103,6 +104,32 @@ public class PlaceInformation extends ActionBarActivity {
                 for(int i=0; i<places.length; i++){
                     Log.i("place", "lat: " + places[i].getLatitude() + " lng: " + places[i].getLongitude());
                 }
+            }
+        }
+    }
+
+    /*Method for displaying a place received by a service*/
+    private class ShowResultReleasePlaceCallback extends ReleasePlaceCallback {
+        protected void callback(Exception e, String message){
+            if(e != null || message == null) {
+                Log.e("MainActivity", e.getMessage(), e);
+                Log.e("erreur", "Une erreur est survenu");
+            }
+            else{
+                Log.i("message", "Superman " + message);
+            }
+        }
+    }
+
+    /*Method for displaying a place received by a service*/
+    private class ShowResultTakePlaceCallback extends TakePlaceCallback {
+        protected void callback(Exception e, String message){
+            if(e != null || message == null) {
+                Log.e("MainActivity", e.getMessage(), e);
+                Log.e("erreur", "Une erreur est survenu");
+            }
+            else{
+                Log.i("message", "Superman " + message);
             }
         }
     }
