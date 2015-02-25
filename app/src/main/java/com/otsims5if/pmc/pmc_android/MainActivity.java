@@ -27,9 +27,7 @@ public class MainActivity extends ActionBarActivity implements OnClickListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         context = this;
-        spinner = (ProgressBar) findViewById(R.id.progressBar1);
-        spinner.setVisibility(View.GONE);
-        connectionButton = (Button) findViewById(R.id.button);
+        connectionButton = (Button) findViewById(R.id.connectButton);
         connectionButton.setOnClickListener(this);
         /*button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {

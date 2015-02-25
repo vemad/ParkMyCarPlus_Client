@@ -55,16 +55,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Connexion"
-                android:id="@+id/button"
+                android:id="@+id/connectButton"
                 android:onClick="displayUserInterface" />
-
-            <ProgressBar
-                android:id="@+id/progressBar1"
-                style="?android:attr/progressBarStyleLarge"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/button"
-                android:layout_centerHorizontal="true" />
 
         </LinearLayout>
 
