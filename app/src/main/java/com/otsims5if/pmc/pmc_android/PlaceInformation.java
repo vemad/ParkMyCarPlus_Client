@@ -36,6 +36,11 @@ public class PlaceInformation extends ActionBarActivity {
         //Call the service getPlaceById and execute the callback ShowPlaceCallback with the result
         //PlaceServices.getInstance().getPlaceById(2, new ShowPlaceCallback()).execute();
         PlaceServices.getInstance().getListPlacesByPosition(45.78166386726485, 4.872752178696828, 5, new ShowListPlacesCallback()).execute();
+        PlaceServices.getInstance().takePlace(45.78166386726485, 4.872752178696828, new ShowResultTakePlaceCallback()).execute();
+        PlaceServices.getInstance().releasePlace(45.78166386726485, 4.872752178696828, new ShowResultReleasePlaceCallback()).execute();
+        PlaceServices.getInstance().takePlace(45.78166386726485, 4.872752178696828, new ShowResultTakePlaceCallback()).execute();
+        PlaceServices.getInstance().takePlace(45.78166386726485, 4.872752178696828, new ShowResultTakePlaceCallback()).execute();
+        PlaceServices.getInstance().releasePlace(45.78166386726485, 4.872752178696828, new ShowResultReleasePlaceCallback()).execute();
         PlaceServices.getInstance().releasePlace(45.78166386726485, 4.872752178696828, new ShowResultReleasePlaceCallback()).execute();
         //PlaceServices.getInstance().takePlace(45.78166386726485, 4.872752178696828, new ShowResultTakePlaceCallback()).execute();
     }
@@ -123,13 +128,13 @@ public class PlaceInformation extends ActionBarActivity {
 
     /*Method for displaying a place received by a service*/
     private class ShowResultTakePlaceCallback extends TakePlaceCallback {
-        protected void callback(Exception e, String message){
-            if(e != null || message == null) {
+        protected void callback(Exception e, Place place){
+            if(e != null || place == null) {
                 Log.e("MainActivity", e.getMessage(), e);
                 Log.e("erreur", "Une erreur est survenu");
             }
             else{
-                Log.i("message", "Superman " + message);
+                Log.i("message", "Superman " + place.getId());
             }
         }
     }
