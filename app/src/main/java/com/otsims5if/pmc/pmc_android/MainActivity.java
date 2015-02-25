@@ -20,6 +20,7 @@ public class MainActivity extends ActionBarActivity implements OnClickListener {
     private Context context;
     private ProgressDialog loadingDialog;
     private Button connectionButton;
+
     private MainUserActivity mainUserActivity;
 
     @Override
@@ -29,6 +30,8 @@ public class MainActivity extends ActionBarActivity implements OnClickListener {
         context = this;
         connectionButton = (Button) findViewById(R.id.connectButton);
         connectionButton.setOnClickListener(this);
+
+
         /*button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 //spinner.setVisibility(View.VISIBLE);
@@ -46,7 +49,17 @@ public class MainActivity extends ActionBarActivity implements OnClickListener {
         //Intent intent = new Intent(this, PlaceInformation.class);
 
         startActivity(intent);
+
     }
+
+    public void newUserInterface(View view) {
+
+        Intent intent = new Intent(this, CreateNewUser.class);
+        startActivity(intent);
+        //  finish();
+    }
+
+
 
     @Override
     protected void onDestroy() {
@@ -59,42 +72,43 @@ public class MainActivity extends ActionBarActivity implements OnClickListener {
 
     @Override
     public void onClick(View v) {
-        v.setEnabled(false);
-        AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>() {
+            v.setEnabled(false);
+            AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>() {
 
-            @Override
-            protected void onPreExecute() {
-                loadingDialog = new ProgressDialog(context);
-                loadingDialog.setTitle("Authentification en cours");
-                loadingDialog.setMessage("Veuillez patienter...");
-                loadingDialog.setCancelable(false);
-                loadingDialog.setIndeterminate(true);
-                loadingDialog.show();
-            }
-
-            @Override
-            protected Void doInBackground(Void... arg0) {
-                try {
-                    //Do something...
-                    Thread.sleep(5000);
-                } catch (InterruptedException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
+                @Override
+                protected void onPreExecute() {
+                    loadingDialog = new ProgressDialog(context);
+                    loadingDialog.setTitle("Authentification en cours");
+                    loadingDialog.setMessage("Veuillez patienter...");
+                    loadingDialog.setCancelable(false);
+                    loadingDialog.setIndeterminate(true);
+                    loadingDialog.show();
                 }
-                return null;
-            }
 
-            @Override
-            protected void onPostExecute(Void result) {
-                if (loadingDialog != null) {
-                    loadingDialog.dismiss();
-                    connectionButton.setEnabled(true);
-                    displayUserInterface();
+                @Override
+                protected Void doInBackground(Void... arg0) {
+                    try {
+                        //Do something...
+                        Thread.sleep(5000);
+                    } catch (InterruptedException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
+                    return null;
                 }
-            }
 
-        };
-        task.execute((Void[]) null);
+                @Override
+                protected void onPostExecute(Void result) {
+                    if (loadingDialog != null) {
+                        loadingDialog.dismiss();
+                        connectionButton.setEnabled(true);
+                        displayUserInterface();
+                    }
+                }
+
+            };
+            task.execute((Void[]) null);
+
     }
 
     @Override

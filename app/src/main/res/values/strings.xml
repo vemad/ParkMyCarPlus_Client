@@ -7,6 +7,8 @@
     <string name="logo">logo</string>
     <string name="usernameHint">Nom utilisateur</string>
     <string name="motDePasse">Mot de passe</string>
+    <string name="ConfirmezmotDePasse">Confirmez mot de passe</string>
+    <string name="taillevoiture"> Taille Voiture</string>
     <string name="title_activity_main_user">Mon Profil</string>
     <string name="title_section3">Mon profil</string>
     <string name="title_section1">Ma carte</string>
@@ -15,7 +17,18 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="baseUrl">http://localhost:8080</string>
 
-    <!-- Display information on a place-->
+    <!-- Display information on a place -->
     <string name="id_place_label">Id de la place</string>
     <string name="id_place_value">[id]</string>
+
+    <string-array name="size_arrays">
+        <item>Small</item>
+        <item>Medium</item>
+        <item>Large</item>
+    </string-array>
+
+    <string name="title_activity_mine">mine</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="title_activity_new_create_user">New_create_user</string>
+
 </resources>
