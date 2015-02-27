@@ -20,20 +20,35 @@
             android:baselineAligned="false"
             android:paddingBottom="5dp">
 
-            <Button
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="QUITTER"
-                android:visibility="gone"
-                android:background="#ffc1331f"
-                android:id="@+id/leaveButton"/>
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_weight="1">
 
-            <Button
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="QUITTER"
+                    android:visibility="gone"
+                    android:background="#ffc1331f"
+                    android:id="@+id/leaveButton"/>
+
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="SE GARER"
+                    android:background="#ff3e8b2f"
+                    android:id="@+id/parkButton"/>
+            </LinearLayout>
+
+            <Switch
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="SE GARER"
-                android:background="#ff3e8b2f"
-                android:id="@+id/parkButton"/>
+                android:layout_height="match_parent"
+                android:id="@+id/placeFindSwitch"
+                android:textOn="Start Find Places"
+                android:textOff="Stop Find Places"
+                android:layout_weight="1" />
 
         </LinearLayout>
 
