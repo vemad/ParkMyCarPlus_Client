@@ -111,26 +111,24 @@ public class PlaceServices {
     /*
     * Service indicating that the user release a place
     */
-    public AsyncTask<Void, Void, Pair<Exception, String>> releasePlace(final double latitude, final double longitude, final ReleasePlaceCallback cb){
+    public AsyncTask<Void, Void, Pair<Exception, Place>> releasePlace(final double latitude, final double longitude, final ReleasePlaceCallback cb){
 
-        class ReleasePlace extends AsyncTask<Void, Void, Pair<Exception, String>> {
+        class ReleasePlace extends AsyncTask<Void, Void, Pair<Exception, Place>> {
             @Override
-            protected Pair<Exception, String> doInBackground(Void... params) {
+            protected Pair<Exception, Place> doInBackground(Void... params) {
                 try {
                     final String url = ApiConfig.baseUrl + "/place/released";
                     RestTemplate restTemplate = new RestTemplate();
 
                     restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
-                    restTemplate.getMessageConverters().add(new FormHttpMessageConverter());
-                    restTemplate.getMessageConverters().add(new StringHttpMessageConverter());
-                    StatusMessage message = restTemplate.postForObject(url, new Position(latitude, longitude), StatusMessage.class);
-                    return new Pair<>(null, message.getMessage());
+                    Place place = restTemplate.postForObject(url, new Position(latitude, longitude), Place.class);
+                    return new Pair<>(null, place);
                 } catch (Exception e) {
                     return new Pair<>(e, null);
                 }
             }
             @Override
-            protected void onPostExecute(Pair<Exception, String> resRequest) {
+            protected void onPostExecute(Pair<Exception, Place> resRequest) {
                 cb.callback(resRequest.first, resRequest.second);
             }
         }

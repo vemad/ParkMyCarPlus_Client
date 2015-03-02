@@ -115,13 +115,13 @@ public class PlaceInformation extends ActionBarActivity {
 
     /*Method for displaying a place received by a service*/
     private class ShowResultReleasePlaceCallback extends ReleasePlaceCallback {
-        protected void callback(Exception e, String message){
-            if(e != null || message == null) {
+        protected void callback(Exception e, Place place){
+            if(e != null || place == null) {
                 Log.e("MainActivity", e.getMessage(), e);
-                Log.e("erreur", "Une erreur est survenu");
+                Log.e("erreur", "Une erreur est survenu release");
             }
             else{
-                Log.i("message", "Superman " + message);
+                Log.i("message", "Superman release" + place.getId());
             }
         }
     }
@@ -131,10 +131,10 @@ public class PlaceInformation extends ActionBarActivity {
         protected void callback(Exception e, Place place){
             if(e != null || place == null) {
                 Log.e("MainActivity", e.getMessage(), e);
-                Log.e("erreur", "Une erreur est survenu");
+                Log.e("erreur", "Une erreur est survenu take");
             }
             else{
-                Log.i("message", "Superman " + place.getId());
+                Log.i("message", "Superman take " + place.getId());
             }
         }
     }

@@ -5,5 +5,5 @@ package api.place;
  * Created by Gaetan on 24/02/2015.
  */
 public abstract class ReleasePlaceCallback {
-    protected abstract void callback(Exception e, String message);
+    protected abstract void callback(Exception e, Place place);
 }
