@@ -39,15 +39,16 @@
                     android:layout_height="wrap_content"
                     android:text="SE GARER"
                     android:background="#ff3e8b2f"
-                    android:id="@+id/parkButton"/>
+                    android:id="@+id/parkButton"
+                    android:layout_weight="2" />
             </LinearLayout>
 
             <Switch
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:id="@+id/placeFindSwitch"
-                android:textOn="Start Find Places"
-                android:textOff="Stop Find Places"
+                android:textOn="Start Find"
+                android:textOff="Stop Find"
                 android:layout_weight="1" />
 
         </LinearLayout>

@@ -15,7 +15,7 @@ import api.StatusMessage;
 
 /**
  * Singleton proposing services on places
- * Created by Gaetan on 18/02/2015.
+ * Created by0 Gaetan on 18/02/2015.
  */
 public class PlaceServices {
     private static PlaceServices ourInstance = new PlaceServices();
