@@ -14,6 +14,12 @@ import android.os.Build;
 import android.widget.TextView;
 
 import api.place.*;
+import api.zone.Density;
+import api.zone.GetListZonesByPositionCallback;
+import api.zone.GetZoneByIdCallback;
+import api.zone.IndicateDensityCallback;
+import api.zone.Zone;
+import api.zone.ZoneServices;
 
 
 public class PlaceInformation extends ActionBarActivity {
@@ -43,6 +49,10 @@ public class PlaceInformation extends ActionBarActivity {
         PlaceServices.getInstance().releasePlace(45.78166386726485, 4.872752178696828, new ShowResultReleasePlaceCallback()).execute();
         PlaceServices.getInstance().releasePlace(45.78166386726485, 4.872752178696828, new ShowResultReleasePlaceCallback()).execute();
         //PlaceServices.getInstance().takePlace(45.78166386726485, 4.872752178696828, new ShowResultTakePlaceCallback()).execute();
+
+        ZoneServices.getInstance().getZoneById(2,new ShowZoneCallback()).execute();
+        ZoneServices.getInstance().indicateDensity(45.78166386726485, 4.872752178696828, Density.MEDIUM, new IndicateCallback()).execute();
+        ZoneServices.getInstance().getListZonesByPosition(45.78166386726485, 4.872752178696828,5,  new ShowListZoneCallback()).execute();
     }
 
     @Override
@@ -135,6 +145,49 @@ public class PlaceInformation extends ActionBarActivity {
             }
             else{
                 Log.i("message", "Superman take " + place.getId());
+            }
+        }
+    }
+
+    private class ShowZoneCallback extends GetZoneByIdCallback{
+
+        @Override
+        protected void callback(Exception e, Zone zone) {
+            if(e != null || zone == null) {
+                Log.e("MainActivity", e.getMessage(), e);
+                Log.e("erreur", "Une erreur est survenu getZone");
+            }
+            else {
+                Log.i("maZone", "id:" + zone.getId() + " density:" + zone.getDensity());
+            }
+        }
+    }
+
+    private class IndicateCallback extends IndicateDensityCallback {
+        @Override
+        protected void callback(Exception e, Zone zone) {
+            if(e != null || zone == null) {
+                Log.e("MainActivity", e.getMessage(), e);
+                Log.e("erreur", "Une erreur est survenu indicate");
+            }
+            else {
+                Log.i("maZone", "id:" + zone.getId() + " density:" + zone.getDensity());
+            }
+        }
+    }
+
+    private class ShowListZoneCallback extends GetListZonesByPositionCallback{
+        @Override
+        protected void callback(Exception e, Zone[] zones) {
+            if(e != null || zones == null) {
+                Log.e("MainActivity", e.getMessage(), e);
+                Log.e("erreur", "Une erreur est survenu listZone");
+            }
+            else {
+                Log.i("listZones", "listZones");
+                for (int i = 0; i < zones.length; i++) {
+                    Log.i("zone", "id:" + zones[i].getId() + " density:" + zones[i].getDensity());
+                }
             }
         }
     }

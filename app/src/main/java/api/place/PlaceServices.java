@@ -35,7 +35,7 @@ public class PlaceServices {
             @Override
             protected Pair<Exception, Place> doInBackground(Void... params) {
                 try {
-                    final String url = ApiConfig.baseUrl + "/place?id=" + id;
+                    final String url = ApiConfig.baseUrl + "/places/" + id;
                     RestTemplate restTemplate = new RestTemplate();
                     restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
                     Place place = restTemplate.getForObject(url, Place.class);
@@ -89,7 +89,7 @@ public class PlaceServices {
             @Override
             protected Pair<Exception, Place> doInBackground(Void... params) {
                 try {
-                    final String url = ApiConfig.baseUrl + "/place/taken";
+                    final String url = ApiConfig.baseUrl + "/places/taken";
                     RestTemplate restTemplate = new RestTemplate();
 
                     restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
@@ -117,7 +117,7 @@ public class PlaceServices {
             @Override
             protected Pair<Exception, Place> doInBackground(Void... params) {
                 try {
-                    final String url = ApiConfig.baseUrl + "/place/released";
+                    final String url = ApiConfig.baseUrl + "/places/released";
                     RestTemplate restTemplate = new RestTemplate();
 
                     restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
