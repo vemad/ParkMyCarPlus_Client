@@ -52,11 +52,16 @@
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
             android:theme="@android:style/Theme.NoTitleBar"
-            android:value="AIzaSyDp_QbB_9fdMEcSdv7HtixcA43gFT8vPLQ" />
+            android:value="AIzaSyApl9xj59pteXu5YnxXHWGeLI8i11T8qsk" />
 
         <activity
             android:name=".CreateNewUser"
             android:label="@string/title_activity_new_create_user" >
+        </activity>
+
+        <activity
+            android:name=".InformationUser"
+            android:label="@string/title_activity_information_user" >
         </activity>
     </application>
 
