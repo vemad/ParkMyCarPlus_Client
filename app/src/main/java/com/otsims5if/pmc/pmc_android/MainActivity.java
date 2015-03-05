@@ -13,6 +13,8 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ProgressBar;
 
+import api.authentification.AuthentificationServices;
+
 
 public class MainActivity extends ActionBarActivity implements OnClickListener {
 
@@ -83,6 +85,7 @@ public class MainActivity extends ActionBarActivity implements OnClickListener {
                     loadingDialog.setCancelable(false);
                     loadingDialog.setIndeterminate(true);
                     loadingDialog.show();
+                    AuthentificationServices.getInstance().authentificate("username", "password", null/*callback*/).execute();
                 }
 
                 @Override

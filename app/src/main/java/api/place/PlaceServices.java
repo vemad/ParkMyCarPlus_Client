@@ -3,6 +3,10 @@ package api.place;
 import android.os.AsyncTask;
 import android.util.Pair;
 
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.FormHttpMessageConverter;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
@@ -12,6 +16,7 @@ import org.springframework.web.client.RestTemplate;
 import api.ApiConfig;
 import api.Position;
 import api.StatusMessage;
+import api.authentification.AuthentificationServices;
 
 /**
  * Singleton proposing services on places
@@ -35,18 +40,25 @@ public class PlaceServices {
             @Override
             protected Pair<Exception, Place> doInBackground(Void... params) {
                 try {
-                    final String url = ApiConfig.baseUrl + "/places/" + id;
+                    final String url = ApiConfig.placesRoutes + "/" + id;
+
+                    HttpHeaders requestHeaders = new HttpHeaders();
+                    AuthentificationServices.getInstance().addAuthorization(requestHeaders);
+                    HttpEntity<?> requestEntity = new HttpEntity<Object>(requestHeaders);
+
                     RestTemplate restTemplate = new RestTemplate();
                     restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
-                    Place place = restTemplate.getForObject(url, Place.class);
-                    return new Pair<Exception, Place>(null, place);
+
+                    ResponseEntity<Place> responseEntity = restTemplate.exchange(url, HttpMethod.GET, requestEntity, Place.class);
+                    return new Pair<Exception, Place>(null, responseEntity.getBody());
+
                 } catch (Exception e) {
                     return new Pair<Exception, Place>(e, null);
                 }
             }
             @Override
             protected void onPostExecute(Pair<Exception, Place> resRequest) {
-                cb.callback(resRequest.first, resRequest.second);
+                if(cb != null) cb.callback(resRequest.first, resRequest.second);
             }
         }
 
@@ -62,18 +74,25 @@ public class PlaceServices {
             @Override
             protected Pair<Exception, Place[]> doInBackground(Void... params) {
                 try {
-                    final String url = ApiConfig.baseUrl + "/places?longitude=" + longitude + "&latitude=" + latitude + "&radius=" + radius;
+                    final String url = ApiConfig.placesRoutes + "?longitude=" + longitude + "&latitude=" + latitude + "&radius=" + radius;
+
+                    HttpHeaders requestHeaders = new HttpHeaders();
+                    AuthentificationServices.getInstance().addAuthorization(requestHeaders);
+                    HttpEntity<?> requestEntity = new HttpEntity<Object>(requestHeaders);
+
                     RestTemplate restTemplate = new RestTemplate();
                     restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
-                    Place[] places = restTemplate.getForObject(url, Place[].class);
-                    return new Pair<>(null, places);
+
+                    ResponseEntity<Place[]> responseEntity = restTemplate.exchange(url, HttpMethod.GET, requestEntity, Place[].class);
+                    return new Pair<>(null, responseEntity.getBody());
+
                 } catch (Exception e) {
                     return new Pair<>(e, null);
                 }
             }
             @Override
             protected void onPostExecute(Pair<Exception, Place[]> resRequest) {
-                cb.callback(resRequest.first, resRequest.second);
+                if(cb != null) cb.callback(resRequest.first, resRequest.second);
             }
         }
 
@@ -89,19 +108,25 @@ public class PlaceServices {
             @Override
             protected Pair<Exception, Place> doInBackground(Void... params) {
                 try {
-                    final String url = ApiConfig.baseUrl + "/places/taken";
-                    RestTemplate restTemplate = new RestTemplate();
+                    final String url = ApiConfig.placesRoutes + "/taken";
 
+                    HttpHeaders requestHeaders = new HttpHeaders();
+                    AuthentificationServices.getInstance().addAuthorization(requestHeaders);
+                    HttpEntity<Position> requestEntity = new HttpEntity<Position>(new Position(latitude, longitude), requestHeaders);
+
+                    RestTemplate restTemplate = new RestTemplate();
                     restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
-                    Place place = restTemplate.postForObject(url, new Position(latitude, longitude), Place.class);
-                    return new Pair<>(null, place);
+
+                    ResponseEntity<Place> responseEntity = restTemplate.exchange(url, HttpMethod.POST, requestEntity, Place.class);
+                    return new Pair<>(null, responseEntity.getBody());
+
                 } catch (Exception e) {
                     return new Pair<>(e, null);
                 }
             }
             @Override
             protected void onPostExecute(Pair<Exception, Place> resRequest) {
-                cb.callback(resRequest.first, resRequest.second);
+                if(cb != null) cb.callback(resRequest.first, resRequest.second);
             }
         }
 
@@ -117,19 +142,25 @@ public class PlaceServices {
             @Override
             protected Pair<Exception, Place> doInBackground(Void... params) {
                 try {
-                    final String url = ApiConfig.baseUrl + "/places/released";
-                    RestTemplate restTemplate = new RestTemplate();
+                    final String url = ApiConfig.placesRoutes + "/released";
 
+                    HttpHeaders requestHeaders = new HttpHeaders();
+                    AuthentificationServices.getInstance().addAuthorization(requestHeaders);
+                    HttpEntity<Position> requestEntity = new HttpEntity<Position>(new Position(latitude, longitude), requestHeaders);
+
+                    RestTemplate restTemplate = new RestTemplate();
                     restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
-                    Place place = restTemplate.postForObject(url, new Position(latitude, longitude), Place.class);
-                    return new Pair<>(null, place);
+
+                    ResponseEntity<Place> responseEntity = restTemplate.exchange(url, HttpMethod.POST, requestEntity, Place.class);
+                    return new Pair<>(null, responseEntity.getBody());
+
                 } catch (Exception e) {
                     return new Pair<>(e, null);
                 }
             }
             @Override
             protected void onPostExecute(Pair<Exception, Place> resRequest) {
-                cb.callback(resRequest.first, resRequest.second);
+                if(cb != null) cb.callback(resRequest.first, resRequest.second);
             }
         }
 

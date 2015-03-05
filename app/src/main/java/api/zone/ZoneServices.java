@@ -3,11 +3,15 @@ package api.zone;
 import android.os.AsyncTask;
 import android.util.Pair;
 
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
 
 import api.ApiConfig;
-import api.Position;
+import api.authentification.AuthentificationServices;
 
 /**
  * Created by Iler on 04/03/2015.
@@ -30,18 +34,25 @@ public class ZoneServices {
             @Override
             protected Pair<Exception, Zone> doInBackground(Void... params) {
                 try {
-                    final String url = ApiConfig.baseUrl + "/zones/" + id;
+                    final String url = ApiConfig.zonesRoutes + "/" + id;
+
+                    HttpHeaders requestHeaders = new HttpHeaders();
+                    AuthentificationServices.getInstance().addAuthorization(requestHeaders);
+                    HttpEntity<?> requestEntity = new HttpEntity<>(requestHeaders);
+
                     RestTemplate restTemplate = new RestTemplate();
                     restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
-                    Zone zone = restTemplate.getForObject(url, Zone.class);
-                    return new Pair<Exception, Zone>(null, zone);
+
+                    ResponseEntity<Zone> responseEntity = restTemplate.exchange(url, HttpMethod.GET, requestEntity, Zone.class);
+                    return new Pair<>(null, responseEntity.getBody());
+
                 } catch (Exception e) {
-                    return new Pair<Exception, Zone>(e, null);
+                    return new Pair<>(e, null);
                 }
             }
             @Override
             protected void onPostExecute(Pair<Exception, Zone> resRequest) {
-                cb.callback(resRequest.first, resRequest.second);
+                if(cb != null) cb.callback(resRequest.first, resRequest.second);
             }
         }
 
@@ -57,18 +68,25 @@ public class ZoneServices {
             @Override
             protected Pair<Exception, Zone[]> doInBackground(Void... params) {
                 try {
-                    final String url = ApiConfig.baseUrl + "/zones?longitude=" + longitude + "&latitude=" + latitude + "&radius=" + radius;
+                    final String url = ApiConfig.zonesRoutes + "?longitude=" + longitude + "&latitude=" + latitude + "&radius=" + radius;
+
+                    HttpHeaders requestHeaders = new HttpHeaders();
+                    AuthentificationServices.getInstance().addAuthorization(requestHeaders);
+                    HttpEntity<?> requestEntity = new HttpEntity<>(requestHeaders);
+
                     RestTemplate restTemplate = new RestTemplate();
                     restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
-                    Zone[] zones = restTemplate.getForObject(url, Zone[].class);
-                    return new Pair<>(null, zones);
+
+                    ResponseEntity<Zone[]> responseEntity = restTemplate.exchange(url, HttpMethod.GET, requestEntity, Zone[].class);
+                    return new Pair<>(null, responseEntity.getBody());
+
                 } catch (Exception e) {
                     return new Pair<>(e, null);
                 }
             }
             @Override
             protected void onPostExecute(Pair<Exception, Zone[]> resRequest) {
-                cb.callback(resRequest.first, resRequest.second);
+                if(cb != null) cb.callback(resRequest.first, resRequest.second);
             }
         }
 
@@ -84,20 +102,25 @@ public class ZoneServices {
             @Override
             protected Pair<Exception, Zone> doInBackground(Void... params) {
                 try {
-                    final String url = ApiConfig.baseUrl + "/zones/indicate";
-                    RestTemplate restTemplate = new RestTemplate();
+                    final String url = ApiConfig.zonesRoutes + "/indicate";
 
+                    HttpHeaders requestHeaders = new HttpHeaders();
+                    AuthentificationServices.getInstance().addAuthorization(requestHeaders);
+                    HttpEntity<Zone> requestEntity = new HttpEntity<>(new Zone(latitude, longitude, density), requestHeaders);
+
+                    RestTemplate restTemplate = new RestTemplate();
                     restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
 
-                    Zone zone = restTemplate.postForObject(url, new Zone(latitude, longitude, density), Zone.class);
-                    return new Pair<>(null, zone);
+                    ResponseEntity<Zone> responseEntity = restTemplate.exchange(url, HttpMethod.POST, requestEntity, Zone.class);
+                    return new Pair<>(null, responseEntity.getBody());
+
                 } catch (Exception e) {
                     return new Pair<>(e, null);
                 }
             }
             @Override
             protected void onPostExecute(Pair<Exception, Zone> resRequest) {
-                cb.callback(resRequest.first, resRequest.second);
+                if(cb != null) cb.callback(resRequest.first, resRequest.second);
             }
         }
 

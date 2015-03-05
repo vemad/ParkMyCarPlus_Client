@@ -13,6 +13,8 @@ import android.view.ViewGroup;
 import android.os.Build;
 import android.widget.TextView;
 
+import api.authentification.AuthentificateCallback;
+import api.authentification.AuthentificationServices;
 import api.place.*;
 import api.zone.Density;
 import api.zone.GetListZonesByPositionCallback;
@@ -39,8 +41,9 @@ public class PlaceInformation extends ActionBarActivity {
     protected void onStart() {
         super.onStart();
 
+
         //Call the service getPlaceById and execute the callback ShowPlaceCallback with the result
-        //PlaceServices.getInstance().getPlaceById(2, new ShowPlaceCallback()).execute();
+        PlaceServices.getInstance().getPlaceById(1, new ShowPlaceCallback()).execute();
         PlaceServices.getInstance().getListPlacesByPosition(45.78166386726485, 4.872752178696828, 5, new ShowListPlacesCallback()).execute();
         PlaceServices.getInstance().takePlace(45.78166386726485, 4.872752178696828, new ShowResultTakePlaceCallback()).execute();
         PlaceServices.getInstance().releasePlace(45.78166386726485, 4.872752178696828, new ShowResultReleasePlaceCallback()).execute();
@@ -50,9 +53,11 @@ public class PlaceInformation extends ActionBarActivity {
         PlaceServices.getInstance().releasePlace(45.78166386726485, 4.872752178696828, new ShowResultReleasePlaceCallback()).execute();
         //PlaceServices.getInstance().takePlace(45.78166386726485, 4.872752178696828, new ShowResultTakePlaceCallback()).execute();
 
-        ZoneServices.getInstance().getZoneById(2,new ShowZoneCallback()).execute();
+        ZoneServices.getInstance().getZoneById(12,new ShowZoneCallback()).execute();
         ZoneServices.getInstance().indicateDensity(45.78166386726485, 4.872752178696828, Density.MEDIUM, new IndicateCallback()).execute();
         ZoneServices.getInstance().getListZonesByPosition(45.78166386726485, 4.872752178696828,5,  new ShowListZoneCallback()).execute();
+
+
     }
 
     @Override
@@ -103,6 +108,7 @@ public class PlaceInformation extends ActionBarActivity {
             }
             else{
                 placeIdText.setText(place.getId());
+                Log.i("maPlace", "id:" + place.getId());
             }
         }
     }
@@ -188,6 +194,19 @@ public class PlaceInformation extends ActionBarActivity {
                 for (int i = 0; i < zones.length; i++) {
                     Log.i("zone", "id:" + zones[i].getId() + " density:" + zones[i].getDensity());
                 }
+            }
+        }
+    }
+
+    private class ResAuthentificateCallback extends AuthentificateCallback {
+        @Override
+        protected void callback(Exception e) {
+            if(e != null) {
+                Log.e("MainActivity", e.getMessage(), e);
+                Log.e("erreur", "Une erreur est survenu listZone");
+            }
+            else{
+                Log.i("authOK", "Authentification OK");
             }
         }
     }
