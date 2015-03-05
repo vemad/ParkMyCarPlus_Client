@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -18,6 +19,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -30,6 +38,8 @@ import android.widget.Toast;
 
 import java.util.Locale;
 
+import api.authentification.AuthentificationServices;
+
 
 public class MainActivity extends ActionBarActivity implements OnClickListener {
 
@@ -37,8 +47,9 @@ public class MainActivity extends ActionBarActivity implements OnClickListener {
     private Context context;
     private ProgressDialog loadingDialog;
     private Button connectionButton;
-
+    private LinearLayout loginBox;
     private MainUserActivity mainUserActivity;
+    private RelativeLayout.LayoutParams portraitLayout;
 
 
     private DrawerLayout mDrawerLayout;
@@ -57,6 +68,33 @@ public class MainActivity extends ActionBarActivity implements OnClickListener {
         context = this;
         connectionButton = (Button) findViewById(R.id.connectButton);
         connectionButton.setOnClickListener(this);
+        ImageView imgLogo = (ImageView) findViewById(R.id.imageLogo);
+        imgLogo.setPadding(0,getResources().getConfiguration().screenHeightDp/2, 0, 0);
+
+        loginBox = (LinearLayout) findViewById(R.id.loginBox);
+        if(portraitLayout==null){
+            portraitLayout = (RelativeLayout.LayoutParams) loginBox.getLayoutParams();
+        }
+        loginBox.setVisibility(View.GONE);
+
+
+        Animation animTranslate  = AnimationUtils.loadAnimation(MainActivity.this, R.anim.translate);
+        animTranslate.setAnimationListener(new Animation.AnimationListener() {
+
+            @Override
+            public void onAnimationStart(Animation arg0) { }
+
+            @Override
+            public void onAnimationRepeat(Animation arg0) { }
+
+            @Override
+            public void onAnimationEnd(Animation arg0) {
+                loginBox.setVisibility(View.VISIBLE);
+                Animation animFade  = AnimationUtils.loadAnimation(MainActivity.this, R.anim.fade);
+                loginBox.startAnimation(animFade);
+            }
+        });
+        imgLogo.startAnimation(animTranslate);
 
 
         /*button.setOnClickListener(new View.OnClickListener() {
@@ -116,6 +154,7 @@ public class MainActivity extends ActionBarActivity implements OnClickListener {
                     loadingDialog.setCancelable(false);
                     loadingDialog.setIndeterminate(true);
                     loadingDialog.show();
+                    AuthentificationServices.getInstance().authentificate("username", "password", null/*callback*/).execute();
                 }
 
                 @Override
@@ -151,7 +190,26 @@ public class MainActivity extends ActionBarActivity implements OnClickListener {
         return super.onCreateOptionsMenu(menu);
     }
 
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
 
+        // Checks the orientation of the screen for landscape and portrait and set portrait mode always
+        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
 
+            //android:layout_below="@+id/imageLogo"
+            //android:layout_centerHorizontal="true">
 
+            RelativeLayout.LayoutParams p = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,
+                    RelativeLayout.LayoutParams.WRAP_CONTENT);
+
+            p.addRule(RelativeLayout.BELOW, R.id.imageLogo);
+            p.addRule(RelativeLayout.CENTER_HORIZONTAL);
+            loginBox.setLayoutParams(p);
+
+        } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT){
+
+            loginBox.setLayoutParams(portraitLayout);
+        }
+    }
 }

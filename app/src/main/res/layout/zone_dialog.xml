@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent" android:layout_height="fill_parent"
+    android:orientation="vertical">
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/imageButton" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Forte"
+        android:id="@+id/highDensityButton"
+        android:layout_row="0"
+        android:layout_column="0" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Moyenne"
+        android:id="@+id/mediumDensityButton"
+        android:layout_row="0"
+        android:layout_column="1" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Faible"
+        android:id="@+id/lowDensityButton"
+        android:layout_row="1"
+        android:layout_column="0" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Ignorer"
+        android:id="@+id/ignoreDensityButton"
+        android:layout_row="1"
+        android:layout_column="1" />
+
+
+</LinearLayout>
