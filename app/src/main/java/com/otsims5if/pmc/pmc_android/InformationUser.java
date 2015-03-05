@@ -1,6 +1,5 @@
 package com.otsims5if.pmc.pmc_android;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
@@ -21,7 +20,7 @@ public class InformationUser extends ActionBarActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_new_create_user, menu);
+        getMenuInflater().inflate(R.menu.menu_undo, menu);
         return true;
     }
 
@@ -33,12 +32,18 @@ public class InformationUser extends ActionBarActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_cart) {
+            System.out.println("test");
+            finish();
             return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
+
+
+
+
 
     public void sendtoserver(View v) {
  /*
@@ -52,7 +57,6 @@ public class InformationUser extends ActionBarActivity {
         //Intent intent = new Intent(this, PlaceInformation.class);
 
         startActivity(intent);*/
-        System.out.println("aaaa");
         finish();
     }
 }
