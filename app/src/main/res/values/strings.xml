@@ -22,8 +22,10 @@
     <string name="id_place_value">[id]</string>
 
     <!-- API key-->
-    <string name="christianAPIKey">AIzaSyApl9xj59pteXu5YnxXHWGeLI8i11T8qsk</string>
-    <string name="ilerAPIKey">AIzaSyBnUJ24HsTk_xNcb0e1lR1wXsFdB2dhQ_4</string>
+    <string name="APIKey_c">AIzaSyApl9xj59pteXu5YnxXHWGeLI8i11T8qsk</string>
+    <string name="APIKey_i">AIzaSyBnUJ24HsTk_xNcb0e1lR1wXsFdB2dhQ_4</string>
+    <string name="APIKey_g">AIzaSyDoSZRua5uN47O_hVqJc9F4ptgG1ZZAvP0</string>
+
 
     <string-array name="size_arrays">
         <item>Small</item>
