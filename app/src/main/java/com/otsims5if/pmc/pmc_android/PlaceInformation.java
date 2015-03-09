@@ -164,7 +164,7 @@ public class PlaceInformation extends ActionBarActivity {
                 Log.e("erreur", "Une erreur est survenu getZone");
             }
             else {
-                Log.i("maZone", "id:" + zone.getId() + " density:" + zone.getDensity());
+                Log.i("idZone", "id:" + zone.getId() + " density:" + zone.getDensity() + " intensity:" + zone.getIntensity());
             }
         }
     }
@@ -177,7 +177,7 @@ public class PlaceInformation extends ActionBarActivity {
                 Log.e("erreur", "Une erreur est survenu indicate");
             }
             else {
-                Log.i("maZone", "id:" + zone.getId() + " density:" + zone.getDensity());
+                Log.i("maZone", "id:" + zone.getId() + " density:" + zone.getDensity() + " intensity:" + zone.getIntensity());
             }
         }
     }
@@ -192,7 +192,7 @@ public class PlaceInformation extends ActionBarActivity {
             else {
                 Log.i("listZones", "listZones");
                 for (int i = 0; i < zones.length; i++) {
-                    Log.i("zone", "id:" + zones[i].getId() + " density:" + zones[i].getDensity());
+                    Log.i("zone", "id:" + zones[i].getId() + " density:" + zones[i].getDensity() + " intensity:" + zones[i].getIntensity());
                 }
             }
         }
