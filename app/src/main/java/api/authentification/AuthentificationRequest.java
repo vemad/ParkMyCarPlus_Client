@@ -18,6 +18,6 @@ public class AuthentificationRequest {
 
     @Override
     public String toString() {
-        return "password=Obama&username=Barack&scope=read%20write&grant_type=password";
+        return "username=" + this.username + "&password=" + this.password + "&scope=" + this.scope + "&grant_type=" + grant_type;
     }
 }
