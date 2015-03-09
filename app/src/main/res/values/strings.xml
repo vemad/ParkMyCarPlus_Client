@@ -30,5 +30,7 @@
     <string name="title_activity_mine">mine</string>
     <string name="hello_world">Hello world!</string>
     <string name="title_activity_new_create_user">New_create_user</string>
+    <string name="leftButton">leftButton</string>
+    <string name="rightButton">rightButton</string>
 
 </resources>

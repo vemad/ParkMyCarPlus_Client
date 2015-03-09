@@ -3,4 +3,5 @@
     android:id="@+id/pager"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#ff041126"
     tools:context="com.otsims5if.pmc.pmc_android.MainUserActivity" />
