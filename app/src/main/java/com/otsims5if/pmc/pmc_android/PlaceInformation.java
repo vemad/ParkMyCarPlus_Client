@@ -1,7 +1,6 @@
 package com.otsims5if.pmc.pmc_android;
 
 import android.support.v7.app.ActionBarActivity;
-import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,16 +9,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.os.Build;
 import android.widget.TextView;
 
 import api.authentification.AuthentificateCallback;
-import api.authentification.AuthentificationServices;
 import api.place.*;
 import api.user.SignupCallback;
-import api.user.User;
 import api.user.UserServices;
-import api.zone.Density;
+import api.Density;
 import api.zone.GetListZonesByPositionCallback;
 import api.zone.GetZoneByIdCallback;
 import api.zone.IndicateDensityCallback;

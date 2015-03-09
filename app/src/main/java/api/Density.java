@@ -1,4 +1,4 @@
-package api.zone;
+package api;
 
 /**
  * Created by Iler on 04/03/2015.
