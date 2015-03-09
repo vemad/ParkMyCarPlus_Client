@@ -1,21 +1,35 @@
 package com.otsims5if.pmc.pmc_android;
 
+import android.app.SearchManager;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
+import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.Locale;
 
 
@@ -36,6 +50,22 @@ public class MainUserActivity extends ActionBarActivity implements ActionBar.Tab
      */
     ViewPager mViewPager;
 
+
+    private DrawerLayout mDrawerLayout;
+    private ListView mDrawerList;
+    private ActionBarDrawerToggle mDrawerToggle;
+
+    private CharSequence mDrawerTitle;
+    private CharSequence mTitle;
+    private String[] menutTitles;
+
+
+    ArrayList<NavItem> mNavItems = new ArrayList<NavItem>();
+    int menu_number = 5;
+    int [] enable= new int[menu_number];
+
+    FragmentManager fragmentManager;
+    Fragment fragment;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,16 +74,18 @@ public class MainUserActivity extends ActionBarActivity implements ActionBar.Tab
         // Set up the action bar.
         final ActionBar actionBar = getSupportActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-
+    //    actionBar.hide();
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
-        // Set up the ViewPager with the sections adapter.
+
+                // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
-        // When swiping between different sections, select the corresponding
+
+                // When swiping between different sections, select the corresponding
         // tab. We can also use ActionBar.Tab#select() to do this if we have
         // a reference to the Tab.
         mViewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
@@ -74,30 +106,224 @@ public class MainUserActivity extends ActionBarActivity implements ActionBar.Tab
                             .setText(mSectionsPagerAdapter.getPageTitle(i))
                             .setTabListener(this));
         }
+
+
+        ////
+        mTitle = mDrawerTitle = getTitle();
+        menutTitles = getResources().getStringArray(R.array.menu_array);
+
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        mDrawerList = (ListView) findViewById(R.id.left_drawer);
+
+
+        View header = getLayoutInflater().inflate(R.layout.header,null);
+        TextView titleView_header = (TextView) header.findViewById(R.id.title_usr);
+        titleView_header.setText("My name");
+        mDrawerList.addHeaderView(header);
+
+        // set a custom shadow that overlays the main content when the drawer opens
+        mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
+        // set up the drawer's list view with items and click listener
+        mNavItems.add(new NavItem("Accueil", "", R.drawable.home));
+        mNavItems.add(new NavItem("Compte", "Mon compte", R.drawable.user));
+        mNavItems.add(new NavItem("Paramètres", "Changer les paramètres", R.drawable.settings));
+        mNavItems.add(new NavItem("A propos de", "Park my Car", R.drawable.action_about));
+        for(int i=0;i<menu_number;i++){
+            enable[i]=1;
+        }
+        enable[0]=0;
+
+        DrawerListAdapter adapter = new DrawerListAdapter(this, mNavItems);
+        mDrawerList.setAdapter(adapter);
+       // mDrawerList.setAdapter(new ArrayAdapter<String>(this,R.layout.drawer_list_item, menutTitles));
+
+        mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
+        System.out.println( getSupportActionBar());
+        // enable ActionBar app icon to behave as action to toggle nav drawer
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
+        // ActionBarDrawerToggle ties together the the proper interactions
+        // between the sliding drawer and the action bar app icon
+        mDrawerToggle = new ActionBarDrawerToggle(
+                this,                  /* host Activity */
+                mDrawerLayout,         /* DrawerLayout object */
+                R.drawable.ic_drawer,  /* nav drawer image to replace 'Up' caret */
+                R.string.drawer_open,  /* "open drawer" description for accessibility */
+                R.string.drawer_close  /* "close drawer" description for accessibility */
+        ) {
+            public void onDrawerClosed(View view) {
+                getSupportActionBar().setTitle(mTitle);
+                invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
+            }
+
+            public void onDrawerOpened(View drawerView) {
+                getSupportActionBar().setTitle(mDrawerTitle);
+                invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
+            }
+        };
+
+        mDrawerLayout.setDrawerListener(mDrawerToggle);
+        if (savedInstanceState == null) {
+            selectItem(0);
+        }
+
     }
 
 
+    private class DrawerItemClickListener implements ListView.OnItemClickListener {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            System.out.println("click");
+            selectItem(position);
+        }
+    }
+
+    private void selectItem(int position) {
+        mDrawerList.setItemChecked(position, true);
+
+        // update the main content by replacing fragments
+        if (position == 1) {
+            if(enable[position]==0) {
+
+
+
+             /*   for (int i = 0; i < mSectionsPagerAdapter.getCount(); i++) {
+                    getSupportActionBar().addTab(
+                            getSupportActionBar().newTab()
+                                    .setText(mSectionsPagerAdapter.getPageTitle(i))
+                                    .setTabListener(this));
+                }
+                getSupportActionBar().selectTab(getSupportActionBar().getTabAt(0));
+                enable[position]=1;*/
+//                fragmentManager.beginTransaction().hide(fragment);
+               // mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+               // mViewPager = (ViewPager) findViewById(R.id.pager);
+               // mViewPager.setAdapter(mSectionsPagerAdapter);
+            }
+        }
+        if(position!=1 && position!=0){  enable[1]=0;
+          // getSupportActionBar().removeAllTabs();
+            Intent intent = new Intent(this, InformationUser.class);
+            startActivity(intent);
+        /*    fragment = new PlanetFragment();
+            Bundle args = new Bundle();
+            args.putInt(PlanetFragment.ARG_PLANET_NUMBER, position);
+            fragment.setArguments(args);
+             fragmentManager = getSupportFragmentManager();
+         //   fragmentManager_aux = fragmentManager;
+            fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();*/
+
+         //   mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+          //  mViewPager = (ViewPager) findViewById(R.id.pager);
+           // mViewPager.setAdapter(mSectionsPagerAdapter);
+        //    mDrawerLayout.addView((View)new UserMapFragment());
+
+       /*     Fragment fragment = new PlanetFragment();
+            Bundle args = new Bundle();
+            args.putInt(PlanetFragment.ARG_PLANET_NUMBER, position);
+            fragment.setArguments(args);
+
+            fragmentManager = getSupportFragmentManager();
+            fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();*/
+        }
+
+        // update selected item and title, then close the drawer
+        mDrawerList.setItemChecked(position, true);
+        setTitle(menutTitles[position]);
+        mDrawerLayout.closeDrawer(mDrawerList);
+
+    }
+
+    public static class PlanetFragment extends Fragment {
+        public static final String ARG_PLANET_NUMBER = "planet_number";
+
+        public PlanetFragment() {
+            // Empty constructor required for fragment subclasses
+        }
+
+        @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                                 Bundle savedInstanceState) {
+            View rootView = inflater.inflate(R.layout.fragment_planet, container, false);
+            int i = getArguments().getInt(ARG_PLANET_NUMBER);
+            String planet = getResources().getStringArray(R.array.menu_array)[i];
+
+            int imageId = getResources().getIdentifier(planet.toLowerCase(Locale.getDefault()),
+                    "drawable", getActivity().getPackageName());
+            ((ImageView) rootView.findViewById(R.id.image)).setImageResource(imageId);
+            getActivity().setTitle(planet);
+            return rootView;
+        }
+    }
+
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main_user, menu);
-        return true;
+    public void setTitle(CharSequence title) {
+        mTitle = title;
+        getSupportActionBar().setTitle(mTitle);
+    }
+
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        // Sync the toggle state after onRestoreInstanceState has occurred.
+        mDrawerToggle.syncState();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        // Pass any configuration change to the drawer toggls
+        mDrawerToggle.onConfigurationChanged(newConfig);
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        // If the nav drawer is open, hide action items related to the content view
+        boolean drawerOpen = mDrawerLayout.isDrawerOpen(mDrawerList);
+        menu.findItem(R.id.action_websearch).setVisible(!drawerOpen);
+        return super.onPrepareOptionsMenu(menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        // The action bar home/up action should open or close the drawer.
+        // ActionBarDrawerToggle will take care of this.
+        if (mDrawerToggle.onOptionsItemSelected(item)) {
             return true;
         }
+        // Handle action buttons
+        switch(item.getItemId()) {
+            case R.id.action_websearch:
+                // create intent to perform web search for this planet
+                Intent intent = new Intent(Intent.ACTION_WEB_SEARCH);
+                intent.putExtra(SearchManager.QUERY, getActionBar().getTitle());
+                // catch event that there's no activity to handle intent
+                if (intent.resolveActivity(getPackageManager()) != null) {
+                    startActivity(intent);
+                } else {
+                    Toast.makeText(this, R.string.app_not_available, Toast.LENGTH_LONG).show();
+                }
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
 
-        return super.onOptionsItemSelected(item);
     }
+
+
+    @Override
+   /* public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_main_user, menu);
+        return true;
+    }*/
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+
 
     @Override
     public void onTabSelected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
@@ -134,8 +360,6 @@ public class MainUserActivity extends ActionBarActivity implements ActionBar.Tab
                     return new UserMapFragment();
                 case 1 :
                     return new BookMarkFragment();
-                case 2 :
-                    return new ProfilFragment();
                 default:
                     return new PlaceholderFragment();
             }
@@ -144,7 +368,7 @@ public class MainUserActivity extends ActionBarActivity implements ActionBar.Tab
         @Override
         public int getCount() {
             // Show 3 total pages.
-            return 3;
+            return 2;
         }
 
         @Override

@@ -9,7 +9,7 @@
     <string name="motDePasse">Mot de passe</string>
     <string name="ConfirmezmotDePasse">Confirmez mot de passe</string>
     <string name="taillevoiture"> Taille Voiture</string>
-    <string name="title_activity_main_user">Mon Profil</string>
+    <string name="title_activity_main_user">Park My Car</string>
     <string name="title_section3">Mon profil</string>
     <string name="title_section1">Ma carte</string>
     <string name="title_section2">Mes favoris</string>
@@ -20,6 +20,10 @@
     <!-- Display information on a place -->
     <string name="id_place_label">Id de la place</string>
     <string name="id_place_value">[id]</string>
+
+    <!-- API key-->
+    <string name="christianAPIKey">AIzaSyApl9xj59pteXu5YnxXHWGeLI8i11T8qsk</string>
+    <string name="ilerAPIKey">AIzaSyBnUJ24HsTk_xNcb0e1lR1wXsFdB2dhQ_4</string>
 
     <string-array name="size_arrays">
         <item>Small</item>
@@ -32,5 +36,21 @@
     <string name="title_activity_new_create_user">New_create_user</string>
     <string name="leftButton">leftButton</string>
     <string name="rightButton">rightButton</string>
+    <string name="title_activity_information_user">Information_user</string>
+
+    <string-array name="menu_array">
+        <item>Park My Car</item>
+        <item>Accueil</item>
+        <item>Mon compte</item>
+        <item>Paramètres</item>
+        <item>A propos</item>
+
+    </string-array>
+
+
+    <string name="drawer_open">Open navigation drawer</string>
+    <string name="drawer_close">Close navigation drawer</string>
+    <string name="action_websearch">Web search</string>
+    <string name="app_not_available">Sorry, there\'s no web browser available</string>
 
 </resources>
