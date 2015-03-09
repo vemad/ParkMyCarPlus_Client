@@ -16,6 +16,9 @@ import android.widget.TextView;
 import api.authentification.AuthentificateCallback;
 import api.authentification.AuthentificationServices;
 import api.place.*;
+import api.user.SignupCallback;
+import api.user.User;
+import api.user.UserServices;
 import api.zone.Density;
 import api.zone.GetListZonesByPositionCallback;
 import api.zone.GetZoneByIdCallback;
@@ -56,6 +59,8 @@ public class PlaceInformation extends ActionBarActivity {
         ZoneServices.getInstance().getZoneById(12,new ShowZoneCallback()).execute();
         ZoneServices.getInstance().indicateDensity(45.78166386726485, 4.872752178696828, Density.MEDIUM, new IndicateCallback()).execute();
         ZoneServices.getInstance().getListZonesByPosition(45.78166386726485, 4.872752178696828,5,  new ShowListZoneCallback()).execute();
+
+        UserServices.getInstance().signup("myname", "mypsw", new ResSignupCallback()).execute();
 
 
     }
@@ -207,6 +212,19 @@ public class PlaceInformation extends ActionBarActivity {
             }
             else{
                 Log.i("authOK", "Authentification OK");
+            }
+        }
+    }
+
+    private class ResSignupCallback extends SignupCallback{
+        @Override
+        protected void callback(Exception e, String message) {
+            if(e != null || message == null) {
+                Log.e("MainActivity", e.getMessage(), e);
+                Log.e("erreur", "Une erreur est survenu signup");
+            }
+            else {
+                Log.i("message", message);
             }
         }
     }
