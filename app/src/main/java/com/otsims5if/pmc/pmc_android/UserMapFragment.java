@@ -2,7 +2,6 @@ package com.otsims5if.pmc.pmc_android;
 
 import android.annotation.TargetApi;
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.location.Location;
@@ -30,13 +29,11 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.GroundOverlay;
-import com.google.android.gms.maps.model.GroundOverlayOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polygon;
-import com.google.android.gms.maps.model.PolygonOptions;
 import com.google.android.gms.maps.model.TileOverlay;
 import com.google.android.gms.maps.model.TileOverlayOptions;
 import com.google.maps.android.heatmaps.Gradient;
@@ -47,12 +44,13 @@ import com.otsims5if.pmc.pmc_android.design.Item;
 import java.util.ArrayList;
 import java.util.List;
 
+import api.favorite.Favorite;
 import api.place.GetListPlacesByPositionCallback;
 import api.place.Place;
 import api.place.PlaceServices;
 import api.place.ReleasePlaceCallback;
 import api.place.TakePlaceCallback;
-import api.zone.Density;
+import api.Density;
 import api.zone.GetListZonesByPositionCallback;
 import api.zone.IndicateDensityCallback;
 import api.zone.Zone;
@@ -69,6 +67,7 @@ public class UserMapFragment extends PlaceholderFragment{
     Button leaveButton;
     Switch placeFindSwitch;
     Marker currentPositionMarker;
+    Marker favoriteMarker;
     LatLng myCurrentLocation;
     LatLng myParkingLocation;
     Thread checkPlacesThread;
@@ -240,7 +239,7 @@ public class UserMapFragment extends PlaceholderFragment{
             @Override
             public void onMyLocationChange(Location location) {
                 LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-                CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 10);
+                CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 15);
                 if(openningActivity) {
                     map.animateCamera(cameraUpdate);
                     openningActivity = false;
@@ -254,118 +253,9 @@ public class UserMapFragment extends PlaceholderFragment{
             checkPlacesThread.start();
         }
 
-        /*map.setOnMyLocationButtonClickListener(new GoogleMap.OnMyLocationButtonClickListener() {
-            @Override
-            public boolean onMyLocationButtonClick() {
-                if(checkPlacesThread.getState()!= Thread.State.RUNNABLE){
-                    //startThread = true;
-                    checkPlacesThread.start();
-                }
-                //checkPlacesThread.start();
-                return true;
-            }
-        });*/
-
         map.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
             @Override
             public void onCameraChange(CameraPosition position) {
-                LatLngBounds bounds = map.getProjection().getVisibleRegion().latLngBounds;
-                System.out.println("NorthEst : Latitude = "+bounds.northeast.latitude+" and Longitude = "+bounds.northeast.longitude);
-                System.out.println("SouthWest : Latitude = "+bounds.southwest.latitude+" and Longitude = "+bounds.southwest.longitude);
-                //Set the right bound for calulate the grid for points
-                //Latitude case
-                if(bounds.northeast.latitude >= bounds.southwest.latitude){
-                    startLatitude = bounds.southwest.latitude;
-                    endLatitude = bounds.northeast.latitude;
-                }else{
-                    startLatitude = bounds.northeast.latitude;
-                    endLatitude = bounds.southwest.latitude;
-                }
-                //Longitude case
-                if(bounds.northeast.longitude >= bounds.southwest.longitude){
-                    startLongitude = bounds.southwest.longitude;
-                    endLongitude = bounds.northeast.longitude;
-                }else{
-                    startLongitude = bounds.northeast.longitude;
-                    endLongitude = bounds.southwest.longitude;
-                }
-
-                //Now calculate each point inside de grid thanks to a number of want points
-                intervalLongitude = (endLongitude - startLongitude)/numberOfPoints;
-                intervalLatitude = (endLatitude - startLatitude)/numberOfPoints;
-
-
-
-
-                /*if(!gridPolygon.isEmpty()) {
-                    for (Polygon marker : gridPolygon) {
-                        marker.remove();
-                    }
-                    gridPolygon.clear();
-                }
-                for(double j=startLatitude; j<endLatitude; j=j+intervalLatitude){
-                    int stroke = Color.RED;
-                    int fill = 0x40ff0000;
-                    for(double i=startLongitude; i<endLongitude; i=i+intervalLongitude){
-                        //set weight to 1 by default
-                        LatLng current = new LatLng(j+intervalLatitude/2, i+intervalLongitude/2);
-
-                        double res = Math.random();
-                        int red = (int)(255*res);
-                        int green = (int)(255*(1-res));
-                        fill = Color.argb(200, red, green, 0);
-
-                        Polygon polygon = map.addPolygon(new PolygonOptions()
-                                .add(new LatLng(j,i), new LatLng(j+intervalLatitude, i),
-                                        new LatLng(j+intervalLatitude, i+intervalLongitude), new LatLng(j, i+intervalLongitude), new LatLng(j,i))
-                                .strokeColor(Color.TRANSPARENT)
-                                .fillColor(fill));
-                        gridPolygon.add(polygon);
-                        //System.out.println(j+" | "+i);
-                        //System.out.println(current.getPoint().x+" - "+current.getPoint().y);
-
-
-                    }
-                }*/
-
-                //Display the heatmap
-                System.out.println("Creation heatmap");
-                /*if(mProvider==null) {
-//                    mProvider = new HeatmapTileProvider.Builder()
-//                            //.weightedData(list) //list with places
-//                            .weightedData(grid) // list with grid
-//                            //.gradient(gradient)
-//                            .opacity(1)
-//                            .radius(20)
-//                            .build();
-                    mProvider = new HeatmapTileProvider.Builder()
-                            .data(grid)
-                            .opacity(1)
-                            .radius(40)
-                            .build();
-                    // Add a tile overlay to the map, using the heat map tile provider.
-                    mOverlay = map.addTileOverlay(new TileOverlayOptions().tileProvider(mProvider));
-                }else{
-                    mProvider.setData(grid);
-                    mOverlay.clearTileCache();
-                }*/
-                /*if(!list.isEmpty()) {
-                    if (mProvider == null) {
-                        mProvider = new HeatmapTileProvider.Builder()
-                                .weightedData(list) //list with places
-                                        //.weightedData(grid) // list with grid
-                                .gradient(gradient)
-                                .opacity(0.8)
-                                .radius(50)
-                                .build();
-                        // Add a tile overlay to the map, using the heat map tile provider.
-                        mOverlay = map.addTileOverlay(new TileOverlayOptions().tileProvider(mProvider));
-                    } else {
-                        mProvider.setWeightedData(list);
-                        mOverlay.clearTileCache();
-                    }
-                }*/
-
 
             }
         });
@@ -391,6 +281,7 @@ public class UserMapFragment extends PlaceholderFragment{
             }
 
             try {
+                System.out.println("There is "+zones.length+" areas");
                 for (Zone zone : zones) {
                     LatLng position = new LatLng(zone.getLatitude(), zone.getLongitude());
                     if (zone.getDensity() == Density.HIGH) {
@@ -416,7 +307,7 @@ public class UserMapFragment extends PlaceholderFragment{
                     }
                 }
             }catch(Exception exp){
-
+                System.err.println("There is no areas");
             }
 
             //Update list for heatmap
@@ -549,39 +440,7 @@ public class UserMapFragment extends PlaceholderFragment{
     }
 
     public void showDensitySelectPopup(View v){
-        /*// Create custom dialog object
-        final Dialog dialog = new Dialog(v.getContext());
-        // Include dialog.xml file
-        dialog.setContentView(R.layout.zone_dialog);
-        // Set dialog title
-        dialog.setTitle("Etat de la zone");
 
-        // set values for custom dialog components - text, image and button
-
-        dialog.show();
-
-        Button highDensityButton = (Button) dialog.findViewById(R.id.highDensityButton);
-        // if decline button is clicked, close the custom dialog
-        highDensityButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Close dialog
-                dialog.dismiss();
-            }
-        });*/
-        /*CharSequence colors[] = new CharSequence[] {"red", "green", "blue", "black"};
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setTitle("Etat de la zone")
-                .setItems(colors, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        // The 'which' argument contains the index position
-                        // of the selected item
-                        dialog.dismiss();
-                    }
-                });
-        final Dialog dialog = builder.create();
-        dialog.show();*/
 
         final Item[] items = {
                 new Item("Forte", R.drawable.high),
@@ -650,38 +509,6 @@ public class UserMapFragment extends PlaceholderFragment{
         return false;
     }
 
-    public void updateDataForHeatMap(Place[] places){
-        double latitudeRange = intervalLatitude/2;
-        double longitudeRange = intervalLongitude/2;
-        System.out.println("latitudeRange "+latitudeRange);
-        System.out.println("longitudeRange "+longitudeRange);
-
-        /*for(WeightedLatLng point : grid) {
-            double intensity = 1;
-            for (Place place : places) {
-                if(insideRange(point.getPoint().x, place.getLatitude(), latitudeRange)
-                        && insideRange(point.getPoint().y, place.getLongitude(), longitudeRange)){
-                    //System.out.println("Inside range place");
-                       intensity++;
-                }
-               //System.out.println("intensity "+intensity);
-            }
-            point = new WeightedLatLng(new LatLng(point.getPoint().x, point.getPoint().y), intensity);
-            System.out.println("Get back intenisty "+point.getIntensity());
-
-            //Just display the grid
-            LatLng position = new LatLng(point.getPoint().x, point.getPoint().y);
-            int stroke = Color.RED;
-            int fill = 0x40ff0000;
-            Circle marker = map.addCircle(new CircleOptions()
-                    .center(position)
-                    .radius(1)
-                    .fillColor(fill)
-                    .zIndex(2)
-                    .strokeColor(stroke)
-                    .strokeWidth(2));
-        }*/
-    }
 
     @Override
     public void onResume() {
@@ -760,20 +587,7 @@ public class UserMapFragment extends PlaceholderFragment{
     /*Method for displaying a place received by a service*/
     private class ShowListPlacesCallback extends GetListPlacesByPositionCallback {
         protected void callback(Exception e, Place[] places){
-            /*if(!placeMarkerList.isEmpty()) {
-                for (Marker marker : placeMarkerList) {
-                    marker.remove();
-                }
-                placeMarkerList.clear();
-            }
-            for(Place place : places){
-                LatLng position = new LatLng(place.getLatitude(), place.getLongitude());
-                Marker marker = map.addMarker(new MarkerOptions()
-                        .position(position)
-                        .title("Place "+place.getId())
-                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.marker)));
-                placeMarkerList.add(marker);
-            }*/
+
             list.clear();
 
             //Circle version
@@ -807,9 +621,6 @@ public class UserMapFragment extends PlaceholderFragment{
                     }
                 }
             }
-
-            //Update list for heatmap
-            //updateDataForHeatMap(places);
 
             int[] colors = {
                     Color.rgb(102, 225, 0), // green
@@ -906,16 +717,20 @@ public class UserMapFragment extends PlaceholderFragment{
         //Allow to get the local position
         map.setMyLocationEnabled(true);
 
-        //Get my position
-        //myCurrentLocation = new Location(map.getMyLocation().getLatitude(),map.getMyLocation().ge);
-
-        /*Circle circle = map.addCircle(new CircleOptions()
-                .center(doubleMixte)
-                .radius(100)
-                .fillColor(0x40ff0000)
-                .strokeColor(Color.RED)
-                .strokeWidth(2));*/
-
         setUpMarkerListAndShowPlaces();
+    }
+
+    public void displayAndMoveToFavorite(Favorite favorite){
+
+        //First move to the right favorite address
+        LatLng latLng = new LatLng(favorite.getLatitude(), favorite.getLongitude());
+        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 15);
+        map.animateCamera(cameraUpdate);
+
+        //Display after the marker
+        favoriteMarker =  map.addMarker(new MarkerOptions()
+                .position(latLng)
+                .title(favorite.getAddress())
+                .icon(BitmapDescriptorFactory.fromResource(R.drawable.favorite)));
     }
 }
