@@ -40,13 +40,13 @@
                 android:layout_marginRight="100dp"
                 android:visibility="gone"
                 />
-
+            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE))
             <Button
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="SE GARER"
                 android:textColor="@android:color/white"
-                android:drawableRight="@drawable/marker"
+                android:drawableRight="@drawable/marker_boutton"
                 android:background="@drawable/green_boutton"
                 android:id="@+id/parkButton"
                 android:layout_marginLeft="100dp"

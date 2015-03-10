@@ -187,6 +187,7 @@ public class UserMapFragment extends PlaceholderFragment{
         setUpMapIfNeeded(v);
 
         //Set actions for leave and park buttons
+
         parkButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 leaveButton.setVisibility(View.VISIBLE);
