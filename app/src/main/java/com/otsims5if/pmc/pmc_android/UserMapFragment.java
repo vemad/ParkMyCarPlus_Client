@@ -143,7 +143,7 @@ public class UserMapFragment extends PlaceholderFragment{
         // Get buttons by there id
         parkButton = (Button) v.findViewById(R.id.parkButton);
         leaveButton = (Button) v.findViewById(R.id.leaveButton);
-        placeFindSwitch = (Switch) v.findViewById(R.id.placeFindSwitch);
+       // placeFindSwitch = (Switch) v.findViewById(R.id.placeFindSwitch);
 
         mapView = (MapView) v.findViewById(R.id.map);
         mapView.onCreate(savedInstanceState);
@@ -214,7 +214,7 @@ public class UserMapFragment extends PlaceholderFragment{
                 showDensitySelectPopup(v);
             }
         });
-        placeFindSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+     /*   placeFindSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
                     // The toggle is enabled
@@ -227,7 +227,7 @@ public class UserMapFragment extends PlaceholderFragment{
                     startThread = false;
                 }
             }
-        });
+        });*/
 
         //Create the heatmap
 
