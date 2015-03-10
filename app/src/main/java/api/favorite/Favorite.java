@@ -24,4 +24,36 @@ public class Favorite {
         this.density = null;
         this.intensity = 0;
     }
+
+    public int getId() {
+        return id;
+    }
+
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public Density getDensity() {
+        return density;
+    }
+
+    public float getIntensity() {
+        return intensity;
+    }
+
+    public void setDensity(Density density) {
+        this.density = density;
+    }
+
+    public void setIntensity(float intensity) {
+        this.intensity = intensity;
+    }
 }

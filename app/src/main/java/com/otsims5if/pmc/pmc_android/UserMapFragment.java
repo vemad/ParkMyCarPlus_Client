@@ -44,6 +44,7 @@ import com.otsims5if.pmc.pmc_android.design.Item;
 import java.util.ArrayList;
 import java.util.List;
 
+import api.favorite.Favorite;
 import api.place.GetListPlacesByPositionCallback;
 import api.place.Place;
 import api.place.PlaceServices;
@@ -66,6 +67,7 @@ public class UserMapFragment extends PlaceholderFragment{
     Button leaveButton;
     Switch placeFindSwitch;
     Marker currentPositionMarker;
+    Marker favoriteMarker;
     LatLng myCurrentLocation;
     LatLng myParkingLocation;
     Thread checkPlacesThread;
@@ -716,5 +718,19 @@ public class UserMapFragment extends PlaceholderFragment{
         map.setMyLocationEnabled(true);
 
         setUpMarkerListAndShowPlaces();
+    }
+
+    public void displayAndMoveToFavorite(Favorite favorite){
+
+        //First move to the right favorite address
+        LatLng latLng = new LatLng(favorite.getLatitude(), favorite.getLongitude());
+        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 15);
+        map.animateCamera(cameraUpdate);
+
+        //Display after the marker
+        favoriteMarker =  map.addMarker(new MarkerOptions()
+                .position(latLng)
+                .title(favorite.getAddress())
+                .icon(BitmapDescriptorFactory.fromResource(R.drawable.favorite)));
     }
 }

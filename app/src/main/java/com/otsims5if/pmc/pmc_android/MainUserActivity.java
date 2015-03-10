@@ -359,6 +359,9 @@ public class MainUserActivity extends ActionBarActivity implements ActionBar.Tab
                 case 0 :
                     return new UserMapFragment();
                 case 1 :
+                    /*BookMarkFragment newBookMarkFragment = new BookMarkFragment();
+                    newBookMarkFragment.setViewPager(mViewPager);
+                    return newBookMarkFragment;*/
                     return new BookMarkFragment();
                 default:
                     return new PlaceholderFragment();

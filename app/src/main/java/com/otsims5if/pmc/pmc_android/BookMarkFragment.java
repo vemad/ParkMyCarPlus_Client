@@ -1,10 +1,12 @@
 package com.otsims5if.pmc.pmc_android;
 
 import android.annotation.TargetApi;
+import android.content.Context;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,12 +15,16 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.otsims5if.pmc.pmc_android.design.StableArrayAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import api.Density;
+import api.favorite.Favorite;
 
 /**
  * Created by Iler on 18/02/2015.
@@ -29,9 +35,11 @@ public class BookMarkFragment extends PlaceholderFragment{
     private Button findAdressButton;
     private EditText addressEditText;
     private ListView addressFaaListView;
-    private ArrayList<String> favList = new ArrayList<String>();
+    private ArrayList<Favorite> favList = new ArrayList<Favorite>();
     private StableArrayAdapter adapter;
     private ArrayAdapter<String> arrAdapt;
+    private ViewPager viewPager;
+
 
     public BookMarkFragment() {
         super();
@@ -66,6 +74,8 @@ public class BookMarkFragment extends PlaceholderFragment{
                                 view.setAlpha(1);
                             }
                         });*/
+                ((MainUserActivity) getActivity()).mViewPager.setCurrentItem(0,true);
+                ((UserMapFragment)(((MainUserActivity) getActivity()).mSectionsPagerAdapter.getItem(0))).displayAndMoveToFavorite(favList.get(position));
             }
 
         });
@@ -74,9 +84,16 @@ public class BookMarkFragment extends PlaceholderFragment{
             public void onClick(View v) {
                 LatLng position = getLocationFromAddress(addressEditText.getText().toString());
                 if(position!=null) {
-                    String newEntry = addressEditText.getText().toString() + " - (" + position.latitude + " | " + position.longitude + " )";
-                    adapter.add(newEntry);
+                    Favorite newFavorite = new Favorite(position.latitude, position.longitude, addressEditText.getText().toString());
+                    newFavorite.setDensity(Density.LOW);
+                    adapter.add(newFavorite);
                     adapter.notifyDataSetChanged();
+                    Context context = getActivity().getApplicationContext();
+                    CharSequence text = "Nouvelle adresse en favoris";
+                    int duration = Toast.LENGTH_SHORT;
+                    
+                    Toast toast = Toast.makeText(context, text, duration);
+                    toast.show();
                 }
             }
         });
@@ -107,4 +124,10 @@ public class BookMarkFragment extends PlaceholderFragment{
 
         return p1;
     }
+
+    public void setViewPager(ViewPager viewPager) {
+        this.viewPager = viewPager;
+    }
+
+
 }

@@ -2,7 +2,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#ff041126"
     tools:context="com.otsims5if.pmc.pmc_android.MainUserActivity" >
 
      <android.support.v4.widget.DrawerLayout
