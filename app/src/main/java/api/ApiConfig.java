@@ -21,6 +21,8 @@ public class ApiConfig {
     public static final String authRoutes = baseUrl + "/oauth";
     public static final String placesRoutes = baseUrl + "/rest/places";
     public static final String zonesRoutes = baseUrl + "/rest/zones";
+    public static final String usersRoutes = baseUrl + "/rest/users";
+    public static final String favoritesRoutes = baseUrl + "/rest/favorites";
 
 
 

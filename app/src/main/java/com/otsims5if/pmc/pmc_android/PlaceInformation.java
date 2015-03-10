@@ -1,7 +1,6 @@
 package com.otsims5if.pmc.pmc_android;
 
 import android.support.v7.app.ActionBarActivity;
-import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,13 +9,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.os.Build;
 import android.widget.TextView;
 
 import api.authentification.AuthentificateCallback;
-import api.authentification.AuthentificationServices;
 import api.place.*;
-import api.zone.Density;
+import api.user.SignupCallback;
+import api.user.UserServices;
+import api.Density;
 import api.zone.GetListZonesByPositionCallback;
 import api.zone.GetZoneByIdCallback;
 import api.zone.IndicateDensityCallback;
@@ -56,6 +55,8 @@ public class PlaceInformation extends ActionBarActivity {
         ZoneServices.getInstance().getZoneById(12,new ShowZoneCallback()).execute();
         ZoneServices.getInstance().indicateDensity(45.78166386726485, 4.872752178696828, Density.MEDIUM, new IndicateCallback()).execute();
         ZoneServices.getInstance().getListZonesByPosition(45.78166386726485, 4.872752178696828,5,  new ShowListZoneCallback()).execute();
+
+        UserServices.getInstance().signup("myname", "mypsw", new ResSignupCallback()).execute();
 
 
     }
@@ -164,7 +165,7 @@ public class PlaceInformation extends ActionBarActivity {
                 Log.e("erreur", "Une erreur est survenu getZone");
             }
             else {
-                Log.i("maZone", "id:" + zone.getId() + " density:" + zone.getDensity());
+                Log.i("idZone", "id:" + zone.getId() + " density:" + zone.getDensity() + " intensity:" + zone.getIntensity());
             }
         }
     }
@@ -177,7 +178,7 @@ public class PlaceInformation extends ActionBarActivity {
                 Log.e("erreur", "Une erreur est survenu indicate");
             }
             else {
-                Log.i("maZone", "id:" + zone.getId() + " density:" + zone.getDensity());
+                Log.i("maZone", "id:" + zone.getId() + " density:" + zone.getDensity() + " intensity:" + zone.getIntensity());
             }
         }
     }
@@ -192,7 +193,7 @@ public class PlaceInformation extends ActionBarActivity {
             else {
                 Log.i("listZones", "listZones");
                 for (int i = 0; i < zones.length; i++) {
-                    Log.i("zone", "id:" + zones[i].getId() + " density:" + zones[i].getDensity());
+                    Log.i("zone", "id:" + zones[i].getId() + " density:" + zones[i].getDensity() + " intensity:" + zones[i].getIntensity());
                 }
             }
         }
@@ -207,6 +208,19 @@ public class PlaceInformation extends ActionBarActivity {
             }
             else{
                 Log.i("authOK", "Authentification OK");
+            }
+        }
+    }
+
+    private class ResSignupCallback extends SignupCallback{
+        @Override
+        protected void callback(Exception e, String message) {
+            if(e != null || message == null) {
+                Log.e("MainActivity", e.getMessage(), e);
+                Log.e("erreur", "Une erreur est survenu signup");
+            }
+            else {
+                Log.i("message", message);
             }
         }
     }
