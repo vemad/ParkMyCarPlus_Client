@@ -12,6 +12,11 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import api.authentification.AuthentificateCallback;
+import api.favorite.CreateFavoriteCallback;
+import api.favorite.DeleteFavoriteCallback;
+import api.favorite.Favorite;
+import api.favorite.FavoriteServices;
+import api.favorite.ListFavoritesCallback;
 import api.place.*;
 import api.user.SignupCallback;
 import api.user.UserServices;
@@ -57,6 +62,10 @@ public class PlaceInformation extends ActionBarActivity {
         ZoneServices.getInstance().getListZonesByPosition(45.78166386726485, 4.872752178696828,5,  new ShowListZoneCallback()).execute();
 
         UserServices.getInstance().signup("myname", "mypsw", new ResSignupCallback()).execute();
+
+        FavoriteServices.getInstance().createFavorite(45.78166386726485, 4.872752178696828, "Pas chez moi", new ResCreateFavoriteCallback()).execute();
+        FavoriteServices.getInstance().createFavorite(45.78166386726485, 4.872752178696828, "Pas chez moi2", new ResCreateFavoriteCallback()).execute();
+        FavoriteServices.getInstance().listFavorites(new ResListFavoriteCallback()).execute();
 
 
     }
@@ -221,6 +230,49 @@ public class PlaceInformation extends ActionBarActivity {
             }
             else {
                 Log.i("message", message);
+            }
+        }
+    }
+
+    private class ResCreateFavoriteCallback extends CreateFavoriteCallback{
+        @Override
+        protected void callback(Exception e, Favorite fav) {
+            if(e != null || fav == null) {
+                Log.e("MainActivity", e.getMessage(), e);
+                Log.e("erreur", "Une erreur est survenu create favorite");
+            }
+            else {
+                Log.i("favoriteCreated", fav.getAddress());
+            }
+        }
+    }
+
+    private class ResListFavoriteCallback extends ListFavoritesCallback{
+        @Override
+        protected void callback(Exception e, Favorite[] favs) {
+            if(e != null || favs == null) {
+                Log.e("MainActivity", e.getMessage(), e);
+                Log.e("erreur", "Une erreur est survenu list favorite");
+            }
+            else {
+                Log.i("listFavorites", "listFavorites");
+                for (Favorite fav:favs) {
+                    Log.i("fav", "id:" + fav.getId() + " address:" + fav.getAddress());
+                    FavoriteServices.getInstance().deleteFavorite(fav.getId(), new ResDeleteFavoriteCallback()).execute();
+                }
+            }
+        }
+    }
+
+    private class ResDeleteFavoriteCallback extends DeleteFavoriteCallback{
+        @Override
+        protected void callback(Exception e, String mess) {
+            if(e != null || mess == null) {
+                Log.e("MainActivity", e.getMessage(), e);
+                Log.e("erreur", "Une erreur est survenu delete favorite");
+            }
+            else {
+                Log.i("favoriteDeleted", mess);
             }
         }
     }
