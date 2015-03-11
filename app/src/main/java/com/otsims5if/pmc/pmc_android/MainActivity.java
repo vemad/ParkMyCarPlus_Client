@@ -80,9 +80,9 @@ public class MainActivity extends ActionBarActivity implements OnClickListener {
         imgLogo.setPadding(0,getResources().getConfiguration().screenHeightDp/2, 0, 0);
 
         loginBox = (LinearLayout) findViewById(R.id.loginBox);
-        if(portraitLayout==null){
+        /*if(portraitLayout==null){
             portraitLayout = (RelativeLayout.LayoutParams) loginBox.getLayoutParams();
-        }
+        }*/
         loginBox.setVisibility(View.GONE);
 
         //login Editext
@@ -193,11 +193,19 @@ public class MainActivity extends ActionBarActivity implements OnClickListener {
                         if(loginException==null) {
                             displayUserInterface();
                         }else{
-                            Context context = getApplicationContext();
+                            /*Context context = getApplicationContext();
                             CharSequence text = "Username ou mot de passe invalide :(";
                             int duration = Toast.LENGTH_SHORT;
 
-                            Toast toast = Toast.makeText(context, text, duration);
+                            Toast toast2 = Toast.makeText(context, text, duration);
+                            toast2.show();*/
+
+                            LayoutInflater inflater = getLayoutInflater();
+                            View view = inflater.inflate(R.layout.custom_toast,
+                                    (ViewGroup) findViewById(R.id.relativeLayout1));
+
+                            Toast toast = new Toast(getApplicationContext());
+                            toast.setView(view);
                             toast.show();
                         }
                     }
@@ -238,7 +246,7 @@ public class MainActivity extends ActionBarActivity implements OnClickListener {
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
 
-        // Checks the orientation of the screen for landscape and portrait and set portrait mode always
+        /*// Checks the orientation of the screen for landscape and portrait and set portrait mode always
         if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
 
             //android:layout_below="@+id/imageLogo"
@@ -254,6 +262,6 @@ public class MainActivity extends ActionBarActivity implements OnClickListener {
         } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT){
 
             loginBox.setLayoutParams(portraitLayout);
-        }
+        }*/
     }
 }

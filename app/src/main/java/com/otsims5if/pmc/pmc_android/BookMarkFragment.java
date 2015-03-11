@@ -14,7 +14,9 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
@@ -39,6 +41,7 @@ public class BookMarkFragment extends PlaceholderFragment{
     private StableArrayAdapter adapter;
     private ArrayAdapter<String> arrAdapt;
     private ViewPager viewPager;
+    private View toastView;
 
 
     public BookMarkFragment() {
@@ -48,6 +51,9 @@ public class BookMarkFragment extends PlaceholderFragment{
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        //Just for the toast view
+        toastView = inflater.inflate(R.layout.custom_toast, (ViewGroup) getActivity().findViewById(R.id.relativeLayout1));
+
         View rootView = inflater.inflate(R.layout.fragment_bookmark, container, false);
         findAdressButton = (Button) rootView.findViewById(R.id.findAdress);
         addressEditText = (EditText) rootView.findViewById(R.id.adressEditText);
@@ -74,8 +80,11 @@ public class BookMarkFragment extends PlaceholderFragment{
                                 view.setAlpha(1);
                             }
                         });*/
+                Favorite favorite = adapter.getItemFromPosition(position);
                 ((MainUserActivity) getActivity()).mViewPager.setCurrentItem(0,true);
-                ((UserMapFragment)(((MainUserActivity) getActivity()).mSectionsPagerAdapter.getItem(0))).displayAndMoveToFavorite(favList.get(position));
+                UserMapFragment test = ((UserMapFragment)(((MainUserActivity) getActivity()).mSectionsPagerAdapter.getItem(0)));
+                test.displayAndMoveToFavorite(favorite);
+
             }
 
         });
@@ -88,12 +97,21 @@ public class BookMarkFragment extends PlaceholderFragment{
                     newFavorite.setDensity(Density.LOW);
                     adapter.add(newFavorite);
                     adapter.notifyDataSetChanged();
-                    Context context = getActivity().getApplicationContext();
+                    /*Context context = getActivity().getApplicationContext();
                     CharSequence text = "Nouvelle adresse en favoris";
                     int duration = Toast.LENGTH_SHORT;
-                    
+
                     Toast toast = Toast.makeText(context, text, duration);
+                    toast.show();*/
+
+                    Toast toast = new Toast(getActivity().getApplicationContext());
+                    ((ImageView) toastView.findViewById(R.id.smileyImage)).setImageResource(R.drawable.happy);
+                    ((TextView) toastView.findViewById(R.id.toastTextView)).setText("Nouvelle adresse en favoris");
+                    toast.setView(toastView);
                     toast.show();
+
+                    addressEditText.setText("");
+
                 }
             }
         });

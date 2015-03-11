@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">PMC_Android</string>
+    <string name="app_name">Park My Car</string>
     <string name="action_settings">Settings</string>
     <string name="userProfil">userProfil</string>
     <string name="logo">logo</string>
@@ -35,10 +35,10 @@
 
     <string name="title_activity_mine">mine</string>
     <string name="hello_world">Hello world!</string>
-    <string name="title_activity_new_create_user">New_create_user</string>
+    <string name="title_activity_new_create_user">Nouveau utilisateur</string>
     <string name="leftButton">leftButton</string>
     <string name="rightButton">rightButton</string>
-    <string name="title_activity_information_user">Information_user</string>
+    <string name="title_activity_information_user">Profil utilisateur</string>
 
     <string-array name="menu_array">
         <item>Park My Car</item>

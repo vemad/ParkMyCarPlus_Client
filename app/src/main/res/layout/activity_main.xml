@@ -13,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/imageLogo"
-        android:src="@drawable/logo3"
+        android:src="@drawable/finallogo2"
         android:contentDescription="@string/logo" />
 
     <android.support.v4.widget.DrawerLayout
@@ -27,7 +27,9 @@
         <FrameLayout
             android:id="@+id/content_frame"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent" >
+
+        </FrameLayout>
 
         <!-- android:layout_gravity="start" tells DrawerLayout to treat
              this as a sliding drawer on the left side for left-to-right
@@ -52,7 +54,9 @@
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
         android:orientation="vertical"
-        android:id="@+id/loginBox">
+        android:id="@+id/loginBox"
+        android:layout_gravity="center_horizontal|bottom"
+        android:layout_alignParentBottom="true">
 
         <!--<ImageView
             android:layout_width="match_parent"
@@ -106,7 +110,6 @@
         </LinearLayout>
 
     </LinearLayout>
-
 
 
 </RelativeLayout>

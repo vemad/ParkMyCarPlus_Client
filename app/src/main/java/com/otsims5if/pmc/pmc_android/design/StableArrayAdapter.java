@@ -53,9 +53,9 @@ public class StableArrayAdapter extends ArrayAdapter {
     }
 
 
-    public int getPosition(Favorite item) {
+    public Favorite getItemFromPosition(int position) {
         // TODO Auto-generated method stub
-        return super.getPosition(item);
+        return Target.get(position);
     }
 
     @Override
