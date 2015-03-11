@@ -216,6 +216,8 @@ public class MainActivity extends ActionBarActivity implements OnClickListener {
 
     }
 
+   /* @Override
+
     /*Method for remove a place taken by the user*/
     private class Login extends AuthentificateCallback {
         protected void callback(Exception e){

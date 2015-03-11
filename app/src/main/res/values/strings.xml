@@ -12,7 +12,7 @@
     <string name="title_activity_main_user">Park My Car</string>
     <string name="title_section3">Mon profil</string>
     <string name="title_section1">Ma carte</string>
-    <string name="title_section2">Mes favoris</string>
+    <string name="title_section2">Mes Favoris</string>
     <string name="title_activity_place_information">PlaceInformation</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="baseUrl">http://localhost:8080</string>
@@ -39,6 +39,7 @@
     <string name="leftButton">leftButton</string>
     <string name="rightButton">rightButton</string>
     <string name="title_activity_information_user">Profil utilisateur</string>
+    <string name="title_activity_mail">e-mail</string>
 
     <string-array name="menu_array">
         <item>Park My Car</item>

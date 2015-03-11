@@ -5,7 +5,7 @@
         android:id="@+id/action_cart"
         android:icon="@drawable/undo"
         android:orderInCategory="100"
-        android:title="mine"
+        android:title="retour"
         android:layout_gravity="left"
         app:showAsAction="always"/>
 

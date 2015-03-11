@@ -25,7 +25,9 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TabHost;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -95,17 +97,20 @@ public class MainUserActivity extends ActionBarActivity implements ActionBar.Tab
             }
         });
 
-        // For each of the sections in the app, add a tab to the action bar.
-        for (int i = 0; i < mSectionsPagerAdapter.getCount(); i++) {
-            // Create a tab with text corresponding to the page title defined by
-            // the adapter. Also specify this Activity object, which implements
-            // the TabListener interface, as the callback (listener) for when
-            // this tab is selected.
-            actionBar.addTab(
-                    actionBar.newTab()
-                            .setText(mSectionsPagerAdapter.getPageTitle(i))
-                            .setTabListener(this));
-        }
+              //Ajouter les onglets
+        actionBar.addTab(actionBar.newTab()
+                .setText(mSectionsPagerAdapter.getPageTitle(0))
+                .setTabListener(this)
+                .setIcon(R.drawable.map));
+
+
+
+        actionBar.addTab(actionBar.newTab()
+                .setText(mSectionsPagerAdapter.getPageTitle(1))
+                .setTabListener(this)
+                .setIcon( R.drawable.bookmark)
+                );
+
 
 
         ////
@@ -127,7 +132,10 @@ public class MainUserActivity extends ActionBarActivity implements ActionBar.Tab
         mNavItems.add(new NavItem("Accueil", "", R.drawable.home));
         mNavItems.add(new NavItem("Compte", "Mon compte", R.drawable.user));
         mNavItems.add(new NavItem("Paramètres", "Changer les paramètres", R.drawable.settings));
+        mNavItems.add(new NavItem("Commentaires", "Envoyez un e-mail", R.drawable.mail));
         mNavItems.add(new NavItem("A propos de", "Park my Car", R.drawable.action_about));
+
+
         for(int i=0;i<menu_number;i++){
             enable[i]=1;
         }
@@ -182,54 +190,32 @@ public class MainUserActivity extends ActionBarActivity implements ActionBar.Tab
         mDrawerList.setItemChecked(position, true);
 
         // update the main content by replacing fragments
-        if (position == 1) {
+   /*     if (position == 1) {
             if(enable[position]==0) {
 
 
-
-             /*   for (int i = 0; i < mSectionsPagerAdapter.getCount(); i++) {
-                    getSupportActionBar().addTab(
-                            getSupportActionBar().newTab()
-                                    .setText(mSectionsPagerAdapter.getPageTitle(i))
-                                    .setTabListener(this));
-                }
-                getSupportActionBar().selectTab(getSupportActionBar().getTabAt(0));
-                enable[position]=1;*/
-//                fragmentManager.beginTransaction().hide(fragment);
-               // mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
-               // mViewPager = (ViewPager) findViewById(R.id.pager);
-               // mViewPager.setAdapter(mSectionsPagerAdapter);
-            }
+           }
         }
         if(position!=1 && position!=0){  enable[1]=0;
           // getSupportActionBar().removeAllTabs();
             Intent intent = new Intent(this, InformationUser.class);
             startActivity(intent);
-        /*    fragment = new PlanetFragment();
-            Bundle args = new Bundle();
-            args.putInt(PlanetFragment.ARG_PLANET_NUMBER, position);
-            fragment.setArguments(args);
-             fragmentManager = getSupportFragmentManager();
-         //   fragmentManager_aux = fragmentManager;
-            fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();*/
-
-         //   mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
-          //  mViewPager = (ViewPager) findViewById(R.id.pager);
-           // mViewPager.setAdapter(mSectionsPagerAdapter);
-        //    mDrawerLayout.addView((View)new UserMapFragment());
-
-       /*     Fragment fragment = new PlanetFragment();
-            Bundle args = new Bundle();
-            args.putInt(PlanetFragment.ARG_PLANET_NUMBER, position);
-            fragment.setArguments(args);
-
-            fragmentManager = getSupportFragmentManager();
-            fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();*/
+        }*/
+        Intent intent;
+        switch(position){
+            case 2: intent = new Intent(this, InformationUser.class);
+                    startActivity(intent);
+                    break;
+            case 4: intent = new Intent(this, MailActivity.class);
+                    startActivity(intent);
+                    break;
+            default: ;
         }
+
 
         // update selected item and title, then close the drawer
         mDrawerList.setItemChecked(position, true);
-        setTitle(menutTitles[position]);
+        setTitle(menutTitles[0]);
         mDrawerLayout.closeDrawer(mDrawerList);
 
     }
@@ -276,13 +262,13 @@ public class MainUserActivity extends ActionBarActivity implements ActionBar.Tab
         mDrawerToggle.onConfigurationChanged(newConfig);
     }
 
-    @Override
+/*    @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         // If the nav drawer is open, hide action items related to the content view
         boolean drawerOpen = mDrawerLayout.isDrawerOpen(mDrawerList);
         menu.findItem(R.id.action_websearch).setVisible(!drawerOpen);
         return super.onPrepareOptionsMenu(menu);
-    }
+    }*/
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -311,17 +297,18 @@ public class MainUserActivity extends ActionBarActivity implements ActionBar.Tab
     }
 
 
-    @Override
-   /* public boolean onCreateOptionsMenu(Menu menu) {
+   /* @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main_user, menu);
         return true;
     }*/
+   /*@Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.main, menu);
         return super.onCreateOptionsMenu(menu);
-    }
+    }*/
 
 
 
