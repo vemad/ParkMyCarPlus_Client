@@ -1,21 +1,28 @@
 package com.otsims5if.pmc.pmc_android;
 
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.LinearLayout;
 import android.widget.ListAdapter;
+import android.widget.RelativeLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 
@@ -187,6 +194,27 @@ public class UserMapFragment extends PlaceholderFragment{
         setUpMapIfNeeded(v);
 
         //Set actions for leave and park buttons
+        DisplayMetrics displaymetrics = new DisplayMetrics();
+        getActivity().getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
+        int height = displaymetrics.heightPixels;
+        int width = displaymetrics.widthPixels;
+        System.out.println("aaaaaaaaa "+width);
+        System.out.println("aaaaaaaaa "+height);
+
+        parkButton.setY(height-300);
+        parkButton.setX((width/2)-150);
+        parkButton.setLayoutParams(new RelativeLayout.LayoutParams(300, 50));
+
+        leaveButton.setY(height-300);
+        leaveButton.setX((width/2)-150);
+        leaveButton.setLayoutParams(new RelativeLayout.LayoutParams(300, 50));
+
+       /*
+
+        *    android:layout_marginLeft="150dp"
+                android:layout_marginRight="150dp"
+
+        * */
 
         parkButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
