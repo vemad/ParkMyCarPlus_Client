@@ -164,8 +164,8 @@ public class UserMapFragment extends PlaceholderFragment{
         }
 
         // Get buttons by there id
-        parkButton = (Button) v.findViewById(R.id.parkButton);
-        leaveButton = (Button) v.findViewById(R.id.leaveButton);
+        parkButton = (Button) view.findViewById(R.id.parkButton);
+        leaveButton = (Button) view.findViewById(R.id.leaveButton);
        // placeFindSwitch = (Switch) v.findViewById(R.id.placeFindSwitch);
 
         mapView = (MapView) view.findViewById(R.id.map);
@@ -206,17 +206,27 @@ public class UserMapFragment extends PlaceholderFragment{
         //Set actions for leave and park buttons
         DisplayMetrics displaymetrics = new DisplayMetrics();
         getActivity().getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
-        int height = displaymetrics.heightPixels;
+
+     /*   Display display = getActivity().getWindowManager().getDefaultDisplay();
+        int screenWidth = display.getWidth();
+        int screenHeight = display.getHeight();
+        System.out.println("screenWidth "+screenWidth);
+*/
+
+        float height = displaymetrics.heightPixels;//216
         int width = displaymetrics.widthPixels;
         System.out.println("aaaaaaaaa "+width);
-        System.out.println("aaaaaaaaa "+height);
+        System.out.println("height "+height);//1280
+        System.out.println("height-(height/4) "+(height-(height/3)));
 
-        parkButton.setY(height-300);
-        parkButton.setX((width/2)-150);
+        parkButton.setY(height-(height/3));
+        parkButton.setX((width/4));
         parkButton.setLayoutParams(new RelativeLayout.LayoutParams(300, 50));
 
-        leaveButton.setY(height-300);
-        leaveButton.setX((width/2)-150);
+        
+
+        leaveButton.setY(height-(height/3));
+        leaveButton.setX((width/4));
         leaveButton.setLayoutParams(new RelativeLayout.LayoutParams(300, 50));
 
        /*
