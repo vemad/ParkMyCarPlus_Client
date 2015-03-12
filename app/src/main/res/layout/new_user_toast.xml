@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/layoutToast"
+    android:padding="1dp"
+    android:background="@layout/roundborder">
+
+    <ImageView
+        android:layout_height="wrap_content"
+        android:layout_width="fill_parent"
+        android:src="@drawable/sorry2"
+        android:layout_margin="5dip"
+        android:id="@+id/smileyImage">
+    </ImageView>
+
+    <TextView
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:id="@+id/toastUser"
+        android:layout_height="wrap_content"
+        android:layout_width="fill_parent"
+        android:text="Vérifiez le mot de pass"
+        android:gravity="center"
+        android:layout_below="@+id/smileyImage"
+        android:textColor="@android:color/white">
+    </TextView>
+
+</RelativeLayout>

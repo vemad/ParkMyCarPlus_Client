@@ -223,7 +223,7 @@ public class UserMapFragment extends PlaceholderFragment{
         parkButton.setX((width/4));
         parkButton.setLayoutParams(new RelativeLayout.LayoutParams(300, 50));
 
-        
+
 
         leaveButton.setY(height-(height/3));
         leaveButton.setX((width/4));
