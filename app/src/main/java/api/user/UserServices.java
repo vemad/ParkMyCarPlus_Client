@@ -14,6 +14,8 @@ import org.springframework.web.client.RestTemplate;
 
 import api.ApiConfig;
 import api.StatusMessage;
+import api.authentification.AuthentificationServices;
+import api.favorite.Favorite;
 
 /**
  * Created by Gaetan on 09/03/2015.
@@ -60,5 +62,39 @@ public class UserServices {
         }
 
         return new Signup();
+    }
+
+    /*
+    * Service get information about the user
+    */
+    public AsyncTask<Void, Void, Pair<Exception, User>> getUser(final GetUserCallback cb){
+
+        class GetUser extends AsyncTask<Void, Void, Pair<Exception, User>> {
+            @Override
+            protected Pair<Exception, User> doInBackground(Void... params) {
+                try {
+                    final String url = ApiConfig.usersRoutes + "";
+
+                    HttpHeaders requestHeaders = new HttpHeaders();
+                    AuthentificationServices.getInstance().addAuthorization(requestHeaders);
+                    HttpEntity<?> requestEntity = new HttpEntity<>(requestHeaders);
+
+                    RestTemplate restTemplate = new RestTemplate();
+                    restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
+
+                    ResponseEntity<User> responseEntity = restTemplate.exchange(url, HttpMethod.GET, requestEntity, User.class);
+                    return new Pair<>(null, responseEntity.getBody());
+
+                } catch (Exception e) {
+                    return new Pair<>(e, null);
+                }
+            }
+            @Override
+            protected void onPostExecute(Pair<Exception, User> resRequest) {
+                if(cb != null) cb.callback(resRequest.first, resRequest.second);
+            }
+        }
+
+        return new GetUser();
     }
 }
