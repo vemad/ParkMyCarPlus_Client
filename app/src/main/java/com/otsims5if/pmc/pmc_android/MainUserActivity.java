@@ -3,6 +3,7 @@ package com.otsims5if.pmc.pmc_android;
 import android.app.SearchManager;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
@@ -33,6 +34,10 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Locale;
+
+import api.user.GetUserCallback;
+import api.user.User;
+import api.user.UserServices;
 
 
 public class MainUserActivity extends ActionBarActivity implements ActionBar.TabListener{
@@ -68,6 +73,10 @@ public class MainUserActivity extends ActionBarActivity implements ActionBar.Tab
 
     FragmentManager fragmentManager;
     Fragment fragment;
+
+    private Exception CreateException;
+    private User getInformations;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -189,6 +198,16 @@ public class MainUserActivity extends ActionBarActivity implements ActionBar.Tab
         }
     }
 
+    private class Information  extends GetUserCallback {
+        protected void callback(Exception e, User user){
+            System.out.println("exceptionnn "+e);
+            CreateException = e;
+            getInformations = user;
+            //System.out.println("User name" + user.getUsername());
+            //System.out.println("Exception e GetUser :" +e);
+        }
+    }
+
     private void selectItem(int position) {
         mDrawerList.setItemChecked(position, true);
 
@@ -201,13 +220,40 @@ public class MainUserActivity extends ActionBarActivity implements ActionBar.Tab
         }
         if(position!=1 && position!=0){  enable[1]=0;
           // getSupportActionBar().removeAllTabs();
-            Intent intent = new Intent(this, InformationUser.class);
+            Intent intent = new Intent(this, swit.class);
             startActivity(intent);
         }*/
-        Intent intent;
+        final Intent intent;
         switch(position){
-            case 2: intent = new Intent(this, InformationUser.class);
-                    startActivity(intent);
+            case 2:
+                    System.out.println("case2");
+                    intent = new Intent(this, InformationUser.class);
+
+
+                AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>() {
+                    @Override
+                    protected void onPreExecute() {
+                        System.out.println("prexecute");
+                        UserServices.getInstance().getUser(new Information()).execute();
+                        System.out.println("after "+ CreateException);
+                    }
+
+                    @Override
+                    protected Void doInBackground(Void... arg0) {return null;}
+                    @Override
+                    protected void onPostExecute(Void result) {
+                        System.out.println("aaaaaaaaaa");
+                        if(CreateException == null) {
+                            System.out.println("after2 " + CreateException);
+                            System.out.println("getUser" + getInformations.getUsername());
+                            intent.putExtra("name", getInformations.getUsername());
+                            intent.putExtra("score", getInformations.getScore());
+                            System.out.println("after3" + CreateException);
+                            startActivity(intent);
+                        }
+                    }
+
+                };task.execute((Void[]) null);
                     break;
             //case 3: //paramètres
             case 4: intent = new Intent(this, MailActivity.class);

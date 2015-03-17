@@ -14,6 +14,13 @@ public class InformationUser extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_information_user);
+
+        Bundle extras = getIntent().getExtras();
+        String name_user =  extras.getString("name");
+        int score =  Integer.getInteger(extras.getString("score"));
+
+        System.out.println("name_user: "+name_user);
+        System.out.println("score: "+score);
     }
 
 
