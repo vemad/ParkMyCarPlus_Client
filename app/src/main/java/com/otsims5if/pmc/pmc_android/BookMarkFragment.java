@@ -26,7 +26,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import api.Density;
+import api.favorite.CreateFavoriteCallback;
 import api.favorite.Favorite;
+import api.favorite.FavoriteServices;
+import api.favorite.ListFavoritesCallback;
 
 /**
  * Created by Iler on 18/02/2015.
@@ -64,6 +67,25 @@ public class BookMarkFragment extends PlaceholderFragment{
         adapter.setNotifyOnChange(true);
         addressFaaListView.setAdapter(adapter);
 
+        //Get favorite from User account
+        try {
+            FavoriteServices.getInstance().listFavorites(new ListFavoritesCallback() {
+                @Override
+                protected void callback(Exception e, Favorite[] listFavorites) {
+                    if (listFavorites!=null) {
+                        System.out.println("Il y a "+listFavorites.length+" favoris!!!");
+                        for (Favorite fav : listFavorites) {
+                            //favList.add(fav);
+                            adapter.add(fav);
+                        }
+                        adapter.notifyDataSetChanged();
+                    }
+                }
+            }).execute();
+        }catch(Exception e){
+
+        }
+
         addressFaaListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
@@ -93,22 +115,20 @@ public class BookMarkFragment extends PlaceholderFragment{
             public void onClick(View v) {
                 LatLng position = getLocationFromAddress(addressEditText.getText().toString());
                 if(position!=null) {
-                    Favorite newFavorite = new Favorite(position.latitude, position.longitude, addressEditText.getText().toString());
-                    newFavorite.setDensity(Density.LOW);
-                    adapter.add(newFavorite);
-                    adapter.notifyDataSetChanged();
-                    /*Context context = getActivity().getApplicationContext();
-                    CharSequence text = "Nouvelle adresse en favoris";
-                    int duration = Toast.LENGTH_SHORT;
+                    final Favorite[] newFavorite = new Favorite[1];
+//                    newFavorite.setDensity(Density.LOW);
+//                    adapter.add(newFavorite);
+//                    adapter.notifyDataSetChanged();
 
-                    Toast toast = Toast.makeText(context, text, duration);
-                    toast.show();*/
+                    //Trying to add a favorite to the user account
+                    try {
+                        FavoriteServices.getInstance().createFavorite(
+                                position.latitude, position.longitude,
+                                addressEditText.getText().toString(),
+                                new CreateFavorite()).execute();
+                    }catch(Exception e){
 
-                    Toast toast = new Toast(getActivity().getApplicationContext());
-                    ((ImageView) toastView.findViewById(R.id.smileyImage)).setImageResource(R.drawable.happy);
-                    ((TextView) toastView.findViewById(R.id.toastTextView)).setText("Nouvelle adresse en favoris");
-                    toast.setView(toastView);
-                    toast.show();
+                    }
 
                     addressEditText.setText("");
 
@@ -143,8 +163,26 @@ public class BookMarkFragment extends PlaceholderFragment{
         return p1;
     }
 
-    public void setViewPager(ViewPager viewPager) {
-        this.viewPager = viewPager;
+    /*Method for displaying a place received by a service*/
+    private class CreateFavorite extends CreateFavoriteCallback {
+        protected void callback(Exception e, Favorite favorite){
+
+            if (favorite != null) {
+                adapter.add(favorite);
+                adapter.notifyDataSetChanged();
+            }
+
+            Toast toast = new Toast(getActivity().getApplicationContext());
+
+            if(favorite != null){
+                ((ImageView) toastView.findViewById(R.id.smileyImage)).setImageResource(R.drawable.happy);
+                ((TextView) toastView.findViewById(R.id.toastTextView)).setText("Nouvelle adresse en favoris");
+            }else{
+                ((TextView) toastView.findViewById(R.id.toastTextView)).setText("Adresse non conforme !!!");
+            }
+            toast.setView(toastView);
+            toast.show();
+        }
     }
 
 

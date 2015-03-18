@@ -72,6 +72,7 @@ public class StableArrayAdapter extends ArrayAdapter {
         //User super class to create the View
         View v = super.getView(position, convertView, parent);
         TextView tv = (TextView)v.findViewById(android.R.id.text1);
+
         tv.setTextColor(Color.BLACK);
         //v.setBackgroundColor(Color.BLACK);
         Favorite favorite = Target.get(position);

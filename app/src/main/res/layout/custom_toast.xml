@@ -10,7 +10,7 @@
     <ImageView
         android:layout_height="wrap_content"
         android:layout_width="fill_parent"
-        android:src="@drawable/sorry2"
+        android:src="@drawable/sorry"
         android:layout_margin="5dip"
         android:id="@+id/smileyImage">
     </ImageView>

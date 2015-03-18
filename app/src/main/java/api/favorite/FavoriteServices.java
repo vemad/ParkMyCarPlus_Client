@@ -14,6 +14,7 @@ import org.springframework.web.client.RestTemplate;
 
 import api.ApiConfig;
 import api.StatusMessage;
+import api.authentification.AuthentificationServices;
 
 /**
  * Created by Gaetan on 09/03/2015.
@@ -39,6 +40,7 @@ public class FavoriteServices {
                     final String url = ApiConfig.favoritesRoutes + "";
 
                     HttpHeaders requestHeaders = new HttpHeaders();
+                    AuthentificationServices.getInstance().addAuthorization(requestHeaders);
                     HttpEntity<Favorite> requestEntity = new HttpEntity<>(new Favorite(latitude, longitude, address), requestHeaders);
 
                     RestTemplate restTemplate = new RestTemplate();
@@ -72,6 +74,7 @@ public class FavoriteServices {
                     final String url = ApiConfig.favoritesRoutes + "";
 
                     HttpHeaders requestHeaders = new HttpHeaders();
+                    AuthentificationServices.getInstance().addAuthorization(requestHeaders);
                     HttpEntity<?> requestEntity = new HttpEntity<>(requestHeaders);
 
                     RestTemplate restTemplate = new RestTemplate();
