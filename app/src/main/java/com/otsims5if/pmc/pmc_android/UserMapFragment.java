@@ -106,9 +106,9 @@ public class UserMapFragment extends PlaceholderFragment{
 
     //List<WeightedLatLng> list = new ArrayList<>();
 
-    List<LatLng> highDensityZone = new ArrayList<>();
-    List<LatLng> lowDensityZone = new ArrayList<>();
-    List<LatLng> mediumDensityZone = new ArrayList<>();
+    List<WeightedLatLng> highDensityZone = new ArrayList<>();
+    List<WeightedLatLng> lowDensityZone = new ArrayList<>();
+    List<WeightedLatLng> mediumDensityZone = new ArrayList<>();
 
     List<LatLng> highDensityZoneFavorite = new ArrayList<>();
     List<LatLng> lowDensityZoneFavorite = new ArrayList<>();
@@ -476,12 +476,13 @@ public class UserMapFragment extends PlaceholderFragment{
                 System.out.println("There is "+zones.length+" areas");
                 for (Zone zone : zones) {
                     LatLng position = new LatLng(zone.getLatitude(), zone.getLongitude());
+                    WeightedLatLng weightedPosition = new WeightedLatLng(position, zone.getIntensity());
                     if (zone.getDensity() == Density.HIGH) {
-                        highDensityZone.add(position);
+                        highDensityZone.add(weightedPosition);
                     } else if (zone.getDensity() == Density.LOW) {
-                        lowDensityZone.add(position);
+                        lowDensityZone.add(weightedPosition);
                     }else{
-                        mediumDensityZone.add(position);
+                        mediumDensityZone.add(weightedPosition);
                     }
                 }
             }catch(Exception exp){
@@ -492,8 +493,8 @@ public class UserMapFragment extends PlaceholderFragment{
                 //Version heatmap
                 if (mProviderGreen == null) {
                     mProviderGreen = new HeatmapTileProvider.Builder()
-                            .data(lowDensityZone) //list with places
-                                    //.weightedData(grid) // list with grid
+                            //.data(lowDensityZone)
+                            .weightedData(lowDensityZone)
                             .gradient(gradientGreen)
                             .opacity(0.3)
                             .radius(50)
@@ -501,14 +502,13 @@ public class UserMapFragment extends PlaceholderFragment{
                     // Add a tile overlay to the map, using the heat map tile provider.
                     mOverlayGReen = map.addTileOverlay(new TileOverlayOptions().tileProvider(mProviderGreen));
                 } else {
-                    mProviderGreen.setData(lowDensityZone);
+                    mProviderGreen.setWeightedData(lowDensityZone);
                     //mOverlayGReen.clearTileCache();
                 }
 
                 if (mProvider == null) {
                     mProvider = new HeatmapTileProvider.Builder()
-                            .data(highDensityZone) //list with places
-                                    //.weightedData(grid) // list with grid
+                            .weightedData(highDensityZone)
                             .gradient(gradientRed)
                             .opacity(0.3)
                             .radius(50)
@@ -516,14 +516,13 @@ public class UserMapFragment extends PlaceholderFragment{
                     // Add a tile overlay to the map, using the heat map tile provider.
                     mOverlay = map.addTileOverlay(new TileOverlayOptions().tileProvider(mProvider));
                 } else {
-                    mProvider.setData(highDensityZone);
+                    mProvider.setWeightedData(highDensityZone);
                     //mOverlay.clearTileCache();
                 }
 
                 if (mProviderOrange == null) {
                     mProviderOrange = new HeatmapTileProvider.Builder()
-                            .data(mediumDensityZone) //list with places
-                                    //.weightedData(grid) // list with grid
+                            .weightedData(mediumDensityZone)
                             .gradient(gradientOrange)
                             .opacity(0.3)
                             .radius(50)
@@ -531,7 +530,7 @@ public class UserMapFragment extends PlaceholderFragment{
                     // Add a tile overlay to the map, using the heat map tile provider.
                     mOverlayOrange = map.addTileOverlay(new TileOverlayOptions().tileProvider(mProviderOrange));
                 } else {
-                    mProviderOrange.setData(mediumDensityZone);
+                    mProviderOrange.setWeightedData(mediumDensityZone);
                     //mOverlayGReen.clearTileCache();
                 }
 
@@ -548,6 +547,7 @@ public class UserMapFragment extends PlaceholderFragment{
                 new Item("Forte", R.drawable.high),
                 new Item("Moyenne", R.drawable.medium),
                 new Item("Faible", R.drawable.low),
+                new Item("Ignorer", R.drawable.ignore),
         };
 
         ListAdapter adapter = new ArrayAdapter<Item>(
@@ -579,9 +579,9 @@ public class UserMapFragment extends PlaceholderFragment{
                 .setAdapter(adapter, new DialogInterface.OnClickListener() {
                     @TargetApi(Build.VERSION_CODES.CUPCAKE)
                     public void onClick(DialogInterface dialog, int item) {
-                        System.out.println("item "+item);
-                        Density currentDensity = Density.LOW;
-                        switch(item){
+                        System.out.println("item " + item);
+                        Density currentDensity = null;
+                        switch (item) {
                             case 0:
                                 currentDensity = Density.HIGH;
                                 break;
@@ -591,12 +591,17 @@ public class UserMapFragment extends PlaceholderFragment{
                             case 2:
                                 currentDensity = Density.LOW;
                                 break;
+                            default:
+                                currentDensity = null;
+                                break;
                         }
-                        try {
-                            ZoneServices.getInstance().indicateDensity(myCurrentLocation.latitude,
-                                    myCurrentLocation.longitude, currentDensity, new IndicateDensity()).execute();
-                        }catch(Exception e){
+                        if (currentDensity != null) {
+                            try {
+                                ZoneServices.getInstance().indicateDensity(myCurrentLocation.latitude,
+                                        myCurrentLocation.longitude, currentDensity, new IndicateDensity()).execute();
+                            } catch (Exception e) {
 
+                            }
                         }
                     }
                 }).show();
@@ -937,7 +942,7 @@ public class UserMapFragment extends PlaceholderFragment{
                 //Version heatmap
                 if (mProviderGreen == null) {
                     mProviderGreen = new HeatmapTileProvider.Builder()
-                            .data(lowDensityZone) //list with places
+                            .data(lowDensityZoneFavorite) //list with places
                                     //.weightedData(grid) // list with grid
                             .gradient(gradientGreen)
                             .opacity(0.5)
@@ -946,13 +951,13 @@ public class UserMapFragment extends PlaceholderFragment{
                     // Add a tile overlay to the map, using the heat map tile provider.
                     mOverlayGReen = map.addTileOverlay(new TileOverlayOptions().tileProvider(mProviderGreen));
                 } else {
-                    mProviderGreen.setData(lowDensityZone);
+                    mProviderGreen.setData(lowDensityZoneFavorite);
                     //mOverlayGReen.clearTileCache();
                 }
 
                 if (mProvider == null) {
                     mProvider = new HeatmapTileProvider.Builder()
-                            .data(highDensityZone) //list with places
+                            .data(highDensityZoneFavorite) //list with places
                                     //.weightedData(grid) // list with grid
                             .gradient(gradientRed)
                             .opacity(0.2)
@@ -961,13 +966,13 @@ public class UserMapFragment extends PlaceholderFragment{
                     // Add a tile overlay to the map, using the heat map tile provider.
                     mOverlay = map.addTileOverlay(new TileOverlayOptions().tileProvider(mProvider));
                 } else {
-                    mProvider.setData(highDensityZone);
+                    mProvider.setData(highDensityZoneFavorite);
                     //mOverlay.clearTileCache();
                 }
 
                 if (mProviderOrange == null) {
                     mProviderOrange = new HeatmapTileProvider.Builder()
-                            .data(mediumDensityZone) //list with places
+                            .data(mediumDensityZoneFavorite) //list with places
                                     //.weightedData(grid) // list with grid
                             .gradient(gradientOrange)
                             .opacity(0.5)
@@ -976,7 +981,7 @@ public class UserMapFragment extends PlaceholderFragment{
                     // Add a tile overlay to the map, using the heat map tile provider.
                     mOverlayOrange = map.addTileOverlay(new TileOverlayOptions().tileProvider(mProviderOrange));
                 } else {
-                    mProviderOrange.setData(mediumDensityZone);
+                    mProviderOrange.setData(mediumDensityZoneFavorite);
                     //mOverlayGReen.clearTileCache();
                 }
 
