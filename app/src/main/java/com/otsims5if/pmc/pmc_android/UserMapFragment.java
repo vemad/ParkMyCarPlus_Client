@@ -183,14 +183,10 @@ public class UserMapFragment extends PlaceholderFragment{
         // Get buttons by there id
         parkButton = (Button) view.findViewById(R.id.parkButton);
         leaveButton = (Button) view.findViewById(R.id.leaveButton);
-<<<<<<< HEAD
         searchAdressButton = (ImageButton) view.findViewById(R.id.searchButton);
        // placeFindSwitch = (Switch) view.findViewById(R.id.placeFindSwitch);
 
         destinationEditText = (EditText) view.findViewById(R.id.destinationEditText);
-=======
-       // placeFindSwitch = (Switch) v.findViewById(R.id.placeFindSwitch);
->>>>>>> ee582bcb63c6ab3c2eea2ab43be0dac1c196f1a9
 
         mapView = (MapView) view.findViewById(R.id.map);
         mapView.onCreate(savedInstanceState);
