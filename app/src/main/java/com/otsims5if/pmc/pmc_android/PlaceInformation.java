@@ -49,8 +49,9 @@ public class PlaceInformation extends ActionBarActivity {
 
 
         //Call the service getPlaceById and execute the callback ShowPlaceCallback with the result
-       /* PlaceServices.getInstance().getPlaceById(1, new ShowPlaceCallback()).execute();
-        PlaceServices.getInstance().getListPlacesByPosition(45.78166386726485, 4.872752178696828, 5, new ShowListPlacesCallback()).execute();
+        PlaceServices.getInstance().getPlaceById(1, new ShowPlaceCallback()).execute();
+        PlaceServices.getInstance().getPlaceById(65, new ShowPlaceCallback()).execute();
+       /* PlaceServices.getInstance().getListPlacesByPosition(45.78166386726485, 4.872752178696828, 5, new ShowListPlacesCallback()).execute();
         PlaceServices.getInstance().takePlace(45.78166386726485, 4.872752178696828, new ShowResultTakePlaceCallback()).execute();
         PlaceServices.getInstance().releasePlace(45.78166386726485, 4.872752178696828, new ShowResultReleasePlaceCallback()).execute();
         PlaceServices.getInstance().takePlace(45.78166386726485, 4.872752178696828, new ShowResultTakePlaceCallback()).execute();
@@ -69,7 +70,7 @@ public class PlaceInformation extends ActionBarActivity {
         FavoriteServices.getInstance().createFavorite(45.78166386726485, 4.872752178696828, "Pas chez moi2", new ResCreateFavoriteCallback()).execute();
         FavoriteServices.getInstance().listFavorites(new ResListFavoriteCallback()).execute();*/
 
-        UserServices.getInstance().getUser(new ResGetUserCallback()).execute();
+        //UserServices.getInstance().getUser(new ResGetUserCallback()).execute();
 
 
     }
@@ -122,7 +123,7 @@ public class PlaceInformation extends ActionBarActivity {
             }
             else{
                 placeIdText.setText(place.getId());
-                Log.i("maPlace", "id:" + place.getId());
+                Log.i("maPlace", "id:" + place.getId() + " dateRelease:" + place.getDateLastRelease() + " dateTake:" + place.getDateLastTake());
             }
         }
     }
