@@ -1,7 +1,9 @@
 package com.otsims5if.pmc.pmc_android;
 
 import android.annotation.TargetApi;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Build;
@@ -27,6 +29,7 @@ import java.util.List;
 
 import api.Density;
 import api.favorite.CreateFavoriteCallback;
+import api.favorite.DeleteFavoriteCallback;
 import api.favorite.Favorite;
 import api.favorite.FavoriteServices;
 import api.favorite.ListFavoritesCallback;
@@ -45,6 +48,10 @@ public class BookMarkFragment extends PlaceholderFragment{
     private ArrayAdapter<String> arrAdapt;
     private ViewPager viewPager;
     private View toastView;
+    private View listView;
+    Favorite favorite;
+
+    DialogInterface.OnClickListener dialogClickListener;
 
 
     public BookMarkFragment() {
@@ -67,6 +74,39 @@ public class BookMarkFragment extends PlaceholderFragment{
         adapter.setNotifyOnChange(true);
         addressFaaListView.setAdapter(adapter);
 
+        dialogClickListener = new DialogInterface.OnClickListener() {
+            @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which){
+                    case DialogInterface.BUTTON_POSITIVE:
+                        listView.animate().setDuration(2000).alpha(0)
+                                .withEndAction(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        //Trying to add a favorite to the user account
+                                        try {
+                                            FavoriteServices.getInstance().deleteFavorite(
+                                                    favorite.getId(),
+                                                    new DeleteFavorite()).execute();
+                                            adapter.remove(favorite);
+                                            adapter.notifyDataSetChanged();
+                                            listView.setAlpha(1);
+                                        }catch(Exception e){
+
+                                        }
+
+                                    }
+                                });
+                        break;
+
+                    case DialogInterface.BUTTON_NEGATIVE:
+                        //No button clicked
+                        break;
+                }
+            }
+        };
+
         //Get favorite from User account
         try {
             FavoriteServices.getInstance().listFavorites(new ListFavoritesCallback() {
@@ -85,7 +125,21 @@ public class BookMarkFragment extends PlaceholderFragment{
         }catch(Exception e){
 
         }
+        addressFaaListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, final View view, int position, long id) {
+                favorite = adapter.getItemFromPosition(position);
+                listView = view;
+//                final String item = (String) parent.getItemAtPosition(position);
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setMessage("Voulez vous supprimer le favoris :\n"+favorite.getAddress()).setPositiveButton("Oui", dialogClickListener)
+                        .setNegativeButton("Non", dialogClickListener).show();
 
+
+                return true;
+            }
+        });
         addressFaaListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
@@ -179,6 +233,22 @@ public class BookMarkFragment extends PlaceholderFragment{
                 ((TextView) toastView.findViewById(R.id.toastTextView)).setText("Nouvelle adresse en favoris");
             }else{
                 ((TextView) toastView.findViewById(R.id.toastTextView)).setText("Adresse non conforme !!!");
+            }
+            toast.setView(toastView);
+            toast.show();
+        }
+    }
+
+    private class DeleteFavorite extends DeleteFavoriteCallback {
+        protected void callback(Exception e, String idFavorite){
+
+            Toast toast = new Toast(getActivity().getApplicationContext());
+
+            if(idFavorite != null){
+                ((ImageView) toastView.findViewById(R.id.smileyImage)).setImageResource(R.drawable.happy);
+                ((TextView) toastView.findViewById(R.id.toastTextView)).setText("Le favoris a été supprimé avec succès");
+            }else{
+                ((TextView) toastView.findViewById(R.id.toastTextView)).setText("La suppression du favoris a échouée !!!");
             }
             toast.setView(toastView);
             toast.show();

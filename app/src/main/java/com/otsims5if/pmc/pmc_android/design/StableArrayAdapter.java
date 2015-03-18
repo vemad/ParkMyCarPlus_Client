@@ -68,6 +68,10 @@ public class StableArrayAdapter extends ArrayAdapter {
         Target.add(item);
     }
 
+    public void remove(Favorite item){
+        Target.remove(item);
+    }
+
     public View getView(int position, View convertView, ViewGroup parent) {
         //User super class to create the View
         View v = super.getView(position, convertView, parent);
