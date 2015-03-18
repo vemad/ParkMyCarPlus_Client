@@ -4,8 +4,8 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
+    android:background="#ff041126"
     tools:context="com.otsims5if.pmc.pmc_android.CreateNewUser">
-
 
     <LinearLayout
         android:orientation="vertical"
@@ -14,22 +14,60 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_marginTop="105dp">
+        android:id="@+id/linearLayout2">
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="50dp">
+            <ImageView
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:id="@+id/left"
+                android:src="@drawable/leftarrow"
+                android:contentDescription="@string/leftButton"
+                android:layout_weight="1"
+                android:layout_gravity="center_vertical" />
+
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_height="128dp"
+                android:id="@+id/imageProfil"
+                android:src="@drawable/man"
+                android:layout_gravity="center_horizontal"
+                android:contentDescription="@string/userProfil"
+                android:layout_weight="3" />
+
+            <ImageView
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:id="@+id/right"
+                android:src="@drawable/rightarrow"
+                android:contentDescription="@string/rightButton"
+                android:layout_weight="1"
+                android:layout_gravity="center_vertical" />
+        </LinearLayout>
 
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textPersonName"
             android:ems="10"
-            android:id="@+id/editText"
-            android:hint="@string/usernameHint" />
+            android:id="@+id/username"
+            android:textColor="#ffffffff"
+            android:textColorHint="#ff758b9a"
+            android:hint="@string/usernameHint"
+            android:layout_marginTop="50dp" />
 
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textPassword"
             android:ems="10"
-            android:id="@+id/editText2"
+            android:id="@+id/textPassword"
+            android:textColor="#ffffffff"
+            android:textColorHint="#ff758b9a"
             android:hint="@string/motDePasse" />
 
         <EditText
@@ -37,7 +75,9 @@
             android:layout_height="wrap_content"
             android:inputType="textPassword"
             android:ems="10"
-            android:id="@+id/editText3"
+            android:id="@+id/passwordConfirmation"
+            android:textColor="#ffffffff"
+            android:textColorHint="#ff758b9a"
             android:hint="@string/ConfirmezmotDePasse" />
 
         <TextView
@@ -45,14 +85,8 @@
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:text="@string/taillevoiture"
+            android:textColor="#ffffffff"
             android:id="@+id/textView" />
-
-        <Spinner
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/spinner"
-            android:spinnerMode="dialog"
-            android:entries="@array/size_arrays"/>
 
     </LinearLayout>
 
@@ -65,21 +99,24 @@
         android:layout_alignParentStart="true"
         android:id="@+id/linearLayout">
 
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/imageProfil"
-            android:src="@drawable/profil"
-            android:layout_gravity="center_horizontal"
-            android:contentDescription="@string/userProfil" />
-
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="OK"
+            android:text="Créer"
             android:id="@+id/ok"
+            android:textColor="#ff758b9a"
             android:onClick="sendtoserver" />
 
     </LinearLayout>
+
+    <Spinner
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/spinner"
+        android:spinnerMode="dialog"
+        android:entries="@array/size_arrays"
+        android:layout_below="@+id/linearLayout2"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
 </RelativeLayout>

@@ -183,10 +183,14 @@ public class UserMapFragment extends PlaceholderFragment{
         // Get buttons by there id
         parkButton = (Button) view.findViewById(R.id.parkButton);
         leaveButton = (Button) view.findViewById(R.id.leaveButton);
+<<<<<<< HEAD
         searchAdressButton = (ImageButton) view.findViewById(R.id.searchButton);
        // placeFindSwitch = (Switch) view.findViewById(R.id.placeFindSwitch);
 
         destinationEditText = (EditText) view.findViewById(R.id.destinationEditText);
+=======
+       // placeFindSwitch = (Switch) v.findViewById(R.id.placeFindSwitch);
+>>>>>>> ee582bcb63c6ab3c2eea2ab43be0dac1c196f1a9
 
         mapView = (MapView) view.findViewById(R.id.map);
         mapView.onCreate(savedInstanceState);
@@ -281,19 +285,27 @@ public class UserMapFragment extends PlaceholderFragment{
         //Set actions for leave and park buttons
         DisplayMetrics displaymetrics = new DisplayMetrics();
         getActivity().getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
-        int height = displaymetrics.heightPixels;
-        float height2 = displaymetrics.ydpi;
+
+     /*   Display display = getActivity().getWindowManager().getDefaultDisplay();
+        int screenWidth = display.getWidth();
+        int screenHeight = display.getHeight();
+        System.out.println("screenWidth "+screenWidth);
+*/
+
+        float height = displaymetrics.heightPixels;//216
         int width = displaymetrics.widthPixels;
         System.out.println("aaaaaaaaa "+width);
-        System.out.println("aaaaaaaaa "+height);
-        System.out.println("ydpi "+height2);
+        System.out.println("height "+height);//1280
+        System.out.println("height-(height/4) "+(height-(height/3)));
 
-        //parkButton.setY(height/2-100);
-        //parkButton.setX((width/2)-100);
+        parkButton.setY(height-(height/3));
+        parkButton.setX((width/4));
         parkButton.setLayoutParams(new RelativeLayout.LayoutParams(300, 50));
 
-        //leaveButton.setY(height/2);
-        //leaveButton.setX((width/2)-50);
+
+
+        leaveButton.setY(height-(height/3));
+        leaveButton.setX((width/4));
         leaveButton.setLayoutParams(new RelativeLayout.LayoutParams(300, 50));
 
         parkButton.setOnClickListener(new View.OnClickListener() {

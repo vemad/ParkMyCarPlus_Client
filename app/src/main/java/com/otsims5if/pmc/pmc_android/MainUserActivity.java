@@ -120,10 +120,13 @@ public class MainUserActivity extends ActionBarActivity implements ActionBar.Tab
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
 
+        //récuperation des données
+        Bundle extras = getIntent().getExtras();
+        String name_header =  extras.getString("name_user");
 
         View header = getLayoutInflater().inflate(R.layout.header,null);
         TextView titleView_header = (TextView) header.findViewById(R.id.title_usr);
-        titleView_header.setText("My name");
+        titleView_header.setText(name_header);
         mDrawerList.addHeaderView(header);
 
         // set a custom shadow that overlays the main content when the drawer opens
@@ -206,6 +209,7 @@ public class MainUserActivity extends ActionBarActivity implements ActionBar.Tab
             case 2: intent = new Intent(this, InformationUser.class);
                     startActivity(intent);
                     break;
+            //case 3: //paramètres
             case 4: intent = new Intent(this, MailActivity.class);
                     startActivity(intent);
                     break;

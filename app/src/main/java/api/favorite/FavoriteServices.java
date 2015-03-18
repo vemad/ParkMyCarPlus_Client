@@ -108,6 +108,7 @@ public class FavoriteServices {
                     final String url = ApiConfig.favoritesRoutes + "/" + id;
 
                     HttpHeaders requestHeaders = new HttpHeaders();
+                    AuthentificationServices.getInstance().addAuthorization(requestHeaders);
                     HttpEntity<?> requestEntity = new HttpEntity<>(requestHeaders);
 
                     RestTemplate restTemplate = new RestTemplate();
