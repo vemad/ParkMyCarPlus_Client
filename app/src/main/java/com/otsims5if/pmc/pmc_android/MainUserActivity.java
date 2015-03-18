@@ -143,7 +143,7 @@ public class MainUserActivity extends ActionBarActivity implements ActionBar.Tab
         // set up the drawer's list view with items and click listener
         mNavItems.add(new NavItem("Accueil", "", R.drawable.home));
         mNavItems.add(new NavItem("Compte", "Mon compte", R.drawable.user));
-        mNavItems.add(new NavItem("Paramètres", "Changer les paramètres", R.drawable.settings));
+        mNavItems.add(new NavItem("Aide", "Besoin d'aide?", R.drawable.help));
         mNavItems.add(new NavItem("Commentaires", "Envoyez un e-mail", R.drawable.mail));
         mNavItems.add(new NavItem("A propos de", "Park my Car", R.drawable.action_about));
 
@@ -204,7 +204,7 @@ public class MainUserActivity extends ActionBarActivity implements ActionBar.Tab
             CreateException = e;
             getInformations = user;
             //System.out.println("User name" + user.getUsername());
-            //System.out.println("Exception e GetUser :" +e);
+            System.out.println("Exception e GetUser :" +e);
         }
     }
 
@@ -226,11 +226,10 @@ public class MainUserActivity extends ActionBarActivity implements ActionBar.Tab
         final Intent intent;
         switch(position){
             case 2:
-                    System.out.println("case2");
-                    intent = new Intent(this, InformationUser.class);
+                 System.out.println("case2");
+                 intent = new Intent(this, InformationUser.class);
 
-
-                AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>() {
+                 AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>() {
                     @Override
                     protected void onPreExecute() {
                         System.out.println("prexecute");
@@ -244,13 +243,20 @@ public class MainUserActivity extends ActionBarActivity implements ActionBar.Tab
                     protected void onPostExecute(Void result) {
                         System.out.println("aaaaaaaaaa");
                         if(CreateException == null) {
-                            System.out.println("after2 " + CreateException);
-                            System.out.println("getUser" + getInformations.getUsername());
                             intent.putExtra("name", getInformations.getUsername());
-                            intent.putExtra("score", getInformations.getScore());
-                            System.out.println("after3" + CreateException);
+                            intent.putExtra("score", ""+getInformations.getScore());
+                            intent.putExtra("level_name", ""+getInformations.getLevel().getLevelName());
+                            intent.putExtra("Start_Score", ""+getInformations.getLevel().getStartScore());
+                            intent.putExtra("NextLevelScore", ""+getInformations.getLevel().getNextLevelScore());
+
+                            System.out.println("getLevelName "+getInformations.getLevel().getLevelName());
+                            System.out.println("getNextLevelName "+getInformations.getLevel().getNextLevelName());
+                            System.out.println("getNextLevelScore "+getInformations.getLevel().getNextLevelScore());
+                            System.out.println("getStartScore "+getInformations.getLevel().getStartScore());
+
                             startActivity(intent);
                         }
+
                     }
 
                 };task.execute((Void[]) null);
