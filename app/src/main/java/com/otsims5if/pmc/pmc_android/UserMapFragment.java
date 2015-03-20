@@ -189,6 +189,8 @@ public class UserMapFragment extends PlaceholderFragment{
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        System.out.println("new map");
+        map = null;
 
         // inflat and return the layout
         if (view != null) {
@@ -716,6 +718,7 @@ public class UserMapFragment extends PlaceholderFragment{
 
     private void setUpMapIfNeeded() {
         // Do a null check to confirm that we have not already instantiated the map.
+        System.out.println("map "+map);
         if (map == null) {
             // Try to obtain the map from the SupportMapFragment.
             mapView = (MapView) view.findViewById(R.id.map);
@@ -964,6 +967,7 @@ public class UserMapFragment extends PlaceholderFragment{
      */
     private void setUpMap() {
         //Allow to get the local position
+        System.out.println("aaaaaaaaaaaaa");
         map.setMyLocationEnabled(true);
 
         setUpMarkerListAndShowPlaces();
