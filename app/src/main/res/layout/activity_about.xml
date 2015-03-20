@@ -8,7 +8,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
-        android:text="Ce projet a été conçu pour offrir aux conducteurs une application communautaire Android qui aide à trouver une place de parking"
+        android:text="Ce projet a été conçu pour offrir aux conducteurs une application communautaire Android qui aide à trouver une place de parking."
         android:id="@+id/text_score"
         android:textSize="20sp"/>
     <ImageView
