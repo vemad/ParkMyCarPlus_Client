@@ -136,6 +136,8 @@ public class MainUserActivity extends ActionBarActivity implements ActionBar.Tab
         View header = getLayoutInflater().inflate(R.layout.header,null);
         TextView titleView_header = (TextView) header.findViewById(R.id.title_usr);
         titleView_header.setText(name_header);
+        titleView_header.setTextSize(30);
+
         mDrawerList.addHeaderView(header);
 
         // set a custom shadow that overlays the main content when the drawer opens
@@ -249,11 +251,6 @@ public class MainUserActivity extends ActionBarActivity implements ActionBar.Tab
                             intent.putExtra("Start_Score", ""+getInformations.getLevel().getStartScore());
                             intent.putExtra("NextLevelScore", ""+getInformations.getLevel().getNextLevelScore());
 
-                            System.out.println("getLevelName "+getInformations.getLevel().getLevelName());
-                            System.out.println("getNextLevelName "+getInformations.getLevel().getNextLevelName());
-                            System.out.println("getNextLevelScore "+getInformations.getLevel().getNextLevelScore());
-                            System.out.println("getStartScore "+getInformations.getLevel().getStartScore());
-
                             startActivity(intent);
                         }
 
@@ -261,10 +258,17 @@ public class MainUserActivity extends ActionBarActivity implements ActionBar.Tab
 
                 };task.execute((Void[]) null);
                     break;
-            //case 3: //paramètres
+            case 3: //aide
+                    intent = new Intent(this, MailActivity.class);
+                    startActivity(intent);
+                    break;
             case 4: intent = new Intent(this, MailActivity.class);
                     startActivity(intent);
                     break;
+            case 5: //About
+                intent = new Intent(this, AboutActivity.class);
+                startActivity(intent);
+                break;
             default: ;
         }
 

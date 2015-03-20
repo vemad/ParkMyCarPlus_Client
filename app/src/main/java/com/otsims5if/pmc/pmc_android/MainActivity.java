@@ -136,7 +136,6 @@ public class MainActivity extends ActionBarActivity implements OnClickListener {
         //Intent intent = new Intent(this, PlaceInformation.class);
         intent.putExtra("name_user",username.getText().toString());
         startActivity(intent);
-
     }
 
     public void newUserInterface(View view) {

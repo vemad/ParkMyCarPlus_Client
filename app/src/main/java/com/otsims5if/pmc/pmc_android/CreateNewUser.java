@@ -130,7 +130,7 @@ public class CreateNewUser extends ActionBarActivity {
                 protected void onPostExecute(Void result) {
                     System.out.println("message: " + message_returned);
                     intent.putExtra("name_user", user);
-                    startActivity(intent);
+                  //  startActivity(intent);
                     finish();
                 }
 

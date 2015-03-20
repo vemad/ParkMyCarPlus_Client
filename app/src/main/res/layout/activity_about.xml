@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/help_layout">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:text="Ce projet a été conçu pour offrir aux conducteurs une application communautaire Android qui aide à trouver une place de parking"
+        android:id="@+id/text_score"
+        android:textSize="20sp"/>
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:src="@drawable/finallogo2"
+        android:gravity="center"
+        android:id="@+id/imageView2"
+
+    />
+</RelativeLayout>
