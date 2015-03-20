@@ -232,11 +232,11 @@ public class UserMapFragment extends PlaceholderFragment{
 
         parkButton.setY(height-(height/3)-100);
         parkButton.setX((width/4));
-        parkButton.setLayoutParams(new RelativeLayout.LayoutParams(300, 50));
+        parkButton.setLayoutParams(new RelativeLayout.LayoutParams(300, 100));
 
         leaveButton.setY(height-(height/3)-100);
         leaveButton.setX((width/4));
-        leaveButton.setLayoutParams(new RelativeLayout.LayoutParams(300, 50));
+        leaveButton.setLayoutParams(new RelativeLayout.LayoutParams(300, 100));
 
         parkButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
