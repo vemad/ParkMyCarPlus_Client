@@ -35,6 +35,7 @@ import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.GroundOverlay;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polygon;
@@ -250,9 +251,6 @@ public class UserMapFragment extends PlaceholderFragment{
 
         float height = displaymetrics.heightPixels;//216
         int width = displaymetrics.widthPixels;
-        System.out.println("aaaaaaaaa "+width);
-        System.out.println("height "+height);//1280
-        System.out.println("height-(height/4) "+(height-(height/3)));
 
         parkButton.setY(height-(height/3)-100);
         parkButton.setX((width/4));
@@ -326,7 +324,6 @@ public class UserMapFragment extends PlaceholderFragment{
 
                     //First move to the right destination address
                     CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(myCurrentLocation, zoomLevel);
-                    System.out.println(map);
                     map.animateCamera(cameraUpdate);
 
                     //Display after the marker
@@ -349,7 +346,7 @@ public class UserMapFragment extends PlaceholderFragment{
                     map.animateCamera(cameraUpdate);
                     openningActivity = false;
                 }
-                else if(localPosition){
+                else if(inMotion){
 
                     if(previousZoomLevel!=0) {
                         cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, previousZoomLevel);
@@ -369,7 +366,7 @@ public class UserMapFragment extends PlaceholderFragment{
             @Override
             public void onCameraChange(CameraPosition position) {
                 Log.d("Zoom", "Zoom: " + position.zoom);
-
+                LatLngBounds mapVisibleBounds = map.getProjection().getVisibleRegion().latLngBounds;
                 if(previousZoomLevel != position.zoom)
                 {
                     try {
@@ -380,13 +377,10 @@ public class UserMapFragment extends PlaceholderFragment{
                     }
                 }
                 previousZoomLevel = position.zoom;
-                LatLng pos = new LatLng(position.target.latitude, position.target.longitude);
                 if(myCurrentLocation!=null) {
-                    System.out.println("En latitude : " + (myCurrentLocation.latitude - pos.latitude));
-                    System.out.println("En longitude : " + (myCurrentLocation.longitude - pos.longitude));
-                }
-                if(myCurrentLocation!=pos) {
-                    inMotion = false;
+                    if(!mapVisibleBounds.contains(myCurrentLocation)){
+                        inMotion = false;
+                    }
                 }
             }
         });
@@ -410,9 +404,7 @@ public class UserMapFragment extends PlaceholderFragment{
                 String addressFind = "";
                 if(addresses!=null){
                     int maxIndex = addresses.get(0).getMaxAddressLineIndex();
-                    System.out.println("Adresse trouvé :");
                     for(int i=0; i<maxIndex-1; i++) {
-                        System.out.println(addresses.get(0).getAddressLine(i));
                         addressFind+=addresses.get(0).getAddressLine(i)+"\n";
                     }
                     addressFind+=addresses.get(0).getAddressLine(maxIndex);
@@ -466,7 +458,6 @@ public class UserMapFragment extends PlaceholderFragment{
                 List<Address> addr = getAdressFromLatLng(newPosition);
                 if(addr!=null) {
                     String codePostale = addr.get(0).getPostalCode();
-                    System.out.println("Le code est "+codePostale);
                     if(codePostale!=null) {
                         if (!areaHashtable.containsKey(codePostale)) {
                             Area area = new Area(codePostale);
@@ -479,28 +470,12 @@ public class UserMapFragment extends PlaceholderFragment{
                 }
             }
         }
-        System.out.println("Taille de la hashtable"+areaHashtable.size());
         areaCol = areaHashtable.values();
-        System.out.println("Taille de la colection"+areaCol.size());
         if(areaPolygon != null) {
             for (Polygon e : areaPolygon) {
                 e.remove();
             }
         }
-        /*for(Area elt : areaCol){
-            System.out.println("Area "+elt.getId());
-            System.out.println("nb points "+elt.getPoints().size());
-
-            HeatmapTileProvider mProviderRand = new HeatmapTileProvider.Builder()
-                    .data(elt.getPoints()) //list with places
-                            //.weightedData(grid) // list with grid
-                    .gradient(elt.getGradientRand())
-                    .opacity(0.5)
-                    .radius(30)
-                    .build();
-            // Add a tile overlay to the map, using the heat map tile provider.
-            map.addTileOverlay(new TileOverlayOptions().tileProvider(mProviderRand));
-        }*/
     }
 
     public void drawAreaMap(){
@@ -642,7 +617,6 @@ public class UserMapFragment extends PlaceholderFragment{
                 .setAdapter(adapter, new DialogInterface.OnClickListener() {
                     @TargetApi(Build.VERSION_CODES.CUPCAKE)
                     public void onClick(DialogInterface dialog, int item) {
-                        System.out.println("item " + item);
                         Density currentDensity = null;
                         switch (item) {
                             case 0:
@@ -730,7 +704,6 @@ public class UserMapFragment extends PlaceholderFragment{
     @TargetApi(Build.VERSION_CODES.CUPCAKE)
     private void setUpMarkerListAndShowPlaces(){
 
-        Log.i("Info", "SetUpMarker");
         try {
 
             if(localPosition) {
@@ -749,8 +722,6 @@ public class UserMapFragment extends PlaceholderFragment{
                         .zIndex(1)
                         .strokeWidth(2));
             }
-
-            Log.i("Info", "GetPlaces");
 
             PlaceServices.getInstance().getListPlacesByPosition(myCurrentLocation.latitude,
                     myCurrentLocation.longitude,
@@ -792,7 +763,6 @@ public class UserMapFragment extends PlaceholderFragment{
                             Seconds timeInterval = Seconds.secondsBetween(place.getDateLastRelease(), DateTime.now());
                             Interval interv = new Interval(place.getDateLastRelease(), DateTime.now());
                             ratio = timeInterval.getSeconds()/3600;
-                            System.out.println("Le ratio est de "+ratio);
                             String time = "";
                             if(interv.toDuration().getStandardHours()== 0){
                                 time = interv.toDuration().getStandardMinutes()+" minutes";
@@ -909,7 +879,6 @@ public class UserMapFragment extends PlaceholderFragment{
                         .position(new LatLng(place.getLatitude(), place.getLongitude()))
                         .title("Je me suis garer ici")
                         .icon(BitmapDescriptorFactory.fromResource(R.drawable.car)));
-                System.out.println("Je me suis garer");
                 //Mark the place that has been parked by the user
                 Circle marker = map.addCircle(new CircleOptions()
                         .center(new LatLng(place.getLatitude(), place.getLongitude()))
