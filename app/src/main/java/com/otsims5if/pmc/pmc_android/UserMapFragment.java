@@ -46,6 +46,10 @@ import com.google.maps.android.heatmaps.HeatmapTileProvider;
 import com.google.maps.android.heatmaps.WeightedLatLng;
 import com.otsims5if.pmc.pmc_android.design.Item;
 
+import org.joda.time.DateTime;
+import org.joda.time.Interval;
+import org.joda.time.Seconds;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Hashtable;
@@ -59,6 +63,9 @@ import api.place.Place;
 import api.place.PlaceServices;
 import api.place.ReleasePlaceCallback;
 import api.place.TakePlaceCallback;
+import api.user.GetUserCallback;
+import api.user.User;
+import api.user.UserServices;
 import api.zone.Area;
 import api.zone.GetListZonesByPositionCallback;
 import api.zone.IndicateDensityCallback;
@@ -86,6 +93,7 @@ public class UserMapFragment extends PlaceholderFragment{
     Thread checkPlacesThread;
     int second = 5;
     int zoomLevel = 17;
+    boolean inMotion = true;
     float previousZoomLevel = 0;
     Handler handler = new Handler();
     boolean startThread = false;
@@ -137,13 +145,29 @@ public class UserMapFragment extends PlaceholderFragment{
             Color.argb(255, 255, 204, 0)    // green
     };
 
+    int[] greenNeutralFillColor = {
+            Color.argb(255, 62, 139, 47), // green
+            Color.argb(255, 139, 139, 125)    // gray
+    };
+
+    int[] greenNeutralStrokeColor = {
+            Color.argb(255, 38, 91, 30), // green
+            Color.argb(255, 88, 91, 85)    // gray
+    };
+
     float[] startPoints = {
             0, 0.02f
+    };
+
+    float[] startNeutralPoints = {
+            0, 1
     };
 
     Gradient gradientRed = new Gradient(colorsRed,startPoints);
     Gradient gradientGreen = new Gradient(colorsGreen,startPoints);
     Gradient gradientOrange = new Gradient(colorsOrange,startPoints);
+    Gradient gradientNeutralFill = new Gradient(greenNeutralFillColor,startNeutralPoints);
+    Gradient gradientNeutralStroke = new Gradient(greenNeutralStrokeColor,startNeutralPoints);
 
     HeatmapTileProvider mProvider;
     HeatmapTileProvider mProviderGreen;
@@ -163,7 +187,7 @@ public class UserMapFragment extends PlaceholderFragment{
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(final LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         // inflat and return the layout
@@ -238,6 +262,29 @@ public class UserMapFragment extends PlaceholderFragment{
         leaveButton.setX((width/4));
         leaveButton.setLayoutParams(new RelativeLayout.LayoutParams(300, 50));
 
+        //Get user current location if park
+        try {
+            UserServices.getInstance().getUser(new GetUserCallback() {
+                @Override
+                protected void callback(Exception e, User user) {
+                    myParkingLocation = new LatLng(user.getPlace().getLatitude(), user.getPlace().getLongitude());
+                }
+            });
+        }catch(Exception exp){
+
+        }
+
+        if(myParkingLocation!=null){
+            leaveButton.setVisibility(View.VISIBLE);
+            parkButton.setVisibility(View.GONE);
+            currentPositionMarker = map.addMarker(new MarkerOptions()
+                    .position(myParkingLocation)
+                    .title("Je me suis garer ici")
+                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.car)));
+        }else{
+            System.out.println("C'est null la position");
+        }
+
         parkButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 leaveButton.setVisibility(View.VISIBLE);
@@ -302,6 +349,13 @@ public class UserMapFragment extends PlaceholderFragment{
                     map.animateCamera(cameraUpdate);
                     openningActivity = false;
                 }
+                else if(localPosition){
+
+                    if(previousZoomLevel!=0) {
+                        cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, previousZoomLevel);
+                    }
+                    map.animateCamera(cameraUpdate);
+                }
                 //locationManager.removeUpdates(this);
             }
         });
@@ -326,6 +380,14 @@ public class UserMapFragment extends PlaceholderFragment{
                     }
                 }
                 previousZoomLevel = position.zoom;
+                LatLng pos = new LatLng(position.target.latitude, position.target.longitude);
+                if(myCurrentLocation!=null) {
+                    System.out.println("En latitude : " + (myCurrentLocation.latitude - pos.latitude));
+                    System.out.println("En longitude : " + (myCurrentLocation.longitude - pos.longitude));
+                }
+                if(myCurrentLocation!=pos) {
+                    inMotion = false;
+                }
             }
         });
 
@@ -333,9 +395,10 @@ public class UserMapFragment extends PlaceholderFragment{
             @Override
             public boolean onMyLocationButtonClick() {
                 myCurrentLocation = new LatLng(map.getMyLocation().getLatitude(), map.getMyLocation().getLongitude());
-                CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(myCurrentLocation, zoomLevel);
+                CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(myCurrentLocation, previousZoomLevel);
                 map.animateCamera(cameraUpdate);
                 localPosition = true;
+                inMotion = true;
                 return true;
             }
         });
@@ -710,14 +773,67 @@ public class UserMapFragment extends PlaceholderFragment{
                 }
                 placeCircleMarkerList.clear();
             }
+            if(!placeMarkerList.isEmpty()) {
+                for (Marker marker : placeMarkerList) {
+                    marker.remove();
+                }
+                placeMarkerList.clear();
+            }
             if(places!=null) {
                 for (Place place : places) {
                     LatLng position = new LatLng(place.getLatitude(), place.getLongitude());
                     int stroke = Color.RED;
                     int fill = 0x40ff0000;
+                    String title="";
                     if (!place.isTaken()) {
-                        stroke = 0xFF265B1E;
-                        fill = 0xff3e8b2f;
+                        //Interval timeInterval = new Interval(place.getDateLastRelease(), DateTime.now());
+                        double ratio = 0;
+                        try {
+                            Seconds timeInterval = Seconds.secondsBetween(place.getDateLastRelease(), DateTime.now());
+                            Interval interv = new Interval(place.getDateLastRelease(), DateTime.now());
+                            ratio = timeInterval.getSeconds()/3600;
+                            System.out.println("Le ratio est de "+ratio);
+                            String time = "";
+                            if(interv.toDuration().getStandardHours()== 0){
+                                time = interv.toDuration().getStandardMinutes()+" minutes";
+                            }else if(interv.toDuration().getStandardHours()<= 48){
+                                time = interv.toDuration().getStandardHours()+" heures";
+                            }else{
+                                time = interv.toDuration().getStandardDays()+" jours";
+                            }
+                            title = "La place a été libérée il y a "+ time;
+                        }catch (Exception exp){
+                            title = "La place a été libérée.";
+                        }
+
+                        if(ratio>1){
+                            ratio = 1;
+                        }
+                        int redFill = (int)((184 - 76)*ratio +76);
+                        int greenFill = 191;
+                        int blueFill = (int)((175 - 61)*ratio + 61);
+                        int redStroke = (int)((139 - 38)*ratio +38);
+                        int greenStroke = 139;
+                        int blueStroke = (int)((139 - 30)*ratio + 30);
+                        //stroke = 0xFF265B1E;
+                        //fill = 0xff3e8b2f;
+                        fill = Color.argb(200, redFill, greenFill, blueFill);
+                        stroke = Color.argb(255, redStroke, greenStroke, blueStroke);
+                    }else{
+                        try {
+                            Interval interv = new Interval(place.getDateLastTake(), DateTime.now());
+                            String time = "";
+                            if(interv.toDuration().getStandardHours()== 0){
+                                time = interv.toDuration().getStandardMinutes()+" minutes";
+                            }else if(interv.toDuration().getStandardHours()<= 48){
+                                time = interv.toDuration().getStandardHours()+" heures";
+                            }else{
+                                time = interv.toDuration().getStandardDays()+" jours";
+                            }
+                            title = "La place a été prise il y a "+ time;
+                        }catch (Exception exp){
+                            title = "La place a été prise.";
+                        }
                     }
                     Circle marker = map.addCircle(new CircleOptions()
                             .center(position)
@@ -727,6 +843,16 @@ public class UserMapFragment extends PlaceholderFragment{
                             .strokeColor(stroke)
                             .strokeWidth(2));
                     placeCircleMarkerList.add(marker);
+
+                    if(previousZoomLevel>17){
+                        Marker pos = map.addMarker(new MarkerOptions()
+                                .position(position)
+                                .title(title)
+                                .alpha(0)
+                                .snippet("Place " + place.getId())
+                                .icon(BitmapDescriptorFactory.fromResource(R.drawable.marker)));
+                        placeMarkerList.add(pos);
+                    }
                     /*if (place.isTaken()) {
                         list.add(new WeightedLatLng(position, 10));
                     } else {
@@ -782,8 +908,8 @@ public class UserMapFragment extends PlaceholderFragment{
                 currentPositionMarker = map.addMarker(new MarkerOptions()
                         .position(new LatLng(place.getLatitude(), place.getLongitude()))
                         .title("Je me suis garer ici")
-                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
-
+                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.car)));
+                System.out.println("Je me suis garer");
                 //Mark the place that has been parked by the user
                 Circle marker = map.addCircle(new CircleOptions()
                         .center(new LatLng(place.getLatitude(), place.getLongitude()))
@@ -811,17 +937,23 @@ public class UserMapFragment extends PlaceholderFragment{
         protected void callback(Exception e, Place place){
 
             //Mark the position in order to park the car at the current position deliver by the GPS
-            currentPositionMarker.remove();
+            if(currentPositionMarker!=null) {
+                currentPositionMarker.remove();
+            }
 
-            //redraw the marker at the position beacause the user just go
-            Circle marker = map.addCircle(new CircleOptions()
-                    .center(new LatLng(place.getLatitude(), place.getLongitude()))
-                    .radius(1)
-                    .fillColor(0xff3e8b2f)
-                    .zIndex(2)
-                    .strokeColor(0xFF265B1E)
-                    .strokeWidth(2));
-            placeCircleMarkerList.add(marker);
+            try {
+                //redraw the marker at the position beacause the user just go
+                Circle marker = map.addCircle(new CircleOptions()
+                        .center(new LatLng(place.getLatitude(), place.getLongitude()))
+                        .radius(1)
+                        .fillColor(0xff3e8b2f)
+                        .zIndex(2)
+                        .strokeColor(0xFF265B1E)
+                        .strokeWidth(2));
+                placeCircleMarkerList.add(marker);
+            }catch(Exception exp){
+
+            }
         }
     }
 

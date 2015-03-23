@@ -22,7 +22,7 @@ public class CreateNewUser extends ActionBarActivity {
     private ImageView userProfil;
     private ImageView leftArrow;
     private ImageView rightArrow;
-    private boolean isManProfil = true;
+    private int numProfilAvatar = 1;
 
     private EditText username;
     private EditText textPassword;
@@ -46,25 +46,59 @@ public class CreateNewUser extends ActionBarActivity {
 
         leftArrow.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                changeProfilType();
+                numProfilAvatar--;
+                if(numProfilAvatar<1){
+                    numProfilAvatar=8;
+                }
+                changeProfilType(numProfilAvatar);
             }
         });
 
         rightArrow.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                changeProfilType();
+                numProfilAvatar++;
+                if(numProfilAvatar>8){
+                    numProfilAvatar=1;
+                }
+                changeProfilType(numProfilAvatar);
             }
         });
 
     }
 
-    public void changeProfilType(){
-        if(isManProfil) {
-            userProfil.setImageResource(R.drawable.girl);
+    public void changeProfilType(int numProfil){
+        switch(numProfil){
+            case 1:
+                userProfil.setImageResource(R.drawable.profil1);
+                break;
+            case 2:
+                userProfil.setImageResource(R.drawable.profil2);
+                break;
+            case 3:
+                userProfil.setImageResource(R.drawable.profil3);
+                break;
+            case 4:
+                userProfil.setImageResource(R.drawable.profil4);
+                break;
+            case 5:
+                userProfil.setImageResource(R.drawable.profil5);
+                break;
+            case 6:
+                userProfil.setImageResource(R.drawable.profil6);
+                break;
+            case 7:
+                userProfil.setImageResource(R.drawable.profil7);
+                break;
+            case 8:
+                userProfil.setImageResource(R.drawable.profil8);
+                break;
+        }
+        /*if(isManProfil) {
+            userProfil.setImageResource(R.drawable.profils);
         }else{
             userProfil.setImageResource(R.drawable.man);
         }
-        isManProfil = !isManProfil;
+        isManProfil = !isManProfil;*/
     }
 
 
@@ -128,7 +162,7 @@ public class CreateNewUser extends ActionBarActivity {
                     finish();
                 }
 
-        };task.execute((Void[]) null);
+            };task.execute((Void[]) null);
         }else {
             LayoutInflater inflater = getLayoutInflater();
             View view = inflater.inflate(R.layout.new_user_toast,

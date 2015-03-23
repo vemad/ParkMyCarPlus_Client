@@ -34,7 +34,7 @@
                 android:layout_width="0dp"
                 android:layout_height="128dp"
                 android:id="@+id/imageProfil"
-                android:src="@drawable/man"
+                android:src="@drawable/profil1"
                 android:layout_gravity="center_horizontal"
                 android:contentDescription="@string/userProfil"
                 android:layout_weight="3" />

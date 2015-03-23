@@ -36,7 +36,10 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import org.springframework.web.client.ResourceAccessException;
 
 import java.util.Locale;
 
@@ -200,11 +203,17 @@ public class MainActivity extends ActionBarActivity implements OnClickListener {
                             Toast toast2 = Toast.makeText(context, text, duration);
                             toast2.show();*/
 
+
                             LayoutInflater inflater = getLayoutInflater();
                             View view = inflater.inflate(R.layout.custom_toast,
                                     (ViewGroup) findViewById(R.id.relativeLayout1));
 
                             Toast toast = new Toast(getApplicationContext());
+
+                            if(loginException.getClass().equals(org.springframework.web.client.ResourceAccessException.class)){
+                                ((TextView) view.findViewById(R.id.toastTextView)).setText("Il y une anomalie au niveau serveur. Veuillez réessayer ultérieurement. ");
+                            }
+
                             toast.setView(view);
                             toast.show();
                         }
@@ -245,26 +254,4 @@ public class MainActivity extends ActionBarActivity implements OnClickListener {
         return super.dispatchKeyEvent(event);
     }
 
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-
-        /*// Checks the orientation of the screen for landscape and portrait and set portrait mode always
-        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-
-            //android:layout_below="@+id/imageLogo"
-            //android:layout_centerHorizontal="true">
-
-            RelativeLayout.LayoutParams p = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,
-                    RelativeLayout.LayoutParams.WRAP_CONTENT);
-
-            p.addRule(RelativeLayout.BELOW, R.id.imageLogo);
-            p.addRule(RelativeLayout.CENTER_HORIZONTAL);
-            loginBox.setLayoutParams(p);
-
-        } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT){
-
-            loginBox.setLayoutParams(portraitLayout);
-        }*/
-    }
 }
