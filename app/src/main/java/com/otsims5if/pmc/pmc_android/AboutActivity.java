@@ -1,9 +1,13 @@
 package com.otsims5if.pmc.pmc_android;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 /**
  * Created by hk on 20/03/2015.
@@ -23,6 +27,9 @@ public class AboutActivity  extends ActionBarActivity {
         getMenuInflater().inflate(R.menu.menu_undo, menu);
         return true;
     }
+
+
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

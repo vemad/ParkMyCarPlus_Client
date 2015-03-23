@@ -1,6 +1,9 @@
 package com.otsims5if.pmc.pmc_android;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.SearchManager;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.AsyncTask;
@@ -334,6 +337,13 @@ public class MainUserActivity extends ActionBarActivity implements ActionBar.Tab
     public boolean onOptionsItemSelected(MenuItem item) {
         // The action bar home/up action should open or close the drawer.
         // ActionBarDrawerToggle will take care of this.
+        int id = item.getItemId();
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_logout) {
+            System.out.println("logout");
+            showDialog(DIALOG_ALERT);
+            return true;
+        }
         if (mDrawerToggle.onOptionsItemSelected(item)) {
             return true;
         }
@@ -441,38 +451,52 @@ public class MainUserActivity extends ActionBarActivity implements ActionBar.Tab
         startActivity(intent);
     }
 
-    /**
-     * A placeholder fragment containing a simple view.
-     */
-    //public static class PlaceholderFragment extends Fragment {
-        /**
-         * The fragment argument representing the section number for this
-         * fragment.
-         */
-        //private static final String ARG_SECTION_NUMBER = "section_number";
+    private static final int DIALOG_ALERT = 10;
 
-        /**
-         * Returns a new instance of this fragment for the given section
-         * number.
-         */
-       /* public static PlaceholderFragment newInstance(int sectionNumber) {
-            PlaceholderFragment fragment = new PlaceholderFragment();
-            Bundle args = new Bundle();
-            args.putInt(ARG_SECTION_NUMBER, sectionNumber);
-            fragment.setArguments(args);
-            return fragment;
+    @Override
+    protected Dialog onCreateDialog(int id) {
+        switch (id) {
+            case DIALOG_ALERT:
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setMessage("Voulez-vous vous déconnecter?");
+                builder.setCancelable(true);
+                builder.setPositiveButton("Oui", new OkOnClickListener());
+                builder.setNegativeButton("Non", new CancelOnClickListener());
+                AlertDialog dialog = builder.create();
+                dialog.show();
         }
+        return super.onCreateDialog(id);
+    }
 
-        public PlaceholderFragment() {
+    private final class CancelOnClickListener implements
+            DialogInterface.OnClickListener {
+        public void onClick(DialogInterface dialog, int which) {
+            Toast.makeText(getApplicationContext(), "Activity will continue",
+                    Toast.LENGTH_LONG).show();
         }
+    }
 
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_main_user, container, false);
-            return rootView;
+    private final class OkOnClickListener implements
+            DialogInterface.OnClickListener {
+        public void onClick(DialogInterface dialog, int which) {
+            MainUserActivity.this.finish();
         }
-    }*/
+    }
+
+    @Override
+    public void onBackPressed() {
+     showDialog(DIALOG_ALERT);
+
+    //   new LogOutWindow().show(getFragmentManager(),"Diag");
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_logout, menu);
+        return true;
+    }
+
+
 
 }

@@ -52,9 +52,7 @@ public class InformationUser extends ActionBarActivity {
         user_level.setText("Niveau: "+level_name);
         text_score.setText(score+"/"+NextLevelScore+"\nPoints");
         user_name.setText("Utilisateur: " + name_user);
-        bar.setMax(Integer.parseInt(NextLevelScore));
-        bar.setProgress(Integer.parseInt(score));
-        //Touriste
+         //Touriste
         //Utilisateur confirmé
         //Citoyen
         //Maire //346
@@ -71,10 +69,13 @@ public class InformationUser extends ActionBarActivity {
         if(Integer.parseInt(score) >=(Integer.parseInt(NextLevelScore)-Integer.parseInt(NextLevelScore)/2.0)){
             bar.setProgressDrawable(res.getDrawable(R.drawable.progress_blue));
         }
-        if(Integer.parseInt(score) >=(Integer.parseInt(NextLevelScore)-Integer.parseInt(NextLevelScore)/4.0)){bar.setProgressDrawable(res.getDrawable(R.drawable.progress_red));}
+        if(Integer.parseInt(score) >=(Integer.parseInt(NextLevelScore)-Integer.parseInt(NextLevelScore)/4.0)){
+            bar.setProgressDrawable(res.getDrawable(R.drawable.progress_red));}
 
         //else --> green
 
+        bar.setMax(Integer.parseInt(NextLevelScore));
+        bar.setProgress(Integer.parseInt(score));
 
     }
 
