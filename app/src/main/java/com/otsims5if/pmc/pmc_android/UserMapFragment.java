@@ -267,7 +267,9 @@ public class UserMapFragment extends PlaceholderFragment{
             UserServices.getInstance().getUser(new GetUserCallback() {
                 @Override
                 protected void callback(Exception e, User user) {
-                    myParkingLocation = new LatLng(user.getPlace().getLatitude(), user.getPlace().getLongitude());
+                    if(user.getPlace()!=null) {
+                        myParkingLocation = new LatLng(user.getPlace().getLatitude(), user.getPlace().getLongitude());
+                    }
                     if(myParkingLocation!=null){
                         leaveButton.setVisibility(View.VISIBLE);
                         parkButton.setVisibility(View.GONE);
@@ -506,13 +508,6 @@ public class UserMapFragment extends PlaceholderFragment{
             lowDensityZone.clear();
             mediumDensityZone.clear();
 
-            if(!groundOverlayList.isEmpty()){
-                for(GroundOverlay element :groundOverlayList ){
-                    element.remove();
-                }
-                groundOverlayList.clear();
-            }
-
             try {
                 System.out.println("There is "+zones.length+" areas");
                 for (Zone zone : zones) {
@@ -542,6 +537,7 @@ public class UserMapFragment extends PlaceholderFragment{
                             .build();
                     // Add a tile overlay to the map, using the heat map tile provider.
                     mOverlayGReen = map.addTileOverlay(new TileOverlayOptions().tileProvider(mProviderGreen));
+
                 } else {
                     mProviderGreen.setWeightedData(lowDensityZone);
                     //mOverlayGReen.clearTileCache();
@@ -572,7 +568,7 @@ public class UserMapFragment extends PlaceholderFragment{
                     mOverlayOrange = map.addTileOverlay(new TileOverlayOptions().tileProvider(mProviderOrange));
                 } else {
                     mProviderOrange.setWeightedData(mediumDensityZone);
-                    //mOverlayGReen.clearTileCache();
+                    //mOverlayOrange.clearTileCache();
                 }
 
             }catch(Exception exp){

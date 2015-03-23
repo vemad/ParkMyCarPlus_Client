@@ -56,7 +56,7 @@
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
             android:theme="@android:style/Theme.NoTitleBar"
-            android:value="@string/APIKey_c"/>
+            android:value="@string/APIKey_i"/>
 
         <activity
             android:name=".CreateNewUser"
