@@ -266,21 +266,20 @@ public class UserMapFragment extends PlaceholderFragment{
                 @Override
                 protected void callback(Exception e, User user) {
                     myParkingLocation = new LatLng(user.getPlace().getLatitude(), user.getPlace().getLongitude());
+                    if(myParkingLocation!=null){
+                        leaveButton.setVisibility(View.VISIBLE);
+                        parkButton.setVisibility(View.GONE);
+                        currentPositionMarker = map.addMarker(new MarkerOptions()
+                                .position(myParkingLocation)
+                                .title("Je me suis garer ici")
+                                .icon(BitmapDescriptorFactory.fromResource(R.drawable.car)));
+                    }else{
+                        System.out.println("C'est null la position");
+                    }
                 }
-            });
+            }).execute();
         }catch(Exception exp){
 
-        }
-
-        if(myParkingLocation!=null){
-            leaveButton.setVisibility(View.VISIBLE);
-            parkButton.setVisibility(View.GONE);
-            currentPositionMarker = map.addMarker(new MarkerOptions()
-                    .position(myParkingLocation)
-                    .title("Je me suis garer ici")
-                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.car)));
-        }else{
-            System.out.println("C'est null la position");
         }
 
         parkButton.setOnClickListener(new View.OnClickListener() {
@@ -348,8 +347,10 @@ public class UserMapFragment extends PlaceholderFragment{
                 }
                 else if(inMotion){
 
-                    if(previousZoomLevel!=0) {
+                    if(previousZoomLevel!=0 && previousZoomLevel>zoomLevel-10) {
                         cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, previousZoomLevel);
+                    }else{
+                        cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, zoomLevel);
                     }
                     map.animateCamera(cameraUpdate);
                 }
