@@ -18,7 +18,7 @@
         android:layout_height="wrap_content"
         android:textSize="18sp"
         android:gravity="center_vertical"
-        android:textColor="@android:color/black"
+        android:textColor="#DF0101"
         android:text="Line 1"
         android:textStyle="bold"
         android:layout_alignParentTop="true"

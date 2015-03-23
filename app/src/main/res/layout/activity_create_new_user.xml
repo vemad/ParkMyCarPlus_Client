@@ -79,44 +79,44 @@
                 android:textColor="#ffffffff"
                 android:textColorHint="#ff758b9a"
                 android:hint="@string/ConfirmezmotDePasse" />
+        <!--
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:text="@string/taillevoiture"
+                        android:textColor="#ffffffff"
+                        android:id="@+id/textView" /> -->
 
-            <TextView
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:id="@+id/linearLayout">
+
+                    <Button
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Créer"
+                        android:id="@+id/ok"
+                        android:textColor="#ff758b9a"
+                        android:onClick="sendtoserver" />
+
+                </LinearLayout>
+
+    <!--        <Spinner
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="@string/taillevoiture"
-                android:textColor="#ffffffff"
-                android:id="@+id/textView" />
+                android:id="@+id/spinner"
+                android:spinnerMode="dialog"
+                android:entries="@array/size_arrays"
+                android:layout_below="@+id/linearLayout2"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true" /> -->
 
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:id="@+id/linearLayout">
-
-            <Button
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Créer"
-                android:id="@+id/ok"
-                android:textColor="#ff758b9a"
-                android:onClick="sendtoserver" />
-
-        </LinearLayout>
-
-    <Spinner
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/spinner"
-        android:spinnerMode="dialog"
-        android:entries="@array/size_arrays"
-        android:layout_below="@+id/linearLayout2"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
-
-</RelativeLayout>
+        </RelativeLayout>
