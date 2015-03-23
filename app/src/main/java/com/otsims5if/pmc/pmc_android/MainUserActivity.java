@@ -3,6 +3,7 @@ package com.otsims5if.pmc.pmc_android;
 import android.app.SearchManager;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
@@ -33,6 +34,10 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Locale;
+
+import api.user.GetUserCallback;
+import api.user.User;
+import api.user.UserServices;
 
 
 public class MainUserActivity extends ActionBarActivity implements ActionBar.TabListener{
@@ -68,6 +73,10 @@ public class MainUserActivity extends ActionBarActivity implements ActionBar.Tab
 
     FragmentManager fragmentManager;
     Fragment fragment;
+
+    private Exception CreateException;
+    private User getInformations;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -127,6 +136,8 @@ public class MainUserActivity extends ActionBarActivity implements ActionBar.Tab
         View header = getLayoutInflater().inflate(R.layout.header,null);
         TextView titleView_header = (TextView) header.findViewById(R.id.title_usr);
         titleView_header.setText(name_header);
+        titleView_header.setTextSize(30);
+
         mDrawerList.addHeaderView(header);
 
         // set a custom shadow that overlays the main content when the drawer opens
@@ -134,7 +145,7 @@ public class MainUserActivity extends ActionBarActivity implements ActionBar.Tab
         // set up the drawer's list view with items and click listener
         mNavItems.add(new NavItem("Accueil", "", R.drawable.home));
         mNavItems.add(new NavItem("Compte", "Mon compte", R.drawable.user));
-        mNavItems.add(new NavItem("Paramètres", "Changer les paramètres", R.drawable.settings));
+        mNavItems.add(new NavItem("Aide", "Besoin d'aide?", R.drawable.help));
         mNavItems.add(new NavItem("Commentaires", "Envoyez un e-mail", R.drawable.mail));
         mNavItems.add(new NavItem("A propos de", "Park my Car", R.drawable.action_about));
 
@@ -189,6 +200,16 @@ public class MainUserActivity extends ActionBarActivity implements ActionBar.Tab
         }
     }
 
+    private class Information  extends GetUserCallback {
+        protected void callback(Exception e, User user){
+            System.out.println("exceptionnn "+e);
+            CreateException = e;
+            getInformations = user;
+            //System.out.println("User name" + user.getUsername());
+            System.out.println("Exception e GetUser :" +e);
+        }
+    }
+
     private void selectItem(int position) {
         mDrawerList.setItemChecked(position, true);
 
@@ -201,18 +222,53 @@ public class MainUserActivity extends ActionBarActivity implements ActionBar.Tab
         }
         if(position!=1 && position!=0){  enable[1]=0;
           // getSupportActionBar().removeAllTabs();
-            Intent intent = new Intent(this, InformationUser.class);
+            Intent intent = new Intent(this, swit.class);
             startActivity(intent);
         }*/
-        Intent intent;
+        final Intent intent;
         switch(position){
-            case 2: intent = new Intent(this, InformationUser.class);
+            case 2:
+                 System.out.println("case2");
+                 intent = new Intent(this, InformationUser.class);
+
+                 AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>() {
+                    @Override
+                    protected void onPreExecute() {
+                        System.out.println("prexecute");
+                        UserServices.getInstance().getUser(new Information()).execute();
+                        System.out.println("after "+ CreateException);
+                    }
+
+                    @Override
+                    protected Void doInBackground(Void... arg0) {return null;}
+                    @Override
+                    protected void onPostExecute(Void result) {
+                        System.out.println("aaaaaaaaaa");
+                        if(CreateException == null) {
+                            intent.putExtra("name", getInformations.getUsername());
+                            intent.putExtra("score", ""+getInformations.getScore());
+                            intent.putExtra("level_name", ""+getInformations.getLevel().getLevelName());
+                            intent.putExtra("Start_Score", ""+getInformations.getLevel().getStartScore());
+                            intent.putExtra("NextLevelScore", ""+getInformations.getLevel().getNextLevelScore());
+
+                            startActivity(intent);
+                        }
+
+                    }
+
+                };task.execute((Void[]) null);
+                    break;
+            case 3: //aide
+                    intent = new Intent(this, MailActivity.class);
                     startActivity(intent);
                     break;
-            //case 3: //paramètres
             case 4: intent = new Intent(this, MailActivity.class);
                     startActivity(intent);
                     break;
+            case 5: //About
+                intent = new Intent(this, AboutActivity.class);
+                startActivity(intent);
+                break;
             default: ;
         }
 

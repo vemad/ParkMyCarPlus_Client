@@ -13,6 +13,9 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import api.user.GetUserCallback;
+import api.user.User;
 import api.user.UserServices;
 import api.user.SignupCallback;
 
@@ -30,6 +33,7 @@ public class CreateNewUser extends ActionBarActivity {
 
     private Exception CreateException;
     private String message_returned = new String();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         message_returned = "qqq";
@@ -134,6 +138,8 @@ public class CreateNewUser extends ActionBarActivity {
         }
     }
 
+
+
     public void sendtoserver(View v) {
 
         final Intent intent = new Intent(this, MainUserActivity.class);
@@ -157,8 +163,8 @@ public class CreateNewUser extends ActionBarActivity {
                 @Override
                 protected void onPostExecute(Void result) {
                     System.out.println("message: " + message_returned);
-                    intent.putExtra("name_user",user);
-                    startActivity(intent);
+                    intent.putExtra("name_user", user);
+                  //  startActivity(intent);
                     finish();
                 }
 

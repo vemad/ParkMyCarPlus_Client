@@ -16,107 +16,80 @@
         android:layout_alignParentStart="true"
         android:id="@+id/linearLayout2">
 
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="50dp">
-            <ImageView
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:id="@+id/left"
-                android:src="@drawable/leftarrow"
-                android:contentDescription="@string/leftButton"
-                android:layout_weight="1"
-                android:layout_gravity="center_vertical" />
 
-            <ImageView
-                android:layout_width="0dp"
-                android:layout_height="128dp"
-                android:id="@+id/imageProfil"
-                android:src="@drawable/man"
-                android:layout_gravity="center_horizontal"
-                android:contentDescription="@string/userProfil"
-                android:layout_weight="3" />
-
-            <ImageView
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:id="@+id/right"
-                android:src="@drawable/rightarrow"
-                android:contentDescription="@string/rightButton"
-                android:layout_weight="1"
-                android:layout_gravity="center_vertical" />
-        </LinearLayout>
-
-        <EditText
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textPersonName"
             android:ems="10"
             android:id="@+id/username"
             android:textColor="#ffffffff"
-            android:textColorHint="#ff758b9a"
-            android:hint="@string/usernameHint"
-            android:layout_marginTop="50dp" />
-
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textPassword"
-            android:ems="10"
-            android:id="@+id/textPassword"
-            android:textColor="#ffffffff"
-            android:textColorHint="#ff758b9a"
-            android:hint="@string/motDePasse" />
-
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textPassword"
-            android:ems="10"
-            android:id="@+id/passwordConfirmation"
-            android:textColor="#ffffffff"
-            android:textColorHint="#ff758b9a"
-            android:hint="@string/ConfirmezmotDePasse" />
+            android:layout_marginTop="50dp"
+            android:textSize="20sp"
+            android:text="aaaaaa"/>
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="@string/taillevoiture"
+            android:ems="10"
+            android:id="@+id/niveau"
             android:textColor="#ffffffff"
-            android:id="@+id/textView" />
+            android:layout_marginTop="50dp"
+            android:textSize="20sp"
+            android:text="aaaaaa"
+            />
 
     </LinearLayout>
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:id="@+id/linearLayout">
-
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Créer"
-            android:id="@+id/ok"
-            android:textColor="#ff758b9a"
-            android:onClick="sendtoserver" />
-
-    </LinearLayout>
-
-    <Spinner
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/spinner"
-        android:spinnerMode="dialog"
-        android:entries="@array/size_arrays"
+        android:id="@+id/linearLayout"
         android:layout_below="@+id/linearLayout2"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:weightSum="1"
+        >
+
+        <ProgressBar
+            android:id="@+id/circularProgressbar"
+            android:layout_width="250dp"
+            android:layout_height="250dp"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:indeterminate="false"
+            android:progress="90"
+            android:max="100"
+            android:secondaryProgress="100"
+            android:progressDrawable="@layout/progress"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Points: "
+                android:textColor="#ffffffff"
+                android:layout_alignLeft="@id/circularProgressbar"
+                android:layout_alignTop="@id/circularProgressbar"
+                android:layout_alignRight="@id/circularProgressbar"
+                android:layout_alignBottom="@id/circularProgressbar"
+                android:gravity="center"
+
+                android:id="@+id/text_score" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/imageView"
+            android:layout_below="@+id/circularProgressbar"
+            android:layout_centerHorizontal="true"
+            android:src="@drawable/tourist"
+           />
+
+
+    </RelativeLayout >
+
+
 
 </RelativeLayout>

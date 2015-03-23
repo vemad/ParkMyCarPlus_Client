@@ -45,6 +45,9 @@ import java.util.Locale;
 
 import api.authentification.AuthentificateCallback;
 import api.authentification.AuthentificationServices;
+import api.user.GetUserCallback;
+import api.user.User;
+import api.user.UserServices;
 
 
 public class MainActivity extends ActionBarActivity implements OnClickListener {
@@ -136,7 +139,6 @@ public class MainActivity extends ActionBarActivity implements OnClickListener {
         //Intent intent = new Intent(this, PlaceInformation.class);
         intent.putExtra("name_user",username.getText().toString());
         startActivity(intent);
-
     }
 
     public void newUserInterface(View view) {
@@ -174,6 +176,7 @@ public class MainActivity extends ActionBarActivity implements OnClickListener {
                     System.out.println("Password :"+password.getText().toString());
 
                     AuthentificationServices.getInstance().authentificate(username.getText().toString(), password.getText().toString(), new Login()).execute();
+
                 }
 
                 @Override
@@ -190,6 +193,8 @@ public class MainActivity extends ActionBarActivity implements OnClickListener {
 
                 @Override
                 protected void onPostExecute(Void result) {
+
+
                     if (loadingDialog != null) {
                         loadingDialog.dismiss();
                         connectionButton.setEnabled(true);
@@ -236,6 +241,8 @@ public class MainActivity extends ActionBarActivity implements OnClickListener {
             System.out.println("loginException  :" +loginException);
         }
     }
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

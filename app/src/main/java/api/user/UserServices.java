@@ -73,7 +73,7 @@ public class UserServices {
             @Override
             protected Pair<Exception, User> doInBackground(Void... params) {
                 try {
-                    final String url = ApiConfig.usersRoutes + "";
+                    final String url = ApiConfig.usersRoutes + "/current";//+""
 
                     HttpHeaders requestHeaders = new HttpHeaders();
                     AuthentificationServices.getInstance().addAuthorization(requestHeaders);

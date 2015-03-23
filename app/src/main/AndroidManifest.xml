@@ -75,6 +75,11 @@
             android:name=".MailActivity"
             android:label="@string/title_activity_mail" >
         </activity>
+
+        <activity
+            android:name=".AboutActivity"
+            android:label="@string/title_activity_mail" >
+        </activity>
     </application>
 
 </manifest>
