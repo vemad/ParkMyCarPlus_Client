@@ -374,6 +374,11 @@ public class UserMapFragment extends PlaceholderFragment{
                 LatLngBounds mapVisibleBounds = map.getProjection().getVisibleRegion().latLngBounds;
                 if(previousZoomLevel != position.zoom)
                 {
+                    if(mOverlay!=null) {
+                        mOverlay.clearTileCache();
+                        mOverlayOrange.clearTileCache();
+                        mOverlayGReen.clearTileCache();
+                    }
                     try {
                         ZoneServices.getInstance().getListZonesByPosition(myCurrentLocation.latitude,
                                 myCurrentLocation.longitude, radius, new ShowListZonesCallback()).execute();
@@ -393,6 +398,16 @@ public class UserMapFragment extends PlaceholderFragment{
         map.setOnMyLocationButtonClickListener(new GoogleMap.OnMyLocationButtonClickListener() {
             @Override
             public boolean onMyLocationButtonClick() {
+
+                if(destinationMarker !=null){
+                    destinationMarker.remove();
+                }
+                if(mOverlay!=null) {
+                    mOverlay.clearTileCache();
+                    mOverlayOrange.clearTileCache();
+                    mOverlayGReen.clearTileCache();
+                }
+
                 myCurrentLocation = new LatLng(map.getMyLocation().getLatitude(), map.getMyLocation().getLongitude());
                 CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(myCurrentLocation, previousZoomLevel);
                 map.animateCamera(cameraUpdate);

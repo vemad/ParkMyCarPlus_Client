@@ -1,15 +1,23 @@
 apply plugin: 'com.android.application'
 
 android {
+    signingConfigs {
+        parkmycar {
+            storeFile file('C:/Users/Iler/Documents/GitHub/PMC_Android/parkmycarkeystore.jks')
+            keyAlias 'parkmycar'
+            keyPassword 'otsims'
+            storePassword 'otsims'
+        }
+    }
     compileSdkVersion 21
     buildToolsVersion "21.1.2"
-
     defaultConfig {
         applicationId "com.otsims5if.pmc.pmc_android"
         minSdkVersion 14
         targetSdkVersion 21
         versionCode 1
         versionName "1.0"
+        signingConfig signingConfigs.parkmycar
     }
     buildTypes {
         release {
@@ -23,6 +31,8 @@ android {
         exclude 'META-INF/license.txt'
         exclude 'META-INF/NOTICE'
         exclude 'META-INF/notice.txt'
+    }
+    productFlavors {
     }
 }
 
