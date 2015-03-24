@@ -262,7 +262,7 @@ public class MainUserActivity extends ActionBarActivity implements ActionBar.Tab
                 };task.execute((Void[]) null);
                     break;
             case 3: //aide
-                    intent = new Intent(this, MailActivity.class);
+                    intent = new Intent(this, HelpActivity.class);
                     startActivity(intent);
                     break;
             case 4: intent = new Intent(this, MailActivity.class);
