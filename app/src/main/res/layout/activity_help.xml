@@ -8,7 +8,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
-        android:text="Facile à utiliser!.Notre application va trouver des endroits autour de 200 m à partir de votre position et vous donnera en même temps quelques informations sur l'état des zones locales (très bien, un peu de trafic ou de parkings surchargés).."
+        android:text="Facile à utiliser!Notre application va trouver des endroits autour de 200 m à partir de votre position et vous donnera en même temps quelques informations sur l'état des zones locales (Forte, Moyenne, Faible)."
         android:id="@+id/text_help"
         android:textSize="20sp"/>
     <ImageView
