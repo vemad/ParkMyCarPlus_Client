@@ -1,6 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:id="@+id/help_layout">
 
-</LinearLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:text="Facile à utiliser!Notre application va trouver des endroits autour de 200 m à partir de votre position et vous donnera en même temps quelques informations sur l'état des zones locales (Forte, Moyenne, Faible)."
+        android:id="@+id/text_help"
+        android:textSize="20sp"/>
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:src="@drawable/help_interface"
+        android:gravity="center"
+        android:id="@+id/imageView_help_interface"
+
+        />
+</RelativeLayout>

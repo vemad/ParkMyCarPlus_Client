@@ -56,7 +56,7 @@
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
             android:theme="@android:style/Theme.NoTitleBar"
-            android:value="@string/APIKey_i"/>
+            android:value="@string/APIKey_c"/>
 
         <activity
             android:name=".CreateNewUser"
@@ -79,7 +79,11 @@
 
         <activity
             android:name=".AboutActivity"
-            android:label="@string/title_activity_mail" >
+            android:label="About us" >
+        </activity>
+        <activity
+            android:name=".HelpActivity"
+            android:label="Aide" >
         </activity>
     </application>
 
