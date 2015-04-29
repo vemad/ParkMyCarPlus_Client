@@ -15,6 +15,7 @@ public class User {
     protected int score;
     protected Place place;
     protected UserLevel level;
+    protected String isPaired;
 
     public User(){}
 
@@ -22,6 +23,7 @@ public class User {
         this.id = null;
         this.username = username;
         this.password = password;
+        this.isPaired = "";
     }
 
     public String getId() { return id; }
@@ -35,4 +37,8 @@ public class User {
     public Place getPlace() { return place; }
 
     public UserLevel getLevel(){ return level; }
+
+    public String getPaired(){ return isPaired; }
+
+    public void setPaired(String isPaired){ this.isPaired = isPaired; }
 }

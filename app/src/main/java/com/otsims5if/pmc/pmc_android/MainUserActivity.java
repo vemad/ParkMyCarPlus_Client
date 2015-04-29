@@ -192,6 +192,16 @@ public class MainUserActivity extends ActionBarActivity implements ActionBar.Tab
             selectItem(0);
         }
 
+        if (extras.getString("isPaired") == "") {
+            // Si connecté à un appareil en Bluetooth
+            // Proposer de s'y appareiller
+
+            // Sinon proposer recherche + pairing
+
+            // if success, isPaired = " paired";
+        }
+
+
     }
 
 
@@ -253,6 +263,7 @@ public class MainUserActivity extends ActionBarActivity implements ActionBar.Tab
                             intent.putExtra("level_name", ""+getInformations.getLevel().getLevelName());
                             intent.putExtra("Start_Score", ""+getInformations.getLevel().getStartScore());
                             intent.putExtra("NextLevelScore", ""+getInformations.getLevel().getNextLevelScore());
+                            intent.putExtra("isPaired", ""+getInformations.getPaired());
 
                             startActivity(intent);
                         }
