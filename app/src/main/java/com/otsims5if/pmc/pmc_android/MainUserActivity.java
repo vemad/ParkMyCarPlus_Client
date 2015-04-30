@@ -3,8 +3,13 @@ package com.otsims5if.pmc.pmc_android;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.SearchManager;
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.res.Configuration;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -37,6 +42,7 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Locale;
+import java.util.Set;
 
 import api.user.GetUserCallback;
 import api.user.User;
@@ -192,18 +198,68 @@ public class MainUserActivity extends ActionBarActivity implements ActionBar.Tab
             selectItem(0);
         }
 
-        if (extras.getString("isPaired") == "") {
+        /*IntentFilter filter1 = new IntentFilter(BluetoothDevice.ACTION_ACL_CONNECTED);
+        IntentFilter filter2 = new IntentFilter(BluetoothDevice.ACTION_ACL_DISCONNECT_REQUESTED);
+        IntentFilter filter3 = new IntentFilter(BluetoothDevice.ACTION_ACL_DISCONNECTED);
+        this.registerReceiver(mReceiver, filter1);
+        this.registerReceiver(mReceiver, filter2);
+        this.registerReceiver(mReceiver, filter3);*/
+
+        if (extras.getString("macAddress") == "") {
+            //BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
             // Si connecté à un appareil en Bluetooth
             // Proposer de s'y appareiller
+            IntentFilter filter1 = new IntentFilter(BluetoothDevice.ACTION_ACL_CONNECTED);
+            IntentFilter filter2 = new IntentFilter(BluetoothDevice.ACTION_ACL_DISCONNECT_REQUESTED);
+            IntentFilter filter3 = new IntentFilter(BluetoothDevice.ACTION_ACL_DISCONNECTED);
+            this.registerReceiver(mReceiver, filter1);
+            this.registerReceiver(mReceiver, filter2);
+            this.registerReceiver(mReceiver, filter3);
 
             // Sinon proposer recherche + pairing
+            String deviceName = "My_Device_Name";
 
-            // if success, isPaired = " paired";
+            BluetoothDevice result = null;
+
+            Set<BluetoothDevice> devices = null;// = mBluetoothAdapter.get les devices autour
+            if (devices != null) {
+                for (BluetoothDevice device : devices) {
+                    if (deviceName.equals(device.getName())) {
+                        result = device;
+                        break;
+                    }
+                }
+            }
         }
 
 
     }
 
+    //The BroadcastReceiver that listens for bluetooth broadcasts
+    private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+
+            if (BluetoothDevice.ACTION_FOUND.equals(action)) {
+                //Device found
+            }
+            else if (BluetoothDevice.ACTION_ACL_CONNECTED.equals(action)) {
+                String macAddress = device.getAddress();
+                intent.putExtra("macAddress", ""+getInformations.getMacAddress());
+            }
+            else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {
+                //Done searching
+            }
+            else if (BluetoothDevice.ACTION_ACL_DISCONNECT_REQUESTED.equals(action)) {
+                //Device is about to disconnect
+            }
+            else if (BluetoothDevice.ACTION_ACL_DISCONNECTED.equals(action)) {
+                //Device has disconnected
+            }
+        }
+    };
 
     private class DrawerItemClickListener implements ListView.OnItemClickListener {
         @Override
@@ -263,7 +319,7 @@ public class MainUserActivity extends ActionBarActivity implements ActionBar.Tab
                             intent.putExtra("level_name", ""+getInformations.getLevel().getLevelName());
                             intent.putExtra("Start_Score", ""+getInformations.getLevel().getStartScore());
                             intent.putExtra("NextLevelScore", ""+getInformations.getLevel().getNextLevelScore());
-                            intent.putExtra("isPaired", ""+getInformations.getPaired());
+                            intent.putExtra("macAddress", ""+getInformations.getMacAddress());
 
                             startActivity(intent);
                         }
