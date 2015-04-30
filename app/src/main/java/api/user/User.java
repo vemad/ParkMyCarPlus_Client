@@ -23,7 +23,7 @@ public class User {
         this.id = null;
         this.username = username;
         this.password = password;
-        this.isPaired = "";
+        //this.isPaired = "";
     }
 
     public String getId() { return id; }
