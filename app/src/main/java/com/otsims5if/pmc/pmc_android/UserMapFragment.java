@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -81,6 +82,7 @@ public class UserMapFragment extends PlaceholderFragment{
     private static View view;
     private static MapView mapView;
     private static GoogleMap map;
+    private static LocationManager locman;
     Button parkButton;
     Button leaveButton;
     ImageButton searchAdressButton;
@@ -267,20 +269,22 @@ public class UserMapFragment extends PlaceholderFragment{
             UserServices.getInstance().getUser(new GetUserCallback() {
                 @Override
                 protected void callback(Exception e, User user) {
-                    if(user.getPlace()!=null) {
-                        myParkingLocation = new LatLng(user.getPlace().getLatitude(), user.getPlace().getLongitude());
+                    if (user != null) {
+                        if (user.getPlace() != null) {
+                            myParkingLocation = new LatLng(user.getPlace().getLatitude(), user.getPlace().getLongitude());
+                        }
+                        if (myParkingLocation != null) {
+                            leaveButton.setVisibility(View.VISIBLE);
+                            parkButton.setVisibility(View.GONE);
+                            currentPositionMarker = map.addMarker(new MarkerOptions()
+                                    .position(myParkingLocation)
+                                    .title("Je me suis garer ici")
+                                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.car)));
+                        } else {
+                            System.out.println("C'est null la position");
+                        }
                     }
-                    if(myParkingLocation!=null){
-                        leaveButton.setVisibility(View.VISIBLE);
-                        parkButton.setVisibility(View.GONE);
-                        currentPositionMarker = map.addMarker(new MarkerOptions()
-                                .position(myParkingLocation)
-                                .title("Je me suis garer ici")
-                                .icon(BitmapDescriptorFactory.fromResource(R.drawable.car)));
-                    }else{
-                        System.out.println("C'est null la position");
-                    }
-                }
+                }//fin if use not null
             }).execute();
         }catch(Exception exp){
 
@@ -399,6 +403,7 @@ public class UserMapFragment extends PlaceholderFragment{
             @Override
             public boolean onMyLocationButtonClick() {
 
+
                 if(destinationMarker !=null){
                     destinationMarker.remove();
                 }
@@ -407,8 +412,10 @@ public class UserMapFragment extends PlaceholderFragment{
                     mOverlayOrange.clearTileCache();
                     mOverlayGReen.clearTileCache();
                 }
+                Location location = locman.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                //myCurrentLocation = new LatLng(map.getMyLocation().getLatitude(), map.getMyLocation().getLongitude());
 
-                myCurrentLocation = new LatLng(map.getMyLocation().getLatitude(), map.getMyLocation().getLongitude());
+                myCurrentLocation = new LatLng(location.getLatitude(), location.getLongitude());
                 CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(myCurrentLocation, previousZoomLevel);
                 map.animateCamera(cameraUpdate);
                 localPosition = true;
