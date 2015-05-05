@@ -44,6 +44,7 @@ import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Set;
 
+import api.user.ChangeMacCallback;
 import api.user.GetUserCallback;
 import api.user.User;
 import api.user.UserServices;
@@ -195,6 +196,132 @@ public class MainUserActivity extends ActionBarActivity implements ActionBar.Tab
         if (savedInstanceState == null) {
             selectItem(0);
         }
+
+        /*button.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                //spinner.setVisibility(View.VISIBLE);
+                ProgressDialog mDialog = new ProgressDialog(getApplicationContext());
+                mDialog.setMessage("Loading...");
+                mDialog.setCancelable(false);
+                mDialog.show();
+            }
+        });*/
+
+/*IntentFilter filter1 = new IntentFilter(BluetoothDevice.ACTION_ACL_CONNECTED);
+        IntentFilter filter2 = new IntentFilter(BluetoothDevice.ACTION_ACL_DISCONNECT_REQUESTED);
+        IntentFilter filter3 = new IntentFilter(BluetoothDevice.ACTION_ACL_DISCONNECTED);
+        this.registerReceiver(mReceiver, filter1);
+        this.registerReceiver(mReceiver, filter2);
+        this.registerReceiver(mReceiver, filter3);*/
+
+        if (extras.getString("macAddress") == " " || extras.getString("macAddress") == null) {
+            //BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+            // Si connecté à un appareil en Bluetooth
+            // Proposer de s'y appareiller
+            IntentFilter filter1 = new IntentFilter(BluetoothDevice.ACTION_ACL_CONNECTED);
+            IntentFilter filter2 = new IntentFilter(BluetoothDevice.ACTION_ACL_DISCONNECT_REQUESTED);
+            IntentFilter filter3 = new IntentFilter(BluetoothDevice.ACTION_ACL_DISCONNECTED);
+            this.registerReceiver(mReceiver, filter1);
+            this.registerReceiver(mReceiver, filter2);
+            this.registerReceiver(mReceiver, filter3);
+
+            // Sinon proposer recherche + pairing
+            String deviceName = "My_Device_Name";
+
+            BluetoothDevice result = null;
+
+            Set<BluetoothDevice> devices = null;// = mBluetoothAdapter.get les devices autour
+            if (devices != null) {
+                for (BluetoothDevice device : devices) {
+                    if (deviceName.equals(device.getName())) {
+                        result = device;
+                        break;
+                    }
+                }
+            }
+        }
+
+
+    }
+
+    //The BroadcastReceiver that listens for bluetooth broadcasts
+    private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+            UserMapFragment umf = new UserMapFragment();
+
+            if (BluetoothDevice.ACTION_FOUND.equals(action)) {
+                //Device found
+            }
+            else if (BluetoothDevice.ACTION_ACL_CONNECTED.equals(action)) {
+                System.out.println("device just connected");
+                String macAddress = device.getAddress();
+                if (macAddress.equals(getInformations.getMacAddress())) {
+
+                    // rentre dans sa voiture (libère la place)
+                    System.out.println("paired device just connected");
+                    umf.leave();
+                    intent.putExtra("macAddress", "" + getInformations.getMacAddress());
+                }
+                else {
+                    // appareille le gadget bluetooth de la voiture
+                    System.out.println("getting paired");
+                    sendtoserver(device.getAddress());
+                    intent.putExtra("macAddress", ""+getInformations.getMacAddress());
+                }
+            }
+            else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {
+                //Done searching
+            }
+            else if (BluetoothDevice.ACTION_ACL_DISCONNECT_REQUESTED.equals(action)) {
+                //Device is about to disconnect
+            }
+            else if (BluetoothDevice.ACTION_ACL_DISCONNECTED.equals(action)) {
+                System.out.println("a device just disconnected");
+                String macAddress = device.getAddress();
+                if (macAddress.equals(getInformations.getMacAddress())) {
+                    // est garé
+                    System.out.println("paired device just disconnected");
+                    umf.park();
+                }
+            }
+        }
+    };
+
+    private class ChangeMac extends ChangeMacCallback {
+        protected void callback(Exception e, User user){
+            getInformations = user;
+            System.out.println("Exception e :" +e);
+
+        }
+    }
+
+    public void sendtoserver(final String macAddress) {
+
+        final Intent intent = new Intent(this, MainUserActivity.class);
+
+        System.out.println("test sendtoserver macaddress");
+        AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected void onPreExecute() {
+                UserServices.getInstance().changemacaddress(getInformations, macAddress, new ChangeMac()).execute();
+            }
+
+            @Override
+            protected Void doInBackground(Void... arg0) {return null;}
+            @Override
+            protected void onPostExecute(Void result) {
+                System.out.println("new macAddress: " + macAddress);
+                intent.putExtra("macAddress", macAddress);
+                //  startActivity(intent);
+                finish();
+            }
+
+        };task.execute((Void[]) null);
+
+
     }
 
     private class DrawerItemClickListener implements ListView.OnItemClickListener {
