@@ -292,11 +292,7 @@ public class UserMapFragment extends PlaceholderFragment{
 
         parkButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                leaveButton.setVisibility(View.VISIBLE);
-                parkButton.setVisibility(View.GONE);
-                myParkingLocation = new LatLng(myCurrentLocation.latitude, myCurrentLocation.longitude);
-                PlaceServices.getInstance().takePlace(myParkingLocation.latitude,
-                        myParkingLocation.longitude, new TakeAndDisplayPlace()).execute();
+                park();
 
                 //Show popup
                 showDensitySelectPopup(v);
@@ -306,11 +302,7 @@ public class UserMapFragment extends PlaceholderFragment{
         });
         leaveButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                leaveButton.setVisibility(View.GONE);
-                parkButton.setVisibility(View.VISIBLE);
-                //currentPositionMarker.remove();
-                PlaceServices.getInstance().releasePlace(myParkingLocation.latitude,
-                        myParkingLocation.longitude, new ReleaseAndRemovePlace()).execute();
+                leave();
 
                 //Show popup
                 showDensitySelectPopup(v);
@@ -469,6 +461,22 @@ public class UserMapFragment extends PlaceholderFragment{
 
 
         return view;
+    }
+
+    public void park() {
+        leaveButton.setVisibility(View.VISIBLE);
+        parkButton.setVisibility(View.GONE);
+        myParkingLocation = new LatLng(myCurrentLocation.latitude, myCurrentLocation.longitude);
+        PlaceServices.getInstance().takePlace(myParkingLocation.latitude,
+                myParkingLocation.longitude, new TakeAndDisplayPlace()).execute();
+    }
+
+    public void leave() {
+        leaveButton.setVisibility(View.GONE);
+        parkButton.setVisibility(View.VISIBLE);
+        //currentPositionMarker.remove();
+        PlaceServices.getInstance().releasePlace(myParkingLocation.latitude,
+                myParkingLocation.longitude, new ReleaseAndRemovePlace()).execute();
     }
 
     public void findAndDisplayAreas(){

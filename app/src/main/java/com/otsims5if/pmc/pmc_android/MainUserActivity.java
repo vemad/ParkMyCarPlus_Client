@@ -94,18 +94,18 @@ public class MainUserActivity extends ActionBarActivity implements ActionBar.Tab
         // Set up the action bar.
         final ActionBar actionBar = getSupportActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-    //    actionBar.hide();
+        //    actionBar.hide();
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
 
-                // Set up the ViewPager with the sections adapter.
+        // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
 
-                // When swiping between different sections, select the corresponding
+        // When swiping between different sections, select the corresponding
         // tab. We can also use ActionBar.Tab#select() to do this if we have
         // a reference to the Tab.
         mViewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
@@ -115,20 +115,18 @@ public class MainUserActivity extends ActionBarActivity implements ActionBar.Tab
             }
         });
 
-              //Ajouter les onglets
+        //Ajouter les onglets
         actionBar.addTab(actionBar.newTab()
                 .setText(mSectionsPagerAdapter.getPageTitle(0))
                 .setTabListener(this)
                 .setIcon(R.drawable.map));
 
 
-
         actionBar.addTab(actionBar.newTab()
-                .setText(mSectionsPagerAdapter.getPageTitle(1))
-                .setTabListener(this)
-                .setIcon( R.drawable.bookmark)
-                );
-
+                        .setText(mSectionsPagerAdapter.getPageTitle(1))
+                        .setTabListener(this)
+                        .setIcon(R.drawable.bookmark)
+        );
 
 
         ////
@@ -140,9 +138,9 @@ public class MainUserActivity extends ActionBarActivity implements ActionBar.Tab
 
         //récuperation des données
         Bundle extras = getIntent().getExtras();
-        String name_header =  extras.getString("name_user");
+        String name_header = extras.getString("name_user");
 
-        View header = getLayoutInflater().inflate(R.layout.header,null);
+        View header = getLayoutInflater().inflate(R.layout.header, null);
         TextView titleView_header = (TextView) header.findViewById(R.id.title_usr);
         titleView_header.setText(name_header);
         titleView_header.setTextSize(30);
@@ -159,17 +157,17 @@ public class MainUserActivity extends ActionBarActivity implements ActionBar.Tab
         mNavItems.add(new NavItem("A propos de", "Park my Car", R.drawable.action_about));
 
 
-        for(int i=0;i<menu_number;i++){
-            enable[i]=1;
+        for (int i = 0; i < menu_number; i++) {
+            enable[i] = 1;
         }
-        enable[0]=0;
+        enable[0] = 0;
 
         DrawerListAdapter adapter = new DrawerListAdapter(this, mNavItems);
         mDrawerList.setAdapter(adapter);
-       // mDrawerList.setAdapter(new ArrayAdapter<String>(this,R.layout.drawer_list_item, menutTitles));
+        // mDrawerList.setAdapter(new ArrayAdapter<String>(this,R.layout.drawer_list_item, menutTitles));
 
         mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
-        System.out.println( getSupportActionBar());
+        System.out.println(getSupportActionBar());
         // enable ActionBar app icon to behave as action to toggle nav drawer
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
@@ -197,69 +195,7 @@ public class MainUserActivity extends ActionBarActivity implements ActionBar.Tab
         if (savedInstanceState == null) {
             selectItem(0);
         }
-
-        /*IntentFilter filter1 = new IntentFilter(BluetoothDevice.ACTION_ACL_CONNECTED);
-        IntentFilter filter2 = new IntentFilter(BluetoothDevice.ACTION_ACL_DISCONNECT_REQUESTED);
-        IntentFilter filter3 = new IntentFilter(BluetoothDevice.ACTION_ACL_DISCONNECTED);
-        this.registerReceiver(mReceiver, filter1);
-        this.registerReceiver(mReceiver, filter2);
-        this.registerReceiver(mReceiver, filter3);*/
-
-        if (extras.getString("macAddress") == "") {
-            //BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-            // Si connecté à un appareil en Bluetooth
-            // Proposer de s'y appareiller
-            IntentFilter filter1 = new IntentFilter(BluetoothDevice.ACTION_ACL_CONNECTED);
-            IntentFilter filter2 = new IntentFilter(BluetoothDevice.ACTION_ACL_DISCONNECT_REQUESTED);
-            IntentFilter filter3 = new IntentFilter(BluetoothDevice.ACTION_ACL_DISCONNECTED);
-            this.registerReceiver(mReceiver, filter1);
-            this.registerReceiver(mReceiver, filter2);
-            this.registerReceiver(mReceiver, filter3);
-
-            // Sinon proposer recherche + pairing
-            String deviceName = "My_Device_Name";
-
-            BluetoothDevice result = null;
-
-            Set<BluetoothDevice> devices = null;// = mBluetoothAdapter.get les devices autour
-            if (devices != null) {
-                for (BluetoothDevice device : devices) {
-                    if (deviceName.equals(device.getName())) {
-                        result = device;
-                        break;
-                    }
-                }
-            }
-        }
-
-
     }
-
-    //The BroadcastReceiver that listens for bluetooth broadcasts
-    private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            String action = intent.getAction();
-            BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-
-            if (BluetoothDevice.ACTION_FOUND.equals(action)) {
-                //Device found
-            }
-            else if (BluetoothDevice.ACTION_ACL_CONNECTED.equals(action)) {
-                String macAddress = device.getAddress();
-                intent.putExtra("macAddress", ""+getInformations.getMacAddress());
-            }
-            else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {
-                //Done searching
-            }
-            else if (BluetoothDevice.ACTION_ACL_DISCONNECT_REQUESTED.equals(action)) {
-                //Device is about to disconnect
-            }
-            else if (BluetoothDevice.ACTION_ACL_DISCONNECTED.equals(action)) {
-                //Device has disconnected
-            }
-        }
-    };
 
     private class DrawerItemClickListener implements ListView.OnItemClickListener {
         @Override

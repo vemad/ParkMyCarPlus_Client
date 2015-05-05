@@ -33,11 +33,11 @@ public class UserServices {
     * Service storing mac address of the device paired
     */
     //public AsyncTask<Void, Void, Pair<Exception, String>> changemacaddress(final User user, final String macAddress, final ChangeMacCallback cb){
-    public AsyncTask<Void, Void, Pair<Exception, String>> changemacaddress(final User user, final ChangeMacCallback cb){
+    public AsyncTask<Void, Void, Pair<Exception, User>> changemacaddress(final User user, String macAddress, final ChangeMacCallback cb){
 
-        class Changemacaddress extends AsyncTask<Void, Void, Pair<Exception, String>> {
+        class Changemacaddress extends AsyncTask<Void, Void, Pair<Exception, User>> {
             @Override
-            protected Pair<Exception, String> doInBackground(Void... params) {
+            protected Pair<Exception, User> doInBackground(Void... params) {
                 try {
                     final String url = ApiConfig.usersRoutes + "/changemacaddress";
 
@@ -46,18 +46,18 @@ public class UserServices {
 
                     RestTemplate restTemplate = new RestTemplate();
                     restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
-                    restTemplate.getMessageConverters().add(new FormHttpMessageConverter());
-                    restTemplate.getMessageConverters().add(new StringHttpMessageConverter());
+                    //restTemplate.getMessageConverters().add(new FormHttpMessageConverter());
+                    //restTemplate.getMessageConverters().add(new StringHttpMessageConverter());
 
-                    ResponseEntity<StatusMessage> responseEntity = restTemplate.exchange(url, HttpMethod.POST, requestEntity, StatusMessage.class);
-                    return new Pair<>(null, responseEntity.getBody().getMessage());
+                    ResponseEntity<User> responseEntity = restTemplate.exchange(url, HttpMethod.POST, requestEntity, User.class);
+                    return new Pair<>(null, responseEntity.getBody());
 
                 } catch (Exception e) {
                     return new Pair<>(e, null);
                 }
             }
             @Override
-            protected void onPostExecute(Pair<Exception, String> resRequest) {
+            protected void onPostExecute(Pair<Exception, User> resRequest) {
                 if(cb != null) cb.callback(resRequest.first, resRequest.second);
             }
         }
