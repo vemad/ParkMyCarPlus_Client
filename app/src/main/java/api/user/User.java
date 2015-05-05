@@ -16,6 +16,7 @@ public class User {
     protected Place place;
     protected UserLevel level;
     protected String isPaired;
+    protected int confianceScore;
 
     public User(){}
 
@@ -24,6 +25,7 @@ public class User {
         this.username = username;
         this.password = password;
         this.isPaired = "";
+        this.confianceScore = 10;
     }
 
     public String getId() { return id; }
@@ -33,6 +35,8 @@ public class User {
     public String getPassword() { return password; }
 
     public int getScore() { return score; }
+
+    public int getConfianceScore() { return confianceScore; }
 
     public Place getPlace() { return place; }
 
