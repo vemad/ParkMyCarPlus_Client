@@ -45,11 +45,11 @@ public class InformationUser extends ActionBarActivity {
         String name_user =  extras.getString("name");
         String score =  extras.getString("score");
         String level_name =  extras.getString("level_name");
-        String isPaired =  extras.getString("isPaired");
+        String macAddress =  extras.getString("macAddress");
         String start_score =  extras.getString("Start_Score");
         String NextLevelScore = "700";//extras.getString("NextLevelScore");
 
-        user_level.setText("Niveau: " + level_name + isPaired);
+        user_level.setText("Niveau: " + level_name + macAddress);
         text_score.setText(score+"/"+NextLevelScore+"\nPoints");
         user_name.setText("Utilisateur: " + name_user);
          //Touriste

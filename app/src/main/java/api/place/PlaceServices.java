@@ -2,6 +2,14 @@ package api.place;
 
 import android.os.AsyncTask;
 import android.util.Pair;
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothServerSocket;
+import android.bluetooth.BluetoothSocket;
+import android.content.Context;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -25,10 +33,26 @@ import api.authentification.AuthentificationServices;
 public class PlaceServices {
     private static PlaceServices ourInstance = new PlaceServices();
 
+    private final BluetoothAdapter mAdapter;
+    /*
+    private AcceptThread mSecureAcceptThread;
+    private AcceptThread mInsecureAcceptThread;
+    private ConnectThread mConnectThread;
+    private ConnectedThread mConnectedThread;
+    */
+    private int mState;
+
+    public static final int STATE_NONE = 0;       // we're doing nothing
+    public static final int STATE_LISTEN = 1;     // now listening for incoming connections
+    public static final int STATE_CONNECTING = 2; // now initiating an outgoing connection
+    public static final int STATE_CONNECTED = 3;  // now connected to a remote device
+
     public static PlaceServices getInstance() {
         return ourInstance;
     }
     private PlaceServices() {
+        mAdapter = BluetoothAdapter.getDefaultAdapter();
+        mState = STATE_NONE;
     }
 
     /*
@@ -166,5 +190,14 @@ public class PlaceServices {
 
         return new ReleasePlace();
     }
+
+    //Bluetooth enabling
+
+    private synchronized void setState(int state) {
+        System.out.println("setState() " + mState + " -> " + state);
+        mState = state;
+    }
+
+
 }
 

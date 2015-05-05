@@ -17,6 +17,7 @@ public class User {
     protected UserLevel level;
     protected String isPaired;
     protected int confianceScore;
+    protected String macAddress;
 
     public User(){}
 
@@ -26,6 +27,8 @@ public class User {
         this.password = password;
         this.isPaired = "";
         this.confianceScore = 10;
+        this.macAddress = "";
+
     }
 
     public String getId() { return id; }
@@ -42,7 +45,5 @@ public class User {
 
     public UserLevel getLevel(){ return level; }
 
-    public String getPaired(){ return isPaired; }
-
-    public void setPaired(String isPaired){ this.isPaired = isPaired; }
+    public String getMacAddress(){ return macAddress; }
 }

@@ -3,8 +3,13 @@ package com.otsims5if.pmc.pmc_android;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.SearchManager;
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.res.Configuration;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -37,7 +42,9 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Locale;
+import java.util.Set;
 
+import api.user.ChangeMacCallback;
 import api.user.GetUserCallback;
 import api.user.User;
 import api.user.UserServices;
@@ -88,18 +95,18 @@ public class MainUserActivity extends ActionBarActivity implements ActionBar.Tab
         // Set up the action bar.
         final ActionBar actionBar = getSupportActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-    //    actionBar.hide();
+        //    actionBar.hide();
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
 
-                // Set up the ViewPager with the sections adapter.
+        // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
 
-                // When swiping between different sections, select the corresponding
+        // When swiping between different sections, select the corresponding
         // tab. We can also use ActionBar.Tab#select() to do this if we have
         // a reference to the Tab.
         mViewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
@@ -109,20 +116,18 @@ public class MainUserActivity extends ActionBarActivity implements ActionBar.Tab
             }
         });
 
-              //Ajouter les onglets
+        //Ajouter les onglets
         actionBar.addTab(actionBar.newTab()
                 .setText(mSectionsPagerAdapter.getPageTitle(0))
                 .setTabListener(this)
                 .setIcon(R.drawable.map));
 
 
-
         actionBar.addTab(actionBar.newTab()
-                .setText(mSectionsPagerAdapter.getPageTitle(1))
-                .setTabListener(this)
-                .setIcon( R.drawable.bookmark)
-                );
-
+                        .setText(mSectionsPagerAdapter.getPageTitle(1))
+                        .setTabListener(this)
+                        .setIcon(R.drawable.bookmark)
+        );
 
 
         ////
@@ -134,9 +139,9 @@ public class MainUserActivity extends ActionBarActivity implements ActionBar.Tab
 
         //récuperation des données
         Bundle extras = getIntent().getExtras();
-        String name_header =  extras.getString("name_user");
+        String name_header = extras.getString("name_user" + " " + "macAddress");
 
-        View header = getLayoutInflater().inflate(R.layout.header,null);
+        View header = getLayoutInflater().inflate(R.layout.header, null);
         TextView titleView_header = (TextView) header.findViewById(R.id.title_usr);
         titleView_header.setText(name_header);
         titleView_header.setTextSize(30);
@@ -153,17 +158,17 @@ public class MainUserActivity extends ActionBarActivity implements ActionBar.Tab
         mNavItems.add(new NavItem("A propos de", "Park my Car", R.drawable.action_about));
 
 
-        for(int i=0;i<menu_number;i++){
-            enable[i]=1;
+        for (int i = 0; i < menu_number; i++) {
+            enable[i] = 1;
         }
-        enable[0]=0;
+        enable[0] = 0;
 
         DrawerListAdapter adapter = new DrawerListAdapter(this, mNavItems);
         mDrawerList.setAdapter(adapter);
-       // mDrawerList.setAdapter(new ArrayAdapter<String>(this,R.layout.drawer_list_item, menutTitles));
+        // mDrawerList.setAdapter(new ArrayAdapter<String>(this,R.layout.drawer_list_item, menutTitles));
 
         mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
-        System.out.println( getSupportActionBar());
+        System.out.println(getSupportActionBar());
         // enable ActionBar app icon to behave as action to toggle nav drawer
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
@@ -192,18 +197,133 @@ public class MainUserActivity extends ActionBarActivity implements ActionBar.Tab
             selectItem(0);
         }
 
-        if (extras.getString("isPaired") == "") {
+        /*button.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                //spinner.setVisibility(View.VISIBLE);
+                ProgressDialog mDialog = new ProgressDialog(getApplicationContext());
+                mDialog.setMessage("Loading...");
+                mDialog.setCancelable(false);
+                mDialog.show();
+            }
+        });*/
+
+/*IntentFilter filter1 = new IntentFilter(BluetoothDevice.ACTION_ACL_CONNECTED);
+        IntentFilter filter2 = new IntentFilter(BluetoothDevice.ACTION_ACL_DISCONNECT_REQUESTED);
+        IntentFilter filter3 = new IntentFilter(BluetoothDevice.ACTION_ACL_DISCONNECTED);
+        this.registerReceiver(mReceiver, filter1);
+        this.registerReceiver(mReceiver, filter2);
+        this.registerReceiver(mReceiver, filter3);*/
+
+        //if (extras.getString("macAddress") == " " || extras.getString("macAddress") == null) {
+            //BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
             // Si connecté à un appareil en Bluetooth
             // Proposer de s'y appareiller
+            IntentFilter filter1 = new IntentFilter(BluetoothDevice.ACTION_ACL_CONNECTED);
+            IntentFilter filter2 = new IntentFilter(BluetoothDevice.ACTION_ACL_DISCONNECT_REQUESTED);
+            IntentFilter filter3 = new IntentFilter(BluetoothDevice.ACTION_ACL_DISCONNECTED);
+            this.registerReceiver(mReceiver, filter1);
+            this.registerReceiver(mReceiver, filter2);
+            this.registerReceiver(mReceiver, filter3);
 
             // Sinon proposer recherche + pairing
 
-            // if success, isPaired = " paired";
-        }
+            /*String deviceName = "My_Device_Name";
+
+            BluetoothDevice result = null;
+
+            Set<BluetoothDevice> devices = null;// = mBluetoothAdapter.get les devices autour
+            if (devices != null) {
+                for (BluetoothDevice device : devices) {
+                    if (deviceName.equals(device.getName())) {
+                        result = device;
+                        break;
+                    }
+                }
+            }*/
+        //}
 
 
     }
 
+    //The BroadcastReceiver that listens for bluetooth broadcasts
+    private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+            UserMapFragment umf = new UserMapFragment();
+
+            if (BluetoothDevice.ACTION_FOUND.equals(action)) {
+                //Device found
+            }
+            else if (BluetoothDevice.ACTION_ACL_CONNECTED.equals(action)) {
+                System.out.println("device just connected");
+                String macAddress = device.getAddress();
+                if (macAddress.equals(getInformations.getMacAddress())) {
+
+                    // rentre dans sa voiture (libère la place)
+                    System.out.println("paired device just connected");
+                    umf.leave();
+                    intent.putExtra("macAddress", "" + getInformations.getMacAddress());
+                }
+                else {
+                    // appareille le gadget bluetooth de la voiture
+                    System.out.println("getting paired");
+                    //sendtoserver(device.getAddress());
+                    intent.putExtra("macAddress", ""+getInformations.getMacAddress());
+                }
+            }
+            else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {
+                //Done searching
+            }
+            else if (BluetoothDevice.ACTION_ACL_DISCONNECT_REQUESTED.equals(action)) {
+                //Device is about to disconnect
+            }
+            else if (BluetoothDevice.ACTION_ACL_DISCONNECTED.equals(action)) {
+                System.out.println("a device just disconnected");
+                String macAddress = device.getAddress();
+                if (macAddress.equals(getInformations.getMacAddress())) {
+                    // est garé
+                    System.out.println("paired device just disconnected");
+                    umf.park();
+                }
+            }
+        }
+    };
+
+    private class ChangeMac extends ChangeMacCallback {
+        protected void callback(Exception e, User user){
+            getInformations = user;
+            System.out.println("Exception e :" +e);
+
+        }
+    }
+
+    public void sendtoserver(final String macAddress) {
+
+        final Intent intent = new Intent(this, MainUserActivity.class);
+
+        System.out.println("test sendtoserver macaddress");
+        AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected void onPreExecute() {
+                UserServices.getInstance().changemacaddress(getInformations, macAddress, new ChangeMac()).execute();
+            }
+
+            @Override
+            protected Void doInBackground(Void... arg0) {return null;}
+            @Override
+            protected void onPostExecute(Void result) {
+                System.out.println("new macAddress: " + macAddress);
+                intent.putExtra("macAddress", macAddress);
+                //  startActivity(intent);
+                finish();
+            }
+
+        };task.execute((Void[]) null);
+
+
+    }
 
     private class DrawerItemClickListener implements ListView.OnItemClickListener {
         @Override
@@ -263,7 +383,7 @@ public class MainUserActivity extends ActionBarActivity implements ActionBar.Tab
                             intent.putExtra("level_name", ""+getInformations.getLevel().getLevelName());
                             intent.putExtra("Start_Score", ""+getInformations.getLevel().getStartScore());
                             intent.putExtra("NextLevelScore", ""+getInformations.getLevel().getNextLevelScore());
-                            intent.putExtra("isPaired", ""+getInformations.getPaired());
+                            intent.putExtra("macAddress", ""+getInformations.getMacAddress());
 
                             startActivity(intent);
                         }

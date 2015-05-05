@@ -30,6 +30,42 @@ public class UserServices {
     }
 
     /*
+    * Service storing mac address of the device paired
+    */
+    //public AsyncTask<Void, Void, Pair<Exception, String>> changemacaddress(final User user, final String macAddress, final ChangeMacCallback cb){
+    public AsyncTask<Void, Void, Pair<Exception, User>> changemacaddress(final User user, String macAddress, final ChangeMacCallback cb){
+
+        class Changemacaddress extends AsyncTask<Void, Void, Pair<Exception, User>> {
+            @Override
+            protected Pair<Exception, User> doInBackground(Void... params) {
+                try {
+                    final String url = ApiConfig.usersRoutes + "/changemacaddress";
+
+                    HttpHeaders requestHeaders = new HttpHeaders();
+                    HttpEntity<User> requestEntity = new HttpEntity<>(user, requestHeaders);
+
+                    RestTemplate restTemplate = new RestTemplate();
+                    restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
+                    //restTemplate.getMessageConverters().add(new FormHttpMessageConverter());
+                    //restTemplate.getMessageConverters().add(new StringHttpMessageConverter());
+
+                    ResponseEntity<User> responseEntity = restTemplate.exchange(url, HttpMethod.POST, requestEntity, User.class);
+                    return new Pair<>(null, responseEntity.getBody());
+
+                } catch (Exception e) {
+                    return new Pair<>(e, null);
+                }
+            }
+            @Override
+            protected void onPostExecute(Pair<Exception, User> resRequest) {
+                if(cb != null) cb.callback(resRequest.first, resRequest.second);
+            }
+        }
+
+        return new Changemacaddress();
+    }
+
+    /*
     * Service creating a new user
     */
     public AsyncTask<Void, Void, Pair<Exception, String>> signup(final String username, final String password, final SignupCallback cb){
