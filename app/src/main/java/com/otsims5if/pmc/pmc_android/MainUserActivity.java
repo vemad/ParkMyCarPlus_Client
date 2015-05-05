@@ -139,7 +139,7 @@ public class MainUserActivity extends ActionBarActivity implements ActionBar.Tab
 
         //récuperation des données
         Bundle extras = getIntent().getExtras();
-        String name_header = extras.getString("name_user");
+        String name_header = extras.getString("name_user" + " " + "macAddress");
 
         View header = getLayoutInflater().inflate(R.layout.header, null);
         TextView titleView_header = (TextView) header.findViewById(R.id.title_usr);
@@ -214,7 +214,7 @@ public class MainUserActivity extends ActionBarActivity implements ActionBar.Tab
         this.registerReceiver(mReceiver, filter2);
         this.registerReceiver(mReceiver, filter3);*/
 
-        if (extras.getString("macAddress") == " " || extras.getString("macAddress") == null) {
+        //if (extras.getString("macAddress") == " " || extras.getString("macAddress") == null) {
             //BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
             // Si connecté à un appareil en Bluetooth
             // Proposer de s'y appareiller
@@ -226,7 +226,8 @@ public class MainUserActivity extends ActionBarActivity implements ActionBar.Tab
             this.registerReceiver(mReceiver, filter3);
 
             // Sinon proposer recherche + pairing
-            String deviceName = "My_Device_Name";
+
+            /*String deviceName = "My_Device_Name";
 
             BluetoothDevice result = null;
 
@@ -238,8 +239,8 @@ public class MainUserActivity extends ActionBarActivity implements ActionBar.Tab
                         break;
                     }
                 }
-            }
-        }
+            }*/
+        //}
 
 
     }
@@ -268,7 +269,7 @@ public class MainUserActivity extends ActionBarActivity implements ActionBar.Tab
                 else {
                     // appareille le gadget bluetooth de la voiture
                     System.out.println("getting paired");
-                    sendtoserver(device.getAddress());
+                    //sendtoserver(device.getAddress());
                     intent.putExtra("macAddress", ""+getInformations.getMacAddress());
                 }
             }
