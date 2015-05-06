@@ -27,7 +27,7 @@ public class User {
         this.password = password;
         this.isPaired = "";
         this.confianceScore = 10;
-        this.macAddress = "";
+        this.macAddress = "a";
 
     }
 

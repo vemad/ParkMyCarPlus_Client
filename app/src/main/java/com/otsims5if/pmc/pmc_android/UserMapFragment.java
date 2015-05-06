@@ -2,7 +2,13 @@ package com.otsims5if.pmc.pmc_android;
 
 import android.annotation.TargetApi;
 import android.app.AlertDialog;
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
@@ -24,6 +30,7 @@ import android.widget.ImageButton;
 import android.widget.ListAdapter;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -341,15 +348,14 @@ public class UserMapFragment extends PlaceholderFragment{
             public void onMyLocationChange(Location location) {
                 LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
                 CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, zoomLevel);
-                if(openningActivity) {
+                if (openningActivity) {
                     map.animateCamera(cameraUpdate);
                     openningActivity = false;
-                }
-                else if(inMotion){
+                } else if (inMotion) {
 
-                    if(previousZoomLevel!=0 && previousZoomLevel>zoomLevel-10) {
+                    if (previousZoomLevel != 0 && previousZoomLevel > zoomLevel - 10) {
                         cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, previousZoomLevel);
-                    }else{
+                    } else {
                         cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, zoomLevel);
                     }
                     map.animateCamera(cameraUpdate);
@@ -368,9 +374,8 @@ public class UserMapFragment extends PlaceholderFragment{
             public void onCameraChange(CameraPosition position) {
                 Log.d("Zoom", "Zoom: " + position.zoom);
                 LatLngBounds mapVisibleBounds = map.getProjection().getVisibleRegion().latLngBounds;
-                if(previousZoomLevel != position.zoom)
-                {
-                    if(mOverlay!=null) {
+                if (previousZoomLevel != position.zoom) {
+                    if (mOverlay != null) {
                         mOverlay.clearTileCache();
                         mOverlayOrange.clearTileCache();
                         mOverlayGReen.clearTileCache();
@@ -378,13 +383,13 @@ public class UserMapFragment extends PlaceholderFragment{
                     try {
                         ZoneServices.getInstance().getListZonesByPosition(myCurrentLocation.latitude,
                                 myCurrentLocation.longitude, radius, new ShowListZonesCallback()).execute();
-                    }catch(Exception e){
+                    } catch (Exception e) {
 
                     }
                 }
                 previousZoomLevel = position.zoom;
-                if(myCurrentLocation!=null) {
-                    if(!mapVisibleBounds.contains(myCurrentLocation)){
+                if (myCurrentLocation != null) {
+                    if (!mapVisibleBounds.contains(myCurrentLocation)) {
                         inMotion = false;
                     }
                 }
@@ -396,10 +401,10 @@ public class UserMapFragment extends PlaceholderFragment{
             public boolean onMyLocationButtonClick() {
 
 
-                if(destinationMarker !=null){
+                if (destinationMarker != null) {
                     destinationMarker.remove();
                 }
-                if(mOverlay!=null) {
+                if (mOverlay != null) {
                     mOverlay.clearTileCache();
                     mOverlayOrange.clearTileCache();
                     mOverlayGReen.clearTileCache();
@@ -459,9 +464,66 @@ public class UserMapFragment extends PlaceholderFragment{
         });
 
 
+        /*IntentFilter filter1 = new IntentFilter(BluetoothDevice.ACTION_ACL_CONNECTED);
+        IntentFilter filter2 = new IntentFilter(BluetoothDevice.ACTION_ACL_DISCONNECT_REQUESTED);
+        IntentFilter filter3 = new IntentFilter(BluetoothDevice.ACTION_ACL_DISCONNECTED);
+        getActivity().getApplicationContext().registerReceiver(mReceiver, filter1);
+        getActivity().getApplicationContext().registerReceiver(mReceiver, filter2);
+        getActivity().getApplicationContext().registerReceiver(mReceiver, filter3);
+        //*/
 
         return view;
     }
+
+    //The BroadcastReceiver that listens for bluetooth broadcasts
+    /*public final BroadcastReceiver mReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+            UserMapFragment umf = new UserMapFragment();
+
+            if (BluetoothDevice.ACTION_FOUND.equals(action)) {
+                //Device found
+            }
+            else if (BluetoothDevice.ACTION_ACL_CONNECTED.equals(action)) {
+                System.out.println("device just connected");
+                String macAddress = device.getAddress();
+                String status;
+
+                //if (macAddress.equals(getInformations.getMacAddress())) {
+
+                // rentre dans sa voiture (libère la place)
+                leave();
+
+                //leaveButton.setVisibility(View.GONE);
+                //parkButton.setVisibility(View.VISIBLE);
+                //currentPositionMarker.remove();
+                //PlaceServices.getInstance().releasePlace(myParkingLocation.latitude,
+                //myParkingLocation.longitude, new ReleaseAndRemovePlace()).execute();
+
+                //intent.putExtra("macAddress", "" + getInformations.getMacAddress());
+                // }
+                //else {
+                // appareille le gadget bluetooth de la voiture
+                //sendtoserver(device.getAddress());
+                //intent.putExtra("macAddress", ""+getInformations.getMacAddress());
+                //}
+            }
+            else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {
+                //Done searching
+            }
+            else if (BluetoothDevice.ACTION_ACL_DISCONNECT_REQUESTED.equals(action)) {
+                //Device is about to disconnect
+            }
+            else if (BluetoothDevice.ACTION_ACL_DISCONNECTED.equals(action)) {
+                //if (macAddress.equals(getInformations.getMacAddress())) {
+                // est garé
+                umf.park();
+                //}
+            }
+        }
+    };*/
 
     public void park() {
         leaveButton.setVisibility(View.VISIBLE);

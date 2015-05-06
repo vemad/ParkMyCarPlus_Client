@@ -33,7 +33,6 @@ import api.authentification.AuthentificationServices;
 public class PlaceServices {
     private static PlaceServices ourInstance = new PlaceServices();
 
-    private final BluetoothAdapter mAdapter;
     /*
     private AcceptThread mSecureAcceptThread;
     private AcceptThread mInsecureAcceptThread;
@@ -51,8 +50,6 @@ public class PlaceServices {
         return ourInstance;
     }
     private PlaceServices() {
-        mAdapter = BluetoothAdapter.getDefaultAdapter();
-        mState = STATE_NONE;
     }
 
     /*
